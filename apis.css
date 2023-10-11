@@ -1,0 +1,229 @@
+*{
+    margin: 0;
+}
+body{
+
+    
+    background-image: url('Tageszeiten\ gifs/Tag.gif');
+    background-image: url('Tageszeiten gifs/Nacht.gif');
+    background-image: url('Tageszeiten gifs/SonnenaufgangUntergang.gif');
+    
+
+    /*background-image: url('Tageszeiten gifs/Tag.gif'); hier muss man man die größe mit javascript ändern */
+    background-repeat: no-repeat;
+    background-size: 500px;
+    /*background-size: 170% 100%;*/ /*!!Für die tag animation!!*/
+    background-size: 100% 100%;
+
+    background-attachment: fixed;
+    background-position: center;
+
+    /*animation: schwankendeAnimation 10s linear infinite alternate;*/ /*!!Für die tag animation!!*/
+    
+   
+}
+
+
+/*  !!Für die tag animation!!
+@keyframes schwankendeAnimation {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100% 0;
+    }
+  }  
+  */
+  
+
+
+h1{
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    /*margin-left: calc(50% - 60px);*/
+    
+    margin-top: 15px;
+    font-family: cursive;
+    
+}
+
+p{
+
+    color: white;
+    margin-top: 10px;
+    font-size: 25px;
+    font-family: cursive;
+    
+    
+}
+
+#temp{
+    font-size: 70px;
+    margin-left: calc(50% - 30px);
+    margin-top: 10px;
+    color: white;
+}
+#symbol{
+    margin-left: calc(50% - 24px);
+
+}
+
+
+#suche{
+    position: relative;
+}
+#suchButton{
+    position: absolute;
+    top: 30%;
+    right: 10%;
+    
+}
+#eingabe{
+    width: 80%;
+    height: 20px;
+    margin-left: 10%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 13px;
+    border: black solid 1px;
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(159, 42, 165); /* Farbe änder wenn der Hintergrung geändert wurde*/
+    text-align: center;
+    font-family: cursive;
+
+}
+#eingabe::placeholder{
+    color: white;
+}
+button{
+
+    border-radius: 13px;
+    background-color: rgba(34,48,67,255);
+    border:rgba(171,147,201,255) solid 1px; 
+    /*box-shadow: 0px 5px 15px -3px #f500b8;*/
+    
+    background-color:rgba(171,147,201,255);
+    background-color: rgba(34,48,67,255);
+
+    color: white;
+    font-weight: 800;
+    font-size: 17px;
+    height: 40px;
+    width: 170px;
+    display: inline-block;    
+    font-family: cursive;
+    
+
+}
+
+#knöpfe{
+    text-align: center;
+    width: auto;
+    margin-top: 10px;
+    
+}
+button:active{
+    transform: scale(0.8);
+    
+    
+}
+
+#zeit{
+    text-align: center;
+    display: block;
+}
+
+#description{
+    text-align: center;
+    display: block;
+}
+
+#maxTemp{
+    text-align: center;
+    display: block;
+}
+
+#minTemp{
+    text-align: center;
+    display: block;
+}
+
+#feels_like{
+    text-align: center;
+    display: block;
+}
+
+#geschwindigkeit{
+    text-align: center;
+    display: block;
+}
+
+
+
+#FavLeiste{
+
+    background-color: rgba(255, 255, 255, 0);
+    margin-top: 10px;
+    width: 95%;
+    width: auto;
+    height: 170px;
+    margin-left: 5%;
+    border:rgba(171,147,201,255) solid 1px; 
+    border-radius: 13px;
+    display: flex;
+    overflow-x: auto;
+    margin-right: 2.5%;
+    margin-left: 2.5%;
+    
+    
+
+}
+
+#Favoriten{
+    margin-left: 3%;
+    
+}
+
+.Fav1{
+    
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: rgba(171, 147, 201, 0.24);
+    border:rgba(171,147,201,255) solid 1px; 
+    border-radius: 13px;
+    height: 140px;
+    min-width: 30%;
+    max-width: 30%;
+    position: relative;
+    
+    
+
+}
+.exit{
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    /*
+    margin-left: 4%;
+    margin-bottom: 10%; */
+}
+.FavStadt{
+    position: absolute;
+    left: calc(50% - 39px);
+    top: 0%;
+    
+}
+.Favsymbol{
+    position: absolute;
+    bottom: 35%;
+    left: calc(50% - 25px);
+}
+.FavTemp{
+    position: absolute;
+    bottom: 2%;
+    left: calc(50% - 23px);
+    font-size: 33px;
+}
