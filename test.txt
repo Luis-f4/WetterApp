@@ -1,140 +1,15 @@
-Ist diese Funktion korrekt?
+Änder den react coe so dass wenn der mode "License" ist dass der erste und dritte input nicht bearbeitet werden darf (also <input className='testInput' value={currentRow[0]} onChange={(e) => handleInputChange(e, 0)} /> und <input value={currentRow[2]} onChange={(e) => handleInputChange(e, 2)} />
 
- @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping(path = "/addLicensingWithFrontend/{email}/{department}/{company}/{licenseID}")
-    public @ResponseBody String addLicensingWithFrontend(@PathVariable String email, @PathVariable String department, @PathVariable String company, @PathVariable int licenseID) {
+und wenn der mode nicht "licensing" ist das die letzten vier inputs nicht bearbeitet werden dürfen (also                <input value={currentRow[3]} onChange={(e) => handleInputChange(e, 3)} />
+                <input value={currentRow[4]} onChange={(e) => handleInputChange(e, 4)} />
+                <input value={currentRow[5]} onChange={(e) => handleInputChange(e, 5)} />
+                <input value={currentRow[6]} onChange={(e) => handleInputChange(e, 6)} />)
 
-        EmployeeEntity employee = employeeRepo.searchEmployee(email, department, company).orElse(null);
-        LicenseEntity license = licenseRepo.findById(licenseID).orElse(null);
-
-        if (license == null) {
-            return  "license not found";
-        }
-        
-        if (employee == null) {
-            employee.setEmail(email);
-            employee.setCompany(company);
-            employee.setDepartment(department);
-	    employeeRepo.save(employee);
-        }
-        
-        Licensing l = new Licensing();
-        l.setLicense(license);
-        l.setEmployee(employee);
-
-
-
-        licensingRepo.save(l);
-
-         
-        return "Saved";
-    }
-
-
-Ich möchte dass erstmal kontrolliert wir ob ein Mitarbeiter mkt diesen Informationen bereits existiert, wenn er existiert dann soll ein neuer eintrag in licensing entstehen, wenn er nicht existiert dann soll dieser Mitarbeiter erstmal erstellt und in die Datenbank eingetragen werden und dann soll erst der eintrag in licensing entstehen.
-
-hier sind die restlichen Klassen:
-
-
-package com.vodafone.spring_swlzfw;
-
-import jakarta.persistence.*;
-import java.util.List;
-
-@Entity
-public class EmployeeEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    private String email;
-    private String department;
-    private String company;
-
-    // n:m Beziehung zu LicenseEntity mit Licensing als Join-Tabelle
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Licensing> licenses;
-
-    // Getter und Setter
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public List<Licensing> getLicenses() {
-        return licenses;
-    }
-
-    public void setLicenses(List<Licensing> licenses) {
-        this.licenses = licenses;
-    }
-}
-
-package com.vodafone.spring_swlzfw;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Optional;
-
-public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
-
-    // Query zur Rückgabe von Mitarbeiterinformationen und den zugehörigen Lizenzinformationen über die Licensing-Tabelle
-    @Query(value = "SELECT e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM employee_entity e " +
-            "JOIN licensing lic ON e.id = lic.employee_id " +
-            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
-    public List<Object> getAll();
-
-    // Suchanfrage, um nach einem Begriff in verschiedenen Feldern zu suchen (über Licensing-Tabelle)
-    @Query(value = "SELECT e.email, e.company, e.department, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM employee_entity e " +
-            "JOIN licensing lic ON e.id = lic.employee_id " +
-            "JOIN license_entity l ON lic.license_id = l.id " +
-            "WHERE e.email LIKE %:search% " +
-            "OR e.department LIKE %:search% " +
-            "OR e.company LIKE %:search% " +
-            "OR l.purchase_order LIKE %:search% " +
-            "OR l.purchase_order_originally LIKE %:search% " +
-            "OR l.subscription_pack LIKE %:search% " +
-            "OR l.expiration_date LIKE %:search%", nativeQuery = true)
-    public List<Object> find(@Param("search") String search);
-
-    @Query(value = "SELECT * FROM employee_entity Where email = :email AND department = :department AND company = company", nativeQuery = true)
-    public Optional<EmployeeEntity> searchEmployee(@Param("email") String email, @Param("department") String department, @Param("company") String company);
-
-}
-
-
-
-
+                <input className='testInput' value={currentRow[0]} onChange={(e) => handleInputChange(e, 0)} />
+                <input value={currentRow[1]} onChange={(e) => handleInputChange(e, 1)} />
+                <input value={currentRow[2]} onChange={(e) => handleInputChange(e, 2)} />
+                {mode === 'License' && <input value={currentRow[7]} onChange={(e) => handleInputChange(e, 7)} />}
+                <input value={currentRow[3]} onChange={(e) => handleInputChange(e, 3)} />
+                <input value={currentRow[4]} onChange={(e) => handleInputChange(e, 4)} />
+                <input value={currentRow[5]} onChange={(e) => handleInputChange(e, 5)} />
+                <input value={currentRow[6]} onChange={(e) => handleInputChange(e, 6)} />
