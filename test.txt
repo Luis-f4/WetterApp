@@ -1,31 +1,102 @@
-korrigiere die searchEmployee Funktion:
+Ist diese Funktion korrekt?
 
-
-    @CrossOrigin(origins = "http://localhost:3000")
+ @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(path = "/addLicensingWithFrontend/{email}/{department}/{company}/{licenseID}")
     public @ResponseBody String addLicensingWithFrontend(@PathVariable String email, @PathVariable String department, @PathVariable String company, @PathVariable int licenseID) {
 
         EmployeeEntity employee = employeeRepo.searchEmployee(email, department, company).orElse(null);
         LicenseEntity license = licenseRepo.findById(licenseID).orElse(null);
 
-        if (employee == null) {
-            return  "employee not found";
-        }else{
-
+        if (license == null) {
+            return  "license not found";
         }
         
-        /*
+        if (employee == null) {
+            employee.setEmail(email);
+            employee.setCompany(company);
+            employee.setDepartment(department);
+	    employeeRepo.save(employee);
+        }
+        
         Licensing l = new Licensing();
         l.setLicense(license);
         l.setEmployee(employee);
-     
+
 
 
         licensingRepo.save(l);
-           
-         */
+
+         
         return "Saved";
     }
+
+
+Ich möchte dass erstmal kontrolliert wir ob ein Mitarbeiter mkt diesen Informationen bereits existiert, wenn er existiert dann soll ein neuer eintrag in licensing entstehen, wenn er nicht existiert dann soll dieser Mitarbeiter erstmal erstellt und in die Datenbank eingetragen werden und dann soll erst der eintrag in licensing entstehen.
+
+hier sind die restlichen Klassen:
+
+
+package com.vodafone.spring_swlzfw;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+public class EmployeeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String email;
+    private String department;
+    private String company;
+
+    // n:m Beziehung zu LicenseEntity mit Licensing als Join-Tabelle
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Licensing> licenses;
+
+    // Getter und Setter
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public List<Licensing> getLicenses() {
+        return licenses;
+    }
+
+    public void setLicenses(List<Licensing> licenses) {
+        this.licenses = licenses;
+    }
+}
 
 package com.vodafone.spring_swlzfw;
 
@@ -34,6 +105,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
 
@@ -58,8 +130,11 @@ public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
             "OR l.expiration_date LIKE %:search%", nativeQuery = true)
     public List<Object> find(@Param("search") String search);
 
-    @Query(value = "SELECT * FROM employee_entity Where email = email and department = department and company = company", nativeQuery = true)
-    public EmployeeEntity searchEmployee();
+    @Query(value = "SELECT * FROM employee_entity Where email = :email AND department = :department AND company = company", nativeQuery = true)
+    public Optional<EmployeeEntity> searchEmployee(@Param("email") String email, @Param("department") String department, @Param("company") String company);
 
 }
+
+
+
 
