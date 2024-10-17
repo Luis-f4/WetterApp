@@ -1,29 +1,30 @@
-    Wo ist der Fehler:
+@CrossOrigin(origins = "http://localhost:3000")
+@GetMapping(path = {"/allLicensing"})
+public @ResponseBody List<List<Object>> getAllLicensing() {
 
+    // Liste für die Ergebnisse
+    List<List<Object>> result = new ArrayList<>();
 
+    // Alle Licensing-Einträge abrufen (List von Object[])
+    List<Object[]> licensingEntries = licensingRepo.getAllLicensingEntries();
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping(path = {"/allLicensing"})
-    public @ResponseBody List<Object> getAllLicensing() {
+    // Für jeden Licensing-Eintrag die zugehörigen Daten verarbeiten
+    for (Object[] entry : licensingEntries) {
+        // Neues List-Objekt für jeden Eintrag
+        List<Object> entryData = new ArrayList<>();
+        entryData.add(entry[0]);  // Lizenz ID
+        entryData.add(entry[1]);  // E-Mail des Mitarbeiters
+        entryData.add(entry[2]);  // Abteilung des Mitarbeiters
+        entryData.add(entry[3]);  // Firma des Mitarbeiters
+        entryData.add(entry[4]);  // Lizenz-Abonnement
+        entryData.add(entry[5]);  // Ablaufdatum der Lizenz
+        entryData.add(entry[6]);  // Neue Bestellnummer der Lizenz
+        entryData.add(entry[7]);  // Alte Bestellnummer der Lizenz
 
-        List<List<Object>> result = new ArrayList<>();
-
-        List<Object> licensingEntries = licensingRepo.getAllLicensingEntries();
-
-        for (Object entry : licensingEntries){
-
-            Map<String, Object> entryData = new HashMap<>();
-            entryData.put(entry[0]);
-            entryData.put(entry[1]);
-            entryData.put(entry[2]);
-            entryData.put(entry[3]);
-            entryData.put(entry[4]);
-            entryData.put(entry[5]);
-            entryData.put(entry[6]);
-            entryData.put(entry[7]);
-
-            result.add(entryData);
-        }
-
-        return result;
+        // Füge den Eintrag zur Ergebnisliste hinzu
+        result.add(entryData);
     }
+
+    // Rückgabe der zusammengestellten Liste
+    return result;
+}
