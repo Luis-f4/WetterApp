@@ -1,3 +1,41 @@
-Ich erhalte folgenden fehler:
+@Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+        "FROM licensing lic " +
+        "JOIN employee_entity e ON lic.employee_id = e.id " +
+        "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
+public List<Object[]> getAllLicensingEntries();  // Rückgabetyp anpassen
 
-java: incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<java.lang.Object[]>
+
+
+
+
+
+@CrossOrigin(origins = "http://localhost:3000")
+@GetMapping(path = {"/allLicensing"})
+public @ResponseBody List<List<Object>> getAllLicensing() {
+
+    // Liste für die Ergebnisse
+    List<List<Object>> result = new ArrayList<>();
+
+    // Alle Licensing-Einträge abrufen (List von Object[])
+    List<Object[]> licensingEntries = licensingRepo.getAllLicensingEntries();
+
+    // Für jeden Licensing-Eintrag die zugehörigen Daten verarbeiten
+    for (Object[] entry : licensingEntries) {
+        // Neues List-Objekt für jeden Eintrag
+        List<Object> entryData = new ArrayList<>();
+        entryData.add(entry[0]);  // Lizenz ID
+        entryData.add(entry[1]);  // E-Mail des Mitarbeiters
+        entryData.add(entry[2]);  // Abteilung des Mitarbeiters
+        entryData.add(entry[3]);  // Firma des Mitarbeiters
+        entryData.add(entry[4]);  // Lizenz-Abonnement
+        entryData.add(entry[5]);  // Ablaufdatum der Lizenz
+        entryData.add(entry[6]);  // Neue Bestellnummer der Lizenz
+        entryData.add(entry[7]);  // Alte Bestellnummer der Lizenz
+
+        // Füge den Eintrag zur Ergebnisliste hinzu
+        result.add(entryData);
+    }
+
+    // Rückgabe der zusammengestellten Liste
+    return result;
+}
