@@ -1,82 +1,268 @@
-Um die ID (die letzte Spalte, z.B. 6 und 5 in deinem Beispiel) zu erhalten und zu verwenden, ohne sie in der Tabelle anzuzeigen, kannst du die ID in einem Attribut speichern, auf das du später zugreifen kannst, z. B. für das Popup.
+Ich will dass die variable idLIcensing von TableLicenseRow an popup übergeben wird:
 
-Hier ist der Ansatz, den du anwenden kannst:
 
-Speichere die ID in einem unsichtbaren Element oder im Zustand: Du kannst die ID in einem Attribut oder Zustand speichern, ohne sie in der Tabelle anzuzeigen.
+import EditButton from "./EditButton";
+import {useState } from 'react';
 
-Ändere die Datenstruktur: Passe deinen Code so an, dass die ID an das Popup oder andere Funktionen übergeben wird, aber ohne sie anzuzeigen.
+const TableRow = ({ row, onEdit, mode}) => {
 
-Anpassungen im Code:
-In der Komponente TableLicenseRow:
-Ändere den Code so, dass du die ID (das letzte Element im row-Array) speicherst, aber nicht anzeigst.
+  
 
-In der TableEmployee-Komponente:
+    //const [idLIcensing, setIdLIcensing] = useState(null);
 
-Du kannst die ID in einem unsichtbaren input-Feld oder als Attribut speichern, sodass du darauf zugreifen kannst, wenn du das Popup öffnest.
-Beispieländerung:
-In TableEmployee.js:
-Passe den Aufruf von TableLicenseRow an und übergebe die ID als zusätzliches Argument (aber zeige sie nicht in der Tabelle an).
+    let idLIcensing = null;
 
-js
-Code kopieren
-<tbody>
-    {data.map((row, index) => (
-        <TableLicenseRow key={index} row={row} onEdit={handleEditClick} id={row[7]} />
-    ))}
-</tbody>
-In TableLicenseRow.js:
-Speichere die ID in einem Attribut und nutze sie im onEdit-Handler, ohne sie anzuzeigen.
+    if(mode !== 'License'){
+        idLIcensing = row[7];
+        console.log("LicensingID: ", idLIcensing + "  email: " + row[0] + "  sub pack: " + row[3]);
+    }
 
-js
-Code kopieren
-const TableLicenseRow = ({ row, onEdit, id }) => {
+    // if(idLIcensing === null){
+    //     console.log("ist null");
+    // }else{
+    //     console.log("ist nicht null");
+    // }
     const commonCells = [
         <td key={0}>{row[0]}</td>,
         <td key={1}>{row[1]}</td>,
         <td key={2}>{row[2]}</td>,
+        mode === 'License' && <td key={7}>{row[7]}</td>,
         <td key={3}>{row[3]}</td>,
         <td key={4}>{row[4]}</td>,
         <td key={5}>{row[5]}</td>,
-        <td key={6}>{row[6]}</td>,
-        // Hier wird die ID nicht angezeigt
-    ];
+        <td key={6}>{row[6]}</td>
+    ].filter(Boolean); // filter(Boolean) entfernt null-Werte
 
     return (
         <tr>
             {commonCells}
-            <td>
-                {/* Unsichtbares Input-Feld, um die ID zu speichern */}
-                <input type="hidden" value={id} />
-            </td>
-            <EditButton onClick={() => onEdit(row, id)} />
+            <EditButton onClick={() => onEdit(row)} />
         </tr>
     );
 }
 
-export default TableLicenseRow;
-In TableEmployee.js:
-Passe den handleEditClick-Handler an, um die ID an das Popup zu übergeben.
+export default TableRow;
 
-js
-Code kopieren
-const handleEditClick = (row, id) => {
-    setSelectedRow({ row, id }); // Row und ID speichern
-};
-In Popup.js:
-Nutze die ID, ohne sie anzuzeigen, indem du sie als prop übergibst.
 
-js
-Code kopieren
-const Popup = ({ row, id, onClose, mode }) => {
+
+import './Table.css';
+import TableLicenseRow from './TableLicenseRow';
+import { useEffect, useState } from 'react';
+import Popup from './Popup';
+
+const TableEmployee = () => {
+
+    const [data, setData] = useState([]);
+    const [selectedRow, setSelectedRow] = useState(null); // Zustand für die ausgewählte Zeile
+
+    useEffect(() => {
+        fetch('http://localhost:8080/allLicensing', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Basic ' + btoa('Bart:123')
+            }
+        })
+        .then(response => response.json())
+        .then(data => setData(data))
+        .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    const handleEditClick = (row) => {
+        setSelectedRow(row); 
+    };
+
+    const closePopup = () => {
+        setSelectedRow(null); // Popup schließen
+    };
+
+    return (
+        <>
+            <table>
+                <thead>
+                    <tr> 
+                        <th>E-Mail</th>
+                        <th>Department</th>
+                        <th>Company</th>
+                        <th>Subscription Pack</th>
+                        <th>Expiration Date</th>
+                        <th>PO (new)</th>
+                        <th>PO (old)</th>
+                        
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {data.map((row, index) => (
+                        <TableLicenseRow key={index} row={row} onEdit={handleEditClick} />
+                    ))}
+                </tbody>
+            </table>
+
+            {selectedRow && <Popup row={selectedRow} onClose={closePopup} mode={"Employee"} />}
+        </>
+    );
+    
+}
+ 
+export default TableEmployee;
+
+
+import React, { useState } from 'react';
+import './Popup.css';
+
+const Popup = ({ row, onClose, mode}) => {
     const [originalRow] = useState(row ? [...row] : []);
     const [currentRow, setCurrentRow] = useState(row ? [...row] : []);
-    
-    // Nutze die ID in Funktionen
-    console.log("ID: ", id); // Hier wird die ID geloggt
+    if (!row) return null;
 
-    // Rest des Codes...
+    const handleInputChange = (e, index) => {
+        const newRow = [...currentRow];
+        newRow[index] = e.target.value;
+
+        console.log("originalRow: ", originalRow);
+        console.log("currentRow: ", currentRow);
+        setCurrentRow(newRow);
+    };
+
+    const resetChanges = () => new Promise(resolve => {
+        setCurrentRow([...originalRow]);
+        resolve();
+    });
+
+    const handleClick = async () => {
+        await resetChanges();
+        onClose();
+    };
+
+    const handleUpdate = async () => {
+        if (mode === 'License') { 
+            
+            
+        await fetch(`http://localhost:8080/updateLicense/${currentRow[0]}/${currentRow[1]}/${currentRow[7]}/${currentRow[3]}/${currentRow[4]}/${currentRow[5]}/${currentRow[6]}`, {
+            method: "PUT",
+            headers: {
+                'Authorization': 'Basic ' + btoa('Bart:123')
+            }
+        });
+        
+
+
+        } else {
+            
+            await fetch(`http://localhost:8080/updateEmployee/${currentRow[0]}/${currentRow[1]}/${currentRow[2]}/${originalRow[0]}/${originalRow[1]}/${originalRow[2]}`, {
+                method: "PUT",
+                headers: {
+                    'Authorization': 'Basic ' + btoa('Bart:123')
+                }
+            });
+            
+        }
+
+        onClose();
+        window.location.reload();
+    };
+
+    const handleDelete = async () => {
+
+        if(mode === 'License'){ 
+
+            console.log('License löschung beginnt');
+
+        await fetch(`http://localhost:8080/deleteLicense/${currentRow[0]}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': 'Basic ' + btoa('Bart:123')
+            }
+        });
+        
+
+        }else{
+
+            await fetch(`http://localhost:8080/delete/${currentRow[0]}`, {
+                method: "DELETE",
+                headers: {
+                    'Authorization': 'Basic ' + btoa('Bart:123')
+                }
+            });
+            
+        }
+
+        onClose();
+        window.location.reload();
+    }
+// disabled={mode === 'license}
+    const renderInputs = () => {
+        return (
+            <>
+                <input className='testInput' value={currentRow[0]} onChange={(e) => handleInputChange(e, 0)} disabled={mode === 'License'}/>
+                <input value={currentRow[1]} onChange={(e) => handleInputChange(e, 1)} />
+                <input value={currentRow[2]} onChange={(e) => handleInputChange(e, 2)} disabled={mode === 'License'}/>
+                {mode === 'License' && <input value={currentRow[7]} onChange={(e) => handleInputChange(e, 7)} />}
+                <input value={currentRow[3]} onChange={(e) => handleInputChange(e, 3)} disabled={mode !== 'License'}/>
+                <input value={currentRow[4]} onChange={(e) => handleInputChange(e, 4)} disabled={mode !== 'License'}/>
+                <input value={currentRow[5]} onChange={(e) => handleInputChange(e, 5)} disabled={mode !== 'License'}/>
+                <input value={currentRow[6]} onChange={(e) => handleInputChange(e, 6)} disabled={mode !== 'License'}/>
+                
+            </>
+        );
+    };
+
+    return (
+        <div id="PopupMainDiv">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16" onClick={handleClick}>
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+            </svg>
+            <h2>Edit {mode === 'License' ? 'License' : 'Licensing'}</h2>
+            <div id='divLicenseDetailsTitle'>
+                {mode === 'License' ? (
+                    <>
+                        <p><strong>ID</strong></p>
+                        <p><strong>Amount</strong></p>
+                        <p><strong>Available</strong></p>
+                        <p><strong>Start Date</strong></p>
+                        <p><strong>Expiration Date</strong></p>
+                        <p><strong>PO (new)</strong></p>
+                        <p><strong>PO (old)</strong></p>
+                        <p><strong>Subscription Pack</strong></p>
+                    </>
+                ) : (
+                    <>
+                        <p><strong>E-Mail</strong></p>
+                        <p><strong>Department</strong></p>
+                        <p><strong>Company</strong></p>
+                        <p><strong>Subscription Pack</strong></p>
+                        <p><strong>Expiration Date</strong></p>
+                        <p><strong>PO (new)</strong></p>
+                        <p><strong>PO (old)</strong></p>
+                    </>
+                )}
+            </div>
+            <div id='divLicenseDetails'>
+                {renderInputs()}
+            </div>
+            <div id='PopupButtons' >
+                <p id='UpdateButton' onClick={handleUpdate}>Update</p>
+                <p className="DeleteButton" onClick={handleDelete}>Delete</p>
+            </div>
+        </div>
+    );
 };
-Ergebnis:
-Die ID wird korrekt in der Zeile gespeichert und ist für das Popup zugänglich.
-Die ID wird nicht in der Tabelle angezeigt, aber sie ist für die Bearbeitungs- und Löschfunktionen verfügbar.
-Mit dieser Anpassung kannst du die ID nutzen, ohne sie in der Tabelle anzuzeigen, und sie für das Popup oder andere Funktionen verwenden.
+
+export default Popup;
+
+
+
+const EditButton = ({ onClick }) => {
+    return ( 
+        <td 
+            style={{backgroundColor: "red", fontWeight: 450, cursor: "pointer"}} 
+            onClick={onClick}
+        >
+            Bearbeiten
+        </td>
+    );
+}
+ 
+export default EditButton;
+
