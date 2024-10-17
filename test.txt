@@ -1,33 +1,34 @@
-wo ist der Fehler:
+wo ist der Fehler im react code:
 
 
     const handleEditClick = (row, idLIcensing) => {
+
         console.log("jetzt wird die funktion ausgeführt");
         console.log("idLIcensing: ", idLIcensing);
 
         setSelectedRow(row); 
         setSelectedIdLicensing(idLIcensing);
 
-        console.log("idLIcensing als const: ", selectedIdLicensing);
+ 
+        console.log("selectedIdLicensing: ", selectedIdLicensing);
     };
 
     const closePopup = () => {
-        console.log("jetzt wird die funktion geschlossen");
-        console.log("idLIcensing als const VORHER: ", selectedIdLicensing);
+
+        console.log("selectedIdLicensing VORHER: ", selectedIdLicensing);
 
         setSelectedRow(null); // Popup schließen
         setSelectedIdLicensing(null);
 
-        console.log("idLIcensing als const NACHHER: ", selectedIdLicensing);
+        console.log("selectedIdLicensing NACHHER: ", selectedIdLicensing);
     };
 
 
+ergebniss in der console:
 
-console.log:
 
 jetzt wird die funktion ausgeführt
-TableEmployee.js:27 idLIcensing:  5
-TableEmployee.js:32 idLIcensing als const:  null
-TableEmployee.js:36 jetzt wird die funktion geschlossen
-TableEmployee.js:37 idLIcensing als const VORHER:  5
-TableEmployee.js:42 idLIcensing als const NACHHER:  5
+TableEmployee.js:28 idLIcensing:  5
+TableEmployee.js:34 selectedIdLicensing:  null
+TableEmployee.js:39 selectedIdLicensing VORHER:  5
+TableEmployee.js:44 selectedIdLicensing NACHHER:  5
