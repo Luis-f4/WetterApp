@@ -1,34 +1,36 @@
-wo ist der Fehler im react code:
+import React, { useEffect } from 'react';
 
+const YourComponent = () => {
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [selectedIdLicensing, setSelectedIdLicensing] = useState(null);
 
-    const handleEditClick = (row, idLIcensing) => {
-
+    const handleEditClick = (row, idLicensing) => {
         console.log("jetzt wird die funktion ausgeführt");
-        console.log("idLIcensing: ", idLIcensing);
+        console.log("idLIcensing: ", idLicensing);
 
         setSelectedRow(row); 
-        setSelectedIdLicensing(idLIcensing);
+        setSelectedIdLicensing(idLicensing);
 
- 
-        console.log("selectedIdLicensing: ", selectedIdLicensing);
+        // Hier kannst du den aktuellen Wert nach dem Setzen des States nicht sehen
+        // console.log("selectedIdLicensing: ", selectedIdLicensing); // dies wird 'null' ausgeben
     };
 
     const closePopup = () => {
-
         console.log("selectedIdLicensing VORHER: ", selectedIdLicensing);
 
         setSelectedRow(null); // Popup schließen
         setSelectedIdLicensing(null);
 
-        console.log("selectedIdLicensing NACHHER: ", selectedIdLicensing);
+        // Auch hier wird der Zustand nicht sofort aktualisiert
+        // console.log("selectedIdLicensing NACHHER: ", selectedIdLicensing); // dies wird den vorherigen Wert ausgeben
     };
 
+    // useEffect um den neuen Wert zu überwachen
+    useEffect(() => {
+        console.log("Neuer Wert von selectedIdLicensing: ", selectedIdLicensing);
+    }, [selectedIdLicensing]);
 
-ergebniss in der console:
-
-
-jetzt wird die funktion ausgeführt
-TableEmployee.js:28 idLIcensing:  5
-TableEmployee.js:34 selectedIdLicensing:  null
-TableEmployee.js:39 selectedIdLicensing VORHER:  5
-TableEmployee.js:44 selectedIdLicensing NACHHER:  5
+    return (
+        // Dein JSX hier
+    );
+};
