@@ -1,41 +1,271 @@
-@Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-        "FROM licensing lic " +
-        "JOIN employee_entity e ON lic.employee_id = e.id " +
-        "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
-public List<Object[]> getAllLicensingEntries();  // Rückgabetyp anpassen
+Im folgenden code frage ichdie api von http://localhost:8080/allLicensing ab und erhalte folgende daten:
+
+[
+    [
+        "test3@gmail.com",
+        "Intern",
+        "testGmbH",
+        "UpdateTest",
+        "2024-10-16",
+        444,
+        333,
+        5
+    ],
+    [
+        "test3@gmail.com",
+        "Intern",
+        "testGmbH",
+        "TestPack4",
+        "2025-09-10",
+        102,
+        101,
+        6
+    ]
+]
+
+
+diese daten werden dann als zeilen korrekt in der Tabelle gespeichertalle daten außer die letzte  (diese ist die id des Datensatzes) ist es möglich dass diese id (in diesem Beispiel fall 6 und 5) erhalten bleibenund ich auf sie zugreifen kann ohne dass ich sie anzeigen lasse? denn ich benötige die ID für eine Funktion bei Popup.
+
+
+hier der Code:
 
 
 
 
+import './Table.css';
+import TableLicenseRow from './TableLicenseRow';
+import { useEffect, useState } from 'react';
+import Popup from './Popup';
 
+const TableEmployee = () => {
 
-@CrossOrigin(origins = "http://localhost:3000")
-@GetMapping(path = {"/allLicensing"})
-public @ResponseBody List<List<Object>> getAllLicensing() {
+    const [data, setData] = useState([]);
+    const [selectedRow, setSelectedRow] = useState(null); // Zustand für die ausgewählte Zeile
 
-    // Liste für die Ergebnisse
-    List<List<Object>> result = new ArrayList<>();
+    useEffect(() => {
+        fetch('http://localhost:8080/allLicensing', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Basic ' + btoa('Bart:123')
+            }
+        })
+        .then(response => response.json())
+        .then(data => setData(data))
+        .catch(error => console.error('Error fetching data:', error));
+    }, []);
 
-    // Alle Licensing-Einträge abrufen (List von Object[])
-    List<Object[]> licensingEntries = licensingRepo.getAllLicensingEntries();
+    const handleEditClick = (row) => {
+        setSelectedRow(row); // Zeile speichern und Popup öffnen
+    };
 
-    // Für jeden Licensing-Eintrag die zugehörigen Daten verarbeiten
-    for (Object[] entry : licensingEntries) {
-        // Neues List-Objekt für jeden Eintrag
-        List<Object> entryData = new ArrayList<>();
-        entryData.add(entry[0]);  // Lizenz ID
-        entryData.add(entry[1]);  // E-Mail des Mitarbeiters
-        entryData.add(entry[2]);  // Abteilung des Mitarbeiters
-        entryData.add(entry[3]);  // Firma des Mitarbeiters
-        entryData.add(entry[4]);  // Lizenz-Abonnement
-        entryData.add(entry[5]);  // Ablaufdatum der Lizenz
-        entryData.add(entry[6]);  // Neue Bestellnummer der Lizenz
-        entryData.add(entry[7]);  // Alte Bestellnummer der Lizenz
+    const closePopup = () => {
+        setSelectedRow(null); // Popup schließen
+    };
 
-        // Füge den Eintrag zur Ergebnisliste hinzu
-        result.add(entryData);
-    }
+    return (
+        <>
+            <table>
+                <thead>
+                    <tr> 
+                        <th>E-Mail</th>
+                        <th>Department</th>
+                        <th>Company</th>
+                        <th>Subscription Pack</th>
+                        <th>Expiration Date</th>
+                        <th>PO (new)</th>
+                        <th>PO (old)</th>
+                        
+                    </tr>
+                </thead>
 
-    // Rückgabe der zusammengestellten Liste
-    return result;
+                <tbody>
+                    {data.map((row, index) => (
+                        <TableLicenseRow key={index} row={row} onEdit={handleEditClick} />
+                    ))}
+                </tbody>
+            </table>
+
+            {selectedRow && <Popup row={selectedRow} onClose={closePopup} mode={"Employee"} />}
+        </>
+    );
+    
 }
+ 
+export default TableEmployee;
+
+
+
+
+
+import React, { useState } from 'react';
+import './Popup.css';
+
+const Popup = ({ row, onClose, mode }) => {
+    const [originalRow] = useState(row ? [...row] : []);
+    const [currentRow, setCurrentRow] = useState(row ? [...row] : []);
+    if (!row) return null;
+
+    const handleInputChange = (e, index) => {
+        const newRow = [...currentRow];
+        newRow[index] = e.target.value;
+
+        console.log("originalRow: ", originalRow);
+        console.log("currentRow: ", currentRow);
+        setCurrentRow(newRow);
+    };
+
+    const resetChanges = () => new Promise(resolve => {
+        setCurrentRow([...originalRow]);
+        resolve();
+    });
+
+    const handleClick = async () => {
+        await resetChanges();
+        onClose();
+    };
+
+    const handleUpdate = async () => {
+        if (mode === 'License') { 
+            
+            
+        await fetch(`http://localhost:8080/updateLicense/${currentRow[0]}/${currentRow[1]}/${currentRow[7]}/${currentRow[3]}/${currentRow[4]}/${currentRow[5]}/${currentRow[6]}`, {
+            method: "PUT",
+            headers: {
+                'Authorization': 'Basic ' + btoa('Bart:123')
+            }
+        });
+        
+
+
+        } else {
+            
+            await fetch(`http://localhost:8080/updateEmployee/${currentRow[0]}/${currentRow[1]}/${currentRow[2]}/${originalRow[0]}/${originalRow[1]}/${originalRow[2]}`, {
+                method: "PUT",
+                headers: {
+                    'Authorization': 'Basic ' + btoa('Bart:123')
+                }
+            });
+            
+        }
+
+        onClose();
+        window.location.reload();
+    };
+
+    const handleDelete = async () => {
+
+        if(mode === 'License'){ 
+
+            console.log('License löschung beginnt');
+
+        await fetch(`http://localhost:8080/deleteLicense/${currentRow[0]}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': 'Basic ' + btoa('Bart:123')
+            }
+        });
+        
+
+        }else{
+
+            await fetch(`http://localhost:8080/delete/${currentRow[0]}`, {
+                method: "DELETE",
+                headers: {
+                    'Authorization': 'Basic ' + btoa('Bart:123')
+                }
+            });
+            
+        }
+
+        onClose();
+        window.location.reload();
+    }
+// disabled={mode === 'license}
+    const renderInputs = () => {
+        return (
+            <>
+                <input className='testInput' value={currentRow[0]} onChange={(e) => handleInputChange(e, 0)} disabled={mode === 'License'}/>
+                <input value={currentRow[1]} onChange={(e) => handleInputChange(e, 1)} />
+                <input value={currentRow[2]} onChange={(e) => handleInputChange(e, 2)} disabled={mode === 'License'}/>
+                {mode === 'License' && <input value={currentRow[7]} onChange={(e) => handleInputChange(e, 7)} />}
+                <input value={currentRow[3]} onChange={(e) => handleInputChange(e, 3)} disabled={mode !== 'License'}/>
+                <input value={currentRow[4]} onChange={(e) => handleInputChange(e, 4)} disabled={mode !== 'License'}/>
+                <input value={currentRow[5]} onChange={(e) => handleInputChange(e, 5)} disabled={mode !== 'License'}/>
+                <input value={currentRow[6]} onChange={(e) => handleInputChange(e, 6)} disabled={mode !== 'License'}/>
+                
+            </>
+        );
+    };
+
+    return (
+        <div id="PopupMainDiv">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16" onClick={handleClick}>
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+            </svg>
+            <h2>Edit {mode === 'License' ? 'License' : 'Licensing'}</h2>
+            <div id='divLicenseDetailsTitle'>
+                {mode === 'License' ? (
+                    <>
+                        <p><strong>ID</strong></p>
+                        <p><strong>Amount</strong></p>
+                        <p><strong>Available</strong></p>
+                        <p><strong>Start Date</strong></p>
+                        <p><strong>Expiration Date</strong></p>
+                        <p><strong>PO (new)</strong></p>
+                        <p><strong>PO (old)</strong></p>
+                        <p><strong>Subscription Pack</strong></p>
+                    </>
+                ) : (
+                    <>
+                        <p><strong>E-Mail</strong></p>
+                        <p><strong>Department</strong></p>
+                        <p><strong>Company</strong></p>
+                        <p><strong>Subscription Pack</strong></p>
+                        <p><strong>Expiration Date</strong></p>
+                        <p><strong>PO (new)</strong></p>
+                        <p><strong>PO (old)</strong></p>
+                    </>
+                )}
+            </div>
+            <div id='divLicenseDetails'>
+                {renderInputs()}
+            </div>
+            <div id='PopupButtons' >
+                <p id='UpdateButton' onClick={handleUpdate}>Update</p>
+                <p className="DeleteButton" onClick={handleDelete}>Delete</p>
+            </div>
+        </div>
+    );
+};
+
+export default Popup;
+
+
+import EditButton from "./EditButton";
+
+const TableRow = ({ row, onEdit, mode }) => {
+
+    console.log("onEdit: ", onEdit);
+    const commonCells = [
+        <td key={0}>{row[0]}</td>,
+        <td key={1}>{row[1]}</td>,
+        <td key={2}>{row[2]}</td>,
+        mode === 'License' && <td key={7}>{row[7]}</td>,
+        <td key={3}>{row[3]}</td>,
+        <td key={4}>{row[4]}</td>,
+        <td key={5}>{row[5]}</td>,
+        <td key={6}>{row[6]}</td>
+    ].filter(Boolean); // filter(Boolean) entfernt null-Werte
+
+    return (
+        <tr>
+            {commonCells}
+            <EditButton onClick={() => onEdit(row)} />
+        </tr>
+    );
+}
+
+export default TableRow;
+
+
