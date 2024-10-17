@@ -1,145 +1,29 @@
-Beende folgende Funktion:
+    Wo ist der Fehler:
 
-   @CrossOrigin(origins = "http://localhost:3000")
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = {"/allLicensing"})
     public @ResponseBody List<Object> getAllLicensing() {
 
-        
-        
-        return employeeRepo.getAll();
+        List<List<Object>> result = new ArrayList<>();
+
+        List<Object> licensingEntries = licensingRepo.getAllLicensingEntries();
+
+        for (Object entry : licensingEntries){
+
+            Map<String, Object> entryData = new HashMap<>();
+            entryData.put(entry[0]);
+            entryData.put(entry[1]);
+            entryData.put(entry[2]);
+            entryData.put(entry[3]);
+            entryData.put(entry[4]);
+            entryData.put(entry[5]);
+            entryData.put(entry[6]);
+            entryData.put(entry[7]);
+
+            result.add(entryData);
+        }
+
+        return result;
     }
-
-
-
-So soll sie funktionieren:
-
-1. sie holt alle einträge  aus licensing
-2. für jeden licensing eintrag spcihert sie den jeweiligen Employee und Lizenz
-3. sich speichert folgende daten von Employee und Lizenz als ein objekt: LizenzID, E-Mail, Department, Company, Subscription Pack, Expiration Date, PO (new), PO (old)
-4das macht sie so lange bis sie alle daten hat und gibt sie dann so zurück
-
-Aufbau der Datenbank:
-
-employee_entity: id company department, email
-license_entity: id amount expiration_date, purchase_order_originally. start_date, subscription_pack
-licensing: id, employee_id, license_ide
-
-
-Hier die wihtigen Klassen:
-
-
-package com.spring_swlzfw;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-
-public interface LicensingRepo extends CrudRepository<Licensing, Integer> {
-
-    // Abfrage aller Verknüpfungen zwischen Mitarbeitern und Lizenzen
-    @Query(value = "SELECT lic.id, e.email, l.subscription_pack " +
-            "FROM licensing lic " +
-            "JOIN employee_entity e ON lic.employee_id = e.id " +
-            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
-    public List<Object> getAllLicensingEntries();
-
-    // Abfrage, um alle Lizenzen für einen bestimmten Mitarbeiter zu finden
-    @Query(value = "SELECT l.id, l.subscription_pack, l.expiration_date " +
-            "FROM licensing lic " +
-            "JOIN license_entity l ON lic.license_id = l.id " +
-            "WHERE lic.employee_id = :employeeId", nativeQuery = true)
-    public List<Object> findLicensesByEmployee(@Param("employeeId") int employeeId);
-
-    // Abfrage, um alle Mitarbeiter zu finden, die eine bestimmte Lizenz verwenden
-    @Query(value = "SELECT e.id, e.email, e.department " +
-            "FROM licensing lic " +
-            "JOIN employee_entity e ON lic.employee_id = e.id " +
-            "WHERE lic.license_id = :licenseId", nativeQuery = true)
-    public List<Object> findEmployeesByLicense(@Param("licenseId") int licenseId);
-
-    @Query(value = "SELECT *" +
-            "FROM licensing", nativeQuery = true)
-    public List<Object> getAll();
-}
-
-
-package com.spring_swlzfw;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Optional;
-
-public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
-
-    // Query zur Rückgabe von Mitarbeiterinformationen und den zugehörigen Lizenzinformationen über die Licensing-Tabelle
-    @Query(value = "SELECT e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM employee_entity e " +
-            "JOIN licensing lic ON e.id = lic.employee_id " +
-            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
-    public List<Object> getAll();
-
-    // Suchanfrage, um nach einem Begriff in verschiedenen Feldern zu suchen (über Licensing-Tabelle)
-    @Query(value = "SELECT e.email, e.company, e.department, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM employee_entity e " +
-            "JOIN licensing lic ON e.id = lic.employee_id " +
-            "JOIN license_entity l ON lic.license_id = l.id " +
-            "WHERE e.email LIKE %:search% " +
-            "OR e.department LIKE %:search% " +
-            "OR e.company LIKE %:search% " +
-            "OR l.purchase_order LIKE %:search% " +
-            "OR l.purchase_order_originally LIKE %:search% " +
-            "OR l.subscription_pack LIKE %:search% " +
-            "OR l.expiration_date LIKE %:search%", nativeQuery = true)
-    public List<Object> find(@Param("search") String search);
-
-    @Query(value = "SELECT * FROM employee_entity Where email = :email AND department = :department AND company = :company", nativeQuery = true)
-    public Optional<EmployeeEntity> searchEmployee(@Param("email") String email, @Param("department") String department, @Param("company") String company);
-
-}
-
-package com.spring_swlzfw;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
-
-public interface LicenseRepo extends CrudRepository<LicenseEntity, Integer> {
-
-    // Abfrage zur Rückgabe freier Lizenzen basierend auf Licensing-Tabelle und Anzahl der zugewiesenen Mitarbeiter
-    @Query(value = "SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, " +
-            "l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date " +
-            "FROM license_entity l " +
-            "LEFT JOIN licensing lic ON l.id = lic.license_id " +
-            "GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date " +
-            "HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount", nativeQuery = true)
-    public List<Object> getFreeLicenses();
-
-    // Abfrage zur Rückgabe aller Lizenzen (freier und belegter Lizenzen)
-    @Query(value = "SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, " +
-            "l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date " +
-            "FROM license_entity l " +
-            "LEFT JOIN licensing lic ON l.id = lic.license_id " +
-            "GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date", nativeQuery = true)
-    public List<Object> getAllLicenses();
-
-    // Abfrage zur Berechnung der Lizenzstatistik (freie, belegte und Gesamtzahl)
-    @Query(value = "SELECT t1.available AS frei, t2.unavailable AS belegt, t1.available + t2.unavailable AS gesamt " +
-            "FROM (SELECT SUM(e1.available) as available " +
-            "      FROM (SELECT (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS available " +
-            "            FROM license_entity l " +
-            "            LEFT JOIN licensing lic ON l.id = lic.license_id " +
-            "            GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack " +
-            "            HAVING COALESCE(COUNT(lic.license_id), 0) <= l.amount) AS e1) AS t1, " +
-            "     (SELECT (COUNT(lic.license_id)) AS unavailable " +
-            "      FROM licensing lic) AS t2", nativeQuery = true)
-    public List<Object> getLicenseStatistic();
-}
-
-
-
