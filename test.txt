@@ -1,19 +1,56 @@
-function checkAblaufdatum(heutigesDatum, ablaufDatum) {
-    // Konvertiere die Strings in Date-Objekte
-    const heute = new Date(heutigesDatum);
-    const ablauf = new Date(ablaufDatum);
-    
-    // Berechne die Differenz in Monaten
-    const differenzInMonaten = (ablauf.getFullYear() - heute.getFullYear()) * 12 + (ablauf.getMonth() - heute.getMonth());
+import EditButton from "./EditButton";
+import {useState } from 'react';
 
-    if (heute > ablauf) {
-        console.log("Abgelaufen");
-    } else if (differenzInMonaten < 3) {
-        console.log("Abgelaufen");
-    } else {
-        console.log("Alles in Ordnung");
+const TableRow = ({ row, onEdit, mode}) => {
+
+    let idLIcensing = null;
+
+    if (mode !== 'License') {
+        idLIcensing = row[7];
+        //console.log("LicensingID: ", idLIcensing + "  email: " + row[0] + "  sub pack: " + row[3]);
     }
-}
 
-// Beispielaufruf:
-checkAblaufdatum("2024/10/18", "2025/01/17"); // Sollte "Abgelaufen" ausgeben
+
+
+        const heute = new Date();
+        const expirationDate = new Date(row[4]);
+        
+        
+        const difference = (expirationDate.getFullYear() - heute.getFullYear()) * 12 + (expirationDate.getMonth() - heute.getMonth());
+    
+        if (heute > expirationDate) {
+            console.log("Abgelaufen");
+        } else if (difference < 3) {
+            console.log("bald abgelaufen");
+        } else {
+            console.log("Alles in Ordnung");
+        }
+    
+    
+
+    console.log("typeof: ", typeof row[3]);
+    console.log(row[3]);
+
+    const commonCells = [
+        <td key={0} className="ClassForBackgroung">{row[0]}</td>,
+        <td key={1} className="ClassForBackgroung">{row[1]}</td>,
+        <td key={2} className="ClassForBackgroung">{row[2]}</td>,
+        mode === 'License' && <td key={7} className="ClassForBackgroung">{row[7]}</td>,
+        <td key={3} className="ClassForBackgroung">{row[3]}</td>,
+        <td key={4} className="ClassForBackgroung">{row[4]}</td>,
+        <td key={5} className="ClassForBackgroung">{row[5]}</td>,
+        <td key={6} className="ClassForBackgroung">{row[6]}</td>
+    ].filter(Boolean);
+
+    return (
+        <tr>
+            {commonCells}
+            <EditButton onClick={() => onEdit(row, idLIcensing)} />
+        </tr>
+    );
+};
+
+
+export default TableRow;
+
+
