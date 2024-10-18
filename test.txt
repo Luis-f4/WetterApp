@@ -1,36 +1,19 @@
-import React, { useEffect } from 'react';
+function checkAblaufdatum(heutigesDatum, ablaufDatum) {
+    // Konvertiere die Strings in Date-Objekte
+    const heute = new Date(heutigesDatum);
+    const ablauf = new Date(ablaufDatum);
+    
+    // Berechne die Differenz in Monaten
+    const differenzInMonaten = (ablauf.getFullYear() - heute.getFullYear()) * 12 + (ablauf.getMonth() - heute.getMonth());
 
-const YourComponent = () => {
-    const [selectedRow, setSelectedRow] = useState(null);
-    const [selectedIdLicensing, setSelectedIdLicensing] = useState(null);
+    if (heute > ablauf) {
+        console.log("Abgelaufen");
+    } else if (differenzInMonaten < 3) {
+        console.log("Abgelaufen");
+    } else {
+        console.log("Alles in Ordnung");
+    }
+}
 
-    const handleEditClick = (row, idLicensing) => {
-        console.log("jetzt wird die funktion ausgeführt");
-        console.log("idLIcensing: ", idLicensing);
-
-        setSelectedRow(row); 
-        setSelectedIdLicensing(idLicensing);
-
-        // Hier kannst du den aktuellen Wert nach dem Setzen des States nicht sehen
-        // console.log("selectedIdLicensing: ", selectedIdLicensing); // dies wird 'null' ausgeben
-    };
-
-    const closePopup = () => {
-        console.log("selectedIdLicensing VORHER: ", selectedIdLicensing);
-
-        setSelectedRow(null); // Popup schließen
-        setSelectedIdLicensing(null);
-
-        // Auch hier wird der Zustand nicht sofort aktualisiert
-        // console.log("selectedIdLicensing NACHHER: ", selectedIdLicensing); // dies wird den vorherigen Wert ausgeben
-    };
-
-    // useEffect um den neuen Wert zu überwachen
-    useEffect(() => {
-        console.log("Neuer Wert von selectedIdLicensing: ", selectedIdLicensing);
-    }, [selectedIdLicensing]);
-
-    return (
-        // Dein JSX hier
-    );
-};
+// Beispielaufruf:
+checkAblaufdatum("2024/10/18", "2025/01/17"); // Sollte "Abgelaufen" ausgeben
