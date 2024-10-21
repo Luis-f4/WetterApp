@@ -1,14 +1,10 @@
-Änder den code so dass mode im local storage gespeichert wir (so wie checkExpiredLicenses):
-
-
 import './MainContent.css';
 import Table from './Table';
 import TableLicense from './TableLicense';
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import CreatePopup from './CreatePopup';
 
 export default function MainContent() {
-
     const [mode, setMode] = useState('License');
     const [modeButton, setModeButton] = useState('Show Employee');
     const [title, setTitle] = useState('Licenses');
@@ -22,6 +18,18 @@ export default function MainContent() {
         if (savedShowExpiredLicenses !== null) {
             setShowExpiredLicenses(JSON.parse(savedShowExpiredLicenses));
         }
+
+        // Mode aus dem localStorage wiederherstellen
+        const savedMode = localStorage.getItem('mode');
+        if (savedMode !== null) {
+            setMode(savedMode);
+            // Modusabhängige Einstellungen wiederherstellen
+            if (savedMode === 'Employee') {
+                setModeButton('Show Licenses');
+                setTitle('Licensing');
+                setAddButtonTitle('Add new licensing');
+            }
+        }
     }, []);
 
     const changeMode = () => {
@@ -30,16 +38,20 @@ export default function MainContent() {
             setModeButton('Show Licenses');
             setTitle('Licensing');
             setAddButtonTitle('Add new licensing');
+            // Modus im localStorage speichern
+            localStorage.setItem('mode', 'Employee');
         } else {
             setMode('License');
             setModeButton('Show Employee');
             setTitle('Licenses');
             setAddButtonTitle('Add new license');
+            // Modus im localStorage speichern
+            localStorage.setItem('mode', 'License');
         }
     }
 
     const closePopup = () => {
-        setCreatePopupOn(false); 
+        setCreatePopupOn(false);
     };
 
     const handleClick = () => {
@@ -59,15 +71,15 @@ export default function MainContent() {
             <body className='MainContent'>
                 <div className="LizenzenStat">
                     Available licenses:
-                    <br/>
+                    <br />
                     Allocated licenses:
-                    <br/>
+                    <br />
                     Total licenses:
                 </div>
 
                 <h1 className='Headline'>{title}</h1>
 
-                <br/><br/><br/><br/>
+                <br /><br /><br /><br />
 
                 <button className='SwitchTable' onClick={changeMode}>{modeButton}</button>
 
@@ -88,28 +100,3 @@ export default function MainContent() {
         </>
     );
 }
-
-
-
-
-
-import TableLicense from "./TableLicense";
-import TableEmployee from "./TableEmployee";
-const Table = ({mode}) => {
-
-
-
-
-    if(mode === 'License'){
-        return(
-            <TableLicense />
-        );
-    }else{
-        return(
-            <TableEmployee />
-        )
-    } 
-
-}
- 
-export default Table;
