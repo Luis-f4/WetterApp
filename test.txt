@@ -1,86 +1,43 @@
-import './MainContent.css';
-import Table from './Table';
-import TableLicense from './TableLicense';
-import React, {useEffect, useState} from "react";
-import CreatePopup from './CreatePopup';
+Änder diese Funktionen so dass zusätzlich nur einträge gezeigt werden wo dass ablaufdatum abgelaufen ist oder in 3 monaten oder weniger abläuft:
 
-export default function MainContent() {
 
-    const [mode, setMode] = useState('License');
-    const [modeButton, setModeButton] = useState('Show Employee');
-    const [title, setTitle] = useState('Licenses');
-    const [createPopupOn, setCreatePopupOn] = useState(false);
-    const [addButtonTitle, setAddButtonTitle] = useState('Add new license');
-    const [showExpiredLicenses, setShowExpiredLicenses] = useState(false);
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = {"/allLicensing"})
+    public @ResponseBody List<List<Object>> getAllLicensing() {
 
-    // Beim Laden der Komponente den Zustand aus dem localStorage wiederherstellen
-    useEffect(() => {
-        const savedShowExpiredLicenses = localStorage.getItem('showExpiredLicenses');
-        if (savedShowExpiredLicenses !== null) {
-            setShowExpiredLicenses(JSON.parse(savedShowExpiredLicenses));
+
+        List<List<Object>> result = new ArrayList<>();
+
+
+        List<Object[]> licensingEntries = licensingRepo.getAllLicensingEntries();
+
+
+        for (Object[] entry : licensingEntries) {
+
+            List<Object> entryData = new ArrayList<>();
+
+            entryData.add(entry[1]);  // E-Mail
+            entryData.add(entry[2]);  // department
+            entryData.add(entry[3]);  // compamy
+            entryData.add(entry[4]);  // Subscribtion pack
+            entryData.add(entry[5]);  // Ablaufdatum der Lizenz
+            entryData.add(entry[6]);  // Neue PO
+            entryData.add(entry[7]);  // Alte PO
+            entryData.add(entry[0]);  // Lizenz ID
+
+
+            result.add(entryData);
         }
-    }, []);
 
-    const changeMode = () => {
-        if (mode === 'License') {
-            setMode('Employee');
-            setModeButton('Show Licenses');
-            setTitle('Licensing');
-            setAddButtonTitle('Add new licensing');
-        } else {
-            setMode('License');
-            setModeButton('Show Employee');
-            setTitle('Licenses');
-            setAddButtonTitle('Add new license');
-        }
+
+        return result;
     }
 
-    const closePopup = () => {
-        setCreatePopupOn(false); 
-    };
 
-    const handleClick = () => {
-        setCreatePopupOn(true);
-    }
 
-    const handleCheckboxChange = (event) => {
-        const isChecked = event.target.checked;
-        setShowExpiredLicenses(isChecked);
-        // Den Zustand in localStorage speichern
-        localStorage.setItem('showExpiredLicenses', JSON.stringify(isChecked));
-    }
 
-    return (
-        <>
-            <body className='MainContent'>
-                <div className="LizenzenStat">
-                    Available licenses:
-                    <br/>
-                    Allocated licenses:
-                    <br/>
-                    Total licenses:
-                </div>
-
-                <h1 className='Headline'>{title}</h1>
-
-                <br/><br/><br/><br/>
-
-                <button className='SwitchTable' onClick={changeMode}>{modeButton}</button>
-
-                <input type='text' className='Searchbar' placeholder="Einträge durchsuchen" />
-
-                <button type="button" className='Search'>Search</button>
-
-                <label htmlFor="checkExpiredLicenses">Abgelaufene Lizenzen anzeigen</label>
-                <input type="checkbox" id='checkExpiredLicenses' checked={showExpiredLicenses} onChange={handleCheckboxChange} />
-
-                <div>
-                    <button className='CreateButton' onClick={handleClick}>{addButtonTitle}</button>
-                </div>
-            </body>
-            <Table mode={mode} showExpiredLicenses={showExpiredLicenses} />
-
-            {createPopupOn && <CreatePopup onClose={closePopup} mode={mode} />}
-        </>
-    );
-}
+    @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM licensing lic " +
+            "JOIN employee_entity e ON lic.employee_id = e.id " +
+            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
+    public List<Object[]> getAllLicensingEntries();  // Rückgabetyp anpassen
