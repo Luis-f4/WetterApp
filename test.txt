@@ -1,13 +1,91 @@
-Diese Woche war die erste nach meinem Urlaub. Am Montag habe ich alle Ausbildungsnachweise für die Wochen geschrieben, in denen ich in der Schule und im Urlaub war. Nachdem ich mit den Ausbildungsnachweisen fertig war, habe ich drei E-Learnings zum Thema Datenschutz und Bürosicherheit absolviert (wir sind verpflichtet, diese E-Learnings einmal im Jahr zu machen).
+Erweiter den code so dass wenn die checkbox checkExpiredLicenses ausgewählt ist ein prop an Table weitergegeben wir mit dem wert true und wenn es nicht ausgewählt ist false übergeben:
 
-Am Dienstag war ich in der Niederlassung. Am Morgen habe ich mich mit der Softwarelizenzverwaltungs-App auseinandergesetzt, um zu wissen, wo wir vor dem Urlaub aufgehört haben. Später haben wir mit unserem Team einen Spaziergang gemacht. Am Nachmittag habe ich dann ein UML-Diagramm der Datenbankstruktur der Lizenzverwaltungs-App erstellt, um festzustellen, welche Änderungen erforderlich sind.
 
-Am Mittwoch begann ich mit der Überarbeitung der API. Zuerst habe ich die Entity-Klassen überarbeitet, so wie ich es am Tag zuvor mit meinem UML-Diagramm geplant hatte. (Entity-Klassen in Spring Boot stellen die einzelnen Tabellen einer Datenbank als Java-Klasse dar. Das bedeutet, wenn diese Klasse verändert wird, ändert sich auch die entsprechende Tabelle in der Datenbank.) Nachdem die Entity-Klassen überarbeitet waren, habe ich die Controller-Klasse an die neuen Entity-Klassen angepasst.
 
-Am Donnerstag habe ich weiter an der Controller-Klasse gearbeitet. (Eine Controller-Klasse ist für die Bearbeitung von Anfragen von Clients verantwortlich und gibt entsprechende Antworten.) Nachdem die Controller-Klasse fertig war, habe ich im Frontend eine Funktion erstellt, die überprüft, ob Lizenzen abgelaufen sind, und diese hervorhebt, wenn dies der Fall ist.
+import './MainContent.css'
+import Table from './Table';
+import TableLicense from './TableLicense'
+import React, {useEffect, useState} from "react";
+import CreatePopup from './CreatePopup'
+export default function MainContent() {
 
-Am Freitag haben mein Azubi-Kollege und ich uns auf einen Review-Termin vorbereitet. In diesem Termin sollten wir unserem Product Owner die Ergebnisse präsentieren, die wir in den letzten Wochen erarbeitet haben. Nach dem Review-Termin haben mein Kollege und ich die Stories für den nächsten Sprint erstellt und besprochen. Zum Schluss hatten wir unser Sprint-Planning und haben den nächsten Sprint durchgeplant.
+    const [mode, setMode] = useState('License');
+    const [modeButton, setModeButton] = useState('Show Employee');
+    const [title, setTitle] = useState('Licenses');
+    const [createPopupOn, setCreatePopupOn] = useState(false);
+    const [addButtonTitle, setAddButtonTitle] = useState('Add new license');
 
-Das habe ich gelernt:
+    
+    const changeMode = () => {
 
-Wenn man sich während der Entwicklung regelmäßig kurze Notizen zu neuen Features macht, hat man weniger Probleme, nach längerer Zeit wieder in das Projekt einzusteigen.
+        if(mode === 'License'){
+            setMode('Employee');
+            setModeButton('Show Licenses'); 
+            setTitle('Licensing');
+            setAddButtonTitle('Add new licensing');
+            
+        }else{
+            setMode('License');
+            
+            setModeButton('Show Employee');
+            setTitle('Licenses');
+            setAddButtonTitle('Add new license');
+            
+        }
+
+}
+
+    const closePopup = () => {
+        setCreatePopupOn(false); 
+    };
+
+    const handleClick = () => {
+        setCreatePopupOn(true)
+    }
+    return (
+<>
+<body className='MainContent'>
+
+
+
+<div className="LizenzenStat">
+Available licenses:
+<br/>
+Allocated licenses:
+<br/>
+Total licenses:
+
+
+</div>
+
+<h1 className='Headline'>{title}</h1>
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<button className='SwitchTable' onClick={changeMode}>{modeButton}</button>
+
+<input type='text' className='Searchbar' placeholder="Einträge durchsuchen" /> {/* onChange={handleChange}
+     onKeyDown={handleSearchEnter} */}
+
+
+<button type="button" className='Search' >Search</button> {/* onClick={handleSearch} */}
+
+<label htmlFor="checkExpiredLicenses">Abgelaufene Lizenzen anzeigen</label>
+<input type="checkbox" id='checkExpiredLicenses' />
+
+
+<div>
+<button className='CreateButton' onClick={handleClick}>{addButtonTitle}</button>
+</div>
+</body> 
+<Table mode={mode}/>
+
+{createPopupOn && <CreatePopup onClose={closePopup} mode={mode} />}
+</>
+    )
+}
+
+
