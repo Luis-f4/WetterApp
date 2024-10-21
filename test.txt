@@ -1,102 +1,143 @@
-import './MainContent.css';
-import Table from './Table';
-import TableLicense from './TableLicense';
-import React, { useEffect, useState } from "react";
-import CreatePopup from './CreatePopup';
+Füge folgendes hinzu: ich benötige ein get fetsch von http://localhost:8080/testLicenseInformation so kann ein response aussehen:
+[
+    [
+        "UpdateTest",
+        444,
+        220
+    ],
+    [
+        "TestPack4",
+        102,
+        8
+    ],
+    [
+        "TestPack5",
+        3502,
+        19
+    ],
+    [
+        "Test7",
+        1111,
+        29
+    ]
+]
 
-export default function MainContent() {
-    const [mode, setMode] = useState('License');
-    const [modeButton, setModeButton] = useState('Show Employee');
-    const [title, setTitle] = useState('Licenses');
-    const [createPopupOn, setCreatePopupOn] = useState(false);
-    const [addButtonTitle, setAddButtonTitle] = useState('Add new license');
-    const [showExpiredLicenses, setShowExpiredLicenses] = useState(false);
 
-    // Beim Laden der Komponente den Zustand aus dem localStorage wiederherstellen
-    useEffect(() => {
-        const savedShowExpiredLicenses = localStorage.getItem('showExpiredLicenses');
-        if (savedShowExpiredLicenses !== null) {
-            setShowExpiredLicenses(JSON.parse(savedShowExpiredLicenses));
-        }
+für jeden datensatz soll eine neue option bei dropdown hinzugefügt werden und die einzelnen werte sollen hinzugefügt werden. Wenn bei dropdown eine option ausgewählt wird soll dies in einer variable gespeichert werden:
 
-        // Mode aus dem localStorage wiederherstellen
-        const savedMode = localStorage.getItem('mode');
-        if (savedMode !== null) {
-            setMode(savedMode);
-            // Modusabhängige Einstellungen wiederherstellen
-            if (savedMode === 'Employee') {
-                setModeButton('Show Licenses');
-                setTitle('Licensing');
-                setAddButtonTitle('Add new licensing');
-            }
-        }
-    }, []);
+import React, { useState } from 'react';
+import './Popup.css';
 
-    const changeMode = () => {
-        if (mode === 'License') {
-            setMode('Employee');
-            setModeButton('Show Licenses');
-            setTitle('Licensing');
-            setAddButtonTitle('Add new licensing');
-            // Modus im localStorage speichern
-            localStorage.setItem('mode', 'Employee');
-        } else {
-            setMode('License');
-            setModeButton('Show Employee');
-            setTitle('Licenses');
-            setAddButtonTitle('Add new license');
-            // Modus im localStorage speichern
-            localStorage.setItem('mode', 'License');
-        }
-    }
+const CreatePopup = ({ onClose, mode }) => {
+    const [currentRow, setCurrentRow] = useState([]);
 
-    const closePopup = () => {
-        setCreatePopupOn(false);
+    const handleInputChange = (e, index) => {
+        const newRow = [...currentRow];
+        newRow[index] = e.target.value;
+        setCurrentRow(newRow);
     };
 
-    const handleClick = () => {
-        setCreatePopupOn(true);
-    }
+    const resetChanges = () => new Promise(resolve => {
+        setCurrentRow([]);
+        resolve();
+    });
 
-    const handleCheckboxChange = (event) => {
-        const isChecked = event.target.checked;
-        setShowExpiredLicenses(isChecked);
-        // Den Zustand in localStorage speichern
-        localStorage.setItem('showExpiredLicenses', JSON.stringify(isChecked));
-        window.location.reload(true);
+    const handleClick = async () => {
+        await resetChanges();
+        onClose();
+    };
+
+
+    const handleCreate = async () => {
+        if(mode ==='License'){
+
+            console.log("Fetch start mode license");
+            
+
+        await fetch(`http://localhost:8080/addLicense/${currentRow[0]}/${currentRow[2]}/${currentRow[3]}/${currentRow[4]}/${currentRow[5]}/${currentRow[1]}`, {
+            method: "Post",
+            headers: {
+                'Authorization': 'Basic ' + btoa('Bart:123')
+            }
+        });
+// /addLicensingWithFrontend/{email}/{department}/{company}/{licenseID}
+        }else{
+
+            await fetch(`http://localhost:8080/addLicensingWithFrontend/${currentRow[0]}/${currentRow[1]}/${currentRow[2]}/${currentRow[3]}`, {
+                method: "Post",
+                headers: {
+                    'Authorization': 'Basic ' + btoa('Bart:123')
+                }
+            });
+        }
+
+        onClose();
+        window.location.reload();
     }
+    
+
+    const renderInputs = () => {
+        return (
+            <>
+                <input className='testInput' defaultValue={""} onChange={(e) => handleInputChange(e, 0)} />
+                <input defaultValue={""}  onChange={(e) => handleInputChange(e, 1)} type={mode === 'License' ? 'Date' : 'text'}  />
+                <input defaultValue={""} onChange={(e) => handleInputChange(e, 2)} type={mode === 'License' ? 'Date' : 'text'} />
+                                
+                {mode !== 'License' && <select name="cars" id="cars">
+                <option value="audi">testPack1 | PO: 1231 | amount: 19</option>
+                <option value="audi">testPack2 | PO: 89823 | amount: 1</option>
+                <option value="audi">testPack3 | PO: 24234 | amount: 190</option>
+                </select>}
+                
+                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 3)} />}
+
+                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 4)} />}
+                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 5)} />}
+
+               
+            </>
+        );
+    };
 
     return (
-        <>
-            <body className='MainContent'>
-                <div className="LizenzenStat">
-                    Available licenses:
-                    <br />
-                    Allocated licenses:
-                    <br />
-                    Total licenses:
-                </div>
-
-                <h1 className='Headline'>{title}</h1>
-
-                <br /><br /><br /><br />
-
-                <button className='SwitchTable' onClick={changeMode}>{modeButton}</button>
-
-                <input type='text' className='Searchbar' placeholder="Einträge durchsuchen" />
-
-                <button type="button" className='Search'>Search</button>
-
-                <label htmlFor="checkExpiredLicenses">Abgelaufene Lizenzen anzeigen</label>
-                <input type="checkbox" id='checkExpiredLicenses' checked={showExpiredLicenses} onChange={handleCheckboxChange} />
-
-                <div>
-                    <button className='CreateButton' onClick={handleClick}>{addButtonTitle}</button>
-                </div>
-            </body>
-            <Table mode={mode} />
-
-            {createPopupOn && <CreatePopup onClose={closePopup} mode={mode} />}
-        </>
+        <div id="PopupMainDiv">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16" onClick={handleClick}>
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+            </svg>
+            <h2>Create {mode === 'License' ? 'License' : 'Licensing'}</h2>
+            <div id='divLicenseDetailsTitle'>
+                {mode === 'License' ? (
+                    <>
+                        
+                        <p><strong>Amount</strong></p>
+                        <p><strong>Start Date</strong></p>
+                        <p><strong>Expiration Date</strong></p>
+                        <p><strong>PO (new)</strong></p>
+                        <p><strong>PO (old)</strong></p>
+                        <p><strong>Subscription Pack</strong></p>
+                    </>
+                ) : (
+                    <>
+                        <p><strong>E-Mail</strong></p>
+                        <p><strong>Department</strong></p>
+                        <p><strong>Company</strong></p>
+                        {/* <p><strong>Subscription Pack</strong></p>
+                        <p><strong>Expiration Date</strong></p> */}
+                        <p><strong>ID (PO (new))</strong></p>
+                        {/* <p><strong>PO (old)</strong></p> */}
+                    </>
+                )}
+            </div>
+            <div id='divLicenseDetails'>
+                {renderInputs()}
+            </div>
+            <div id='PopupButtons'>
+                
+                <p className="DeleteButton" onClick={handleCreate}>Create</p>
+            </div>
+        </div>
     );
-}
+};
+
+export default CreatePopup;
