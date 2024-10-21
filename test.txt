@@ -1,40 +1,35 @@
-Füge folgendes hinzu: ich benötige ein get fetsch von http://localhost:8080/testLicenseInformation so kann ein response aussehen:
-[
-    [
-        "UpdateTest",
-        444,
-        220
-    ],
-    [
-        "TestPack4",
-        102,
-        8
-    ],
-    [
-        "TestPack5",
-        3502,
-        19
-    ],
-    [
-        "Test7",
-        1111,
-        29
-    ]
-]
-
-
-für jeden datensatz soll eine neue option bei dropdown hinzugefügt werden und die einzelnen werte sollen hinzugefügt werden. Wenn bei dropdown eine option ausgewählt wird soll dies in einer variable gespeichert werden:
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Popup.css';
 
 const CreatePopup = ({ onClose, mode }) => {
     const [currentRow, setCurrentRow] = useState([]);
+    const [dropdownOptions, setDropdownOptions] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null); // Zum Speichern der ausgewählten Dropdown-Option
+
+    // Fetch the test license information on component mount
+    useEffect(() => {
+        const fetchLicenseInformation = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/testLicenseInformation');
+                const data = await response.json();
+                setDropdownOptions(data); // Set the fetched data as dropdown options
+            } catch (error) {
+                console.error('Error fetching license information:', error);
+            }
+        };
+
+        fetchLicenseInformation();
+    }, []);
 
     const handleInputChange = (e, index) => {
         const newRow = [...currentRow];
         newRow[index] = e.target.value;
         setCurrentRow(newRow);
+    };
+
+    const handleDropdownChange = (e) => {
+        const selectedValue = dropdownOptions[e.target.value];
+        setSelectedOption(selectedValue); // Store the selected dropdown value
     };
 
     const resetChanges = () => new Promise(resolve => {
@@ -47,22 +42,17 @@ const CreatePopup = ({ onClose, mode }) => {
         onClose();
     };
 
-
     const handleCreate = async () => {
-        if(mode ==='License'){
-
+        if (mode === 'License') {
             console.log("Fetch start mode license");
-            
 
-        await fetch(`http://localhost:8080/addLicense/${currentRow[0]}/${currentRow[2]}/${currentRow[3]}/${currentRow[4]}/${currentRow[5]}/${currentRow[1]}`, {
-            method: "Post",
-            headers: {
-                'Authorization': 'Basic ' + btoa('Bart:123')
-            }
-        });
-// /addLicensingWithFrontend/{email}/{department}/{company}/{licenseID}
-        }else{
-
+            await fetch(`http://localhost:8080/addLicense/${currentRow[0]}/${currentRow[2]}/${currentRow[3]}/${currentRow[4]}/${currentRow[5]}/${currentRow[1]}`, {
+                method: "Post",
+                headers: {
+                    'Authorization': 'Basic ' + btoa('Bart:123')
+                }
+            });
+        } else {
             await fetch(`http://localhost:8080/addLicensingWithFrontend/${currentRow[0]}/${currentRow[1]}/${currentRow[2]}/${currentRow[3]}`, {
                 method: "Post",
                 headers: {
@@ -73,28 +63,29 @@ const CreatePopup = ({ onClose, mode }) => {
 
         onClose();
         window.location.reload();
-    }
-    
+    };
 
     const renderInputs = () => {
         return (
             <>
                 <input className='testInput' defaultValue={""} onChange={(e) => handleInputChange(e, 0)} />
-                <input defaultValue={""}  onChange={(e) => handleInputChange(e, 1)} type={mode === 'License' ? 'Date' : 'text'}  />
+                <input defaultValue={""} onChange={(e) => handleInputChange(e, 1)} type={mode === 'License' ? 'Date' : 'text'} />
                 <input defaultValue={""} onChange={(e) => handleInputChange(e, 2)} type={mode === 'License' ? 'Date' : 'text'} />
-                                
-                {mode !== 'License' && <select name="cars" id="cars">
-                <option value="audi">testPack1 | PO: 1231 | amount: 19</option>
-                <option value="audi">testPack2 | PO: 89823 | amount: 1</option>
-                <option value="audi">testPack3 | PO: 24234 | amount: 190</option>
-                </select>}
-                
-                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 3)} />}
 
+                {/* Dynamisches Dropdown */}
+                {mode !== 'License' && (
+                    <select onChange={handleDropdownChange}>
+                        {dropdownOptions.map((option, index) => (
+                            <option key={index} value={index}>
+                                {option[0]} | PO: {option[1]} | Amount: {option[2]}
+                            </option>
+                        ))}
+                    </select>
+                )}
+
+                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 3)} />}
                 {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 4)} />}
                 {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 5)} />}
-
-               
             </>
         );
     };
@@ -109,7 +100,6 @@ const CreatePopup = ({ onClose, mode }) => {
             <div id='divLicenseDetailsTitle'>
                 {mode === 'License' ? (
                     <>
-                        
                         <p><strong>Amount</strong></p>
                         <p><strong>Start Date</strong></p>
                         <p><strong>Expiration Date</strong></p>
@@ -122,10 +112,7 @@ const CreatePopup = ({ onClose, mode }) => {
                         <p><strong>E-Mail</strong></p>
                         <p><strong>Department</strong></p>
                         <p><strong>Company</strong></p>
-                        {/* <p><strong>Subscription Pack</strong></p>
-                        <p><strong>Expiration Date</strong></p> */}
                         <p><strong>ID (PO (new))</strong></p>
-                        {/* <p><strong>PO (old)</strong></p> */}
                     </>
                 )}
             </div>
@@ -133,7 +120,6 @@ const CreatePopup = ({ onClose, mode }) => {
                 {renderInputs()}
             </div>
             <div id='PopupButtons'>
-                
                 <p className="DeleteButton" onClick={handleCreate}>Create</p>
             </div>
         </div>
