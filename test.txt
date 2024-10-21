@@ -1,6 +1,7 @@
-    @Query(value = "SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, " +
-            "l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date " +
-            "FROM license_entity l " +
-            "LEFT JOIN licensing lic ON l.id = lic.license_id " +
-            "GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date", nativeQuery = true)
-    public List<Object> getAllLicenses();
+@Query(value = "SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, " +
+        "l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date " +
+        "FROM license_entity l " +
+        "LEFT JOIN licensing lic ON l.id = lic.license_id " +
+        "WHERE l.expiration_date <= NOW() OR l.expiration_date <= DATE_ADD(NOW(), INTERVAL 3 MONTH) " +
+        "GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date", nativeQuery = true)
+public List<Object> getAllLicensesExpiringSoon();
