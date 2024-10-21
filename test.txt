@@ -1,15 +1,12 @@
-Änder diese Funktionen so dass zusätzlich nur einträge gezeigt werden wo dass ablaufdatum abgelaufen ist oder in 3 monaten oder weniger abläuft:
-
-
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping(path = {"/allLicensing"})
-    public @ResponseBody List<List<Object>> getAllLicensing() {
+  @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = {"/allLicensingExpiringSoon"})
+    public @ResponseBody List<List<Object>> getAllLicensingExpiringSoon() {
 
 
         List<List<Object>> result = new ArrayList<>();
 
 
-        List<Object[]> licensingEntries = licensingRepo.getAllLicensingEntries();
+        List<Object[]> licensingEntries = licensingRepo.getAllLicensingEntriesExpiringSoon();
 
 
         for (Object[] entry : licensingEntries) {
@@ -35,9 +32,10 @@
 
 
 
-
     @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
             "FROM licensing lic " +
             "JOIN employee_entity e ON lic.employee_id = e.id " +
-            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
-    public List<Object[]> getAllLicensingEntries();  // Rückgabetyp anpassen
+            "JOIN license_entity l ON lic.license_id = l.id" +
+            "Where l.expiration_date <= CURDATE()" +
+            "OR l.expiration_date <= DATE_ADD(CURDATE(), INTERVAL 3 MONTH)", nativeQuery = true)
+    public List<Object[]> getAllLicensingEntriesExpiringSoon();
