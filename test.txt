@@ -1,27 +1,6 @@
-Egal ob die checkbox ausgewählt ist oder nicht es wird immer false ausgegeben:
-
-
-import TableLicense from "./TableLicense";
-import TableEmployee from "./TableEmployee";
-const Table = ({mode, showExpiredLicenses}) => {
-
-    //console.log("showExpiredLicenses: ", showExpiredLicenses);
-    
-    if(showExpiredLicenses == true){
-        console.log("true");
-    }else{
-        console.log("false");
-    }
-    if(mode === 'License'){
-        return(
-            <TableLicense />
-        );
-    }else{
-        return(
-            <TableEmployee />
-        )
-    } 
-
-}
- 
-export default Table;
+    @Query(value = "SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, " +
+            "l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date " +
+            "FROM license_entity l " +
+            "LEFT JOIN licensing lic ON l.id = lic.license_id " +
+            "GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date", nativeQuery = true)
+    public List<Object> getAllLicenses();
