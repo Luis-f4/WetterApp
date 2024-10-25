@@ -277,5 +277,50 @@ public class LicenseEntity {
     }
 }
 
+hier ein teil der console:
 
+
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally FROM licensing lic JOIN employee_entity e ON lic.employee_id = e.id JOIN license_entity l ON lic.license_id = l.id
+Hibernate: SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date
+Hibernate: SELECT t1.available AS frei, t2.unavailable AS belegt, t1.available + t2.unavailable AS gesamt FROM (SELECT SUM(e1.available) as available       FROM (SELECT (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS available             FROM license_entity l             LEFT JOIN licensing lic ON l.id = lic.license_id             GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack             HAVING COALESCE(COUNT(lic.license_id), 0) <= l.amount) AS e1) AS t1,      (SELECT (COUNT(lic.license_id)) AS unavailable       FROM licensing lic) AS t2
+Auth herader:   Basic QmFydDoxMjM=
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date
+Hibernate: SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally FROM licensing lic JOIN employee_entity e ON lic.employee_id = e.id JOIN license_entity l ON lic.license_id = l.id
+Hibernate: SELECT t1.available AS frei, t2.unavailable AS belegt, t1.available + t2.unavailable AS gesamt FROM (SELECT SUM(e1.available) as available       FROM (SELECT (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS available             FROM license_entity l             LEFT JOIN licensing lic ON l.id = lic.license_id             GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack             HAVING COALESCE(COUNT(lic.license_id), 0) <= l.amount) AS e1) AS t1,      (SELECT (COUNT(lic.license_id)) AS unavailable       FROM licensing lic) AS t2
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
+Auth herader:   Basic QmFydDoxMjM=
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
 
