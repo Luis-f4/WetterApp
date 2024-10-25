@@ -1,4 +1,4 @@
-warum funktioniert die funktion nicht? (die daten werden korrekt gesendet):
+Beende folgende funktion:
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping(path = "/updateEmployee/{licensingID}/{email}/{department}/{company}/{subscriptionPack}/{po}/{amount}")
@@ -20,7 +20,7 @@ warum funktioniert die funktion nicht? (die daten werden korrekt gesendet):
             System.out.println("Employee with email " + email + " not found.");
             return "Employee not found!";
         }
-
+/*
         if (licensing != null) {
             licensing.setEmployee(employee);
             if (licenseOpt.isPresent()) {
@@ -30,98 +30,15 @@ warum funktioniert die funktion nicht? (die daten werden korrekt gesendet):
                 System.out.println("License not found.");
                 return "License not found!";
             }
-        }
+        }*/
 
 
         return "Employee and Licensing updated successfully!";
     }
 
 
-package com.vodafone.spring_swlzfw;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-
-public interface LicensingRepo extends CrudRepository<Licensing, Integer> {
-
-    // Abfrage aller Verknüpfungen zwischen Mitarbeitern und Lizenzen
-    @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM licensing lic " +
-            "JOIN employee_entity e ON lic.employee_id = e.id " +
-            "JOIN license_entity l ON lic.license_id = l.id " +
-            "Where l.expiration_date <= CURDATE() " +
-            "OR l.expiration_date <= DATE_ADD(CURDATE(), INTERVAL 3 MONTH)", nativeQuery = true)
-    public List<Object[]> getAllLicensingEntriesExpiringSoon();
-
-    @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM licensing lic " +
-            "JOIN employee_entity e ON lic.employee_id = e.id " +
-            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
-    public List<Object[]> getAllLicensingEntries();
-
-
-
-    // Abfrage, um alle Lizenzen für einen bestimmten Mitarbeiter zu finden
-    @Query(value = "SELECT l.id, l.subscription_pack, l.expiration_date " +
-            "FROM licensing lic " +
-            "JOIN license_entity l ON lic.license_id = l.id " +
-            "WHERE lic.employee_id = :employeeId", nativeQuery = true)
-    public List<Object> findLicensesByEmployee(@Param("employeeId") int employeeId);
-
-    // Abfrage, um alle Mitarbeiter zu finden, die eine bestimmte Lizenz verwenden
-    @Query(value = "SELECT e.id, e.email, e.department " +
-            "FROM licensing lic " +
-            "JOIN employee_entity e ON lic.employee_id = e.id " +
-            "WHERE lic.license_id = :licenseId", nativeQuery = true)
-    public List<Object> findEmployeesByLicense(@Param("licenseId") int licenseId);
-
-    @Query(value = "SELECT *" +
-            "FROM licensing", nativeQuery = true)
-    public List<Object> getAll();
-
-    @Query(value = "UPDATE licensing SET license_id = :licenseId WHERE id = :licensingId", nativeQuery = true)
-    public void updateLicense(@Param("licensingId") int licensingId, @Param("licenseId") int licenseId);
-}
-
-package com.vodafone.spring_swlzfw;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Optional;
-
-public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
-
-    // Query zur Rückgabe von Mitarbeiterinformationen und den zugehörigen Lizenzinformationen über die Licensing-Tabelle
-    @Query(value = "SELECT e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM employee_entity e " +
-            "JOIN licensing lic ON e.id = lic.employee_id " +
-            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
-    public List<Object> getAll();
-
-    // Suchanfrage, um nach einem Begriff in verschiedenen Feldern zu suchen (über Licensing-Tabelle)
-    @Query(value = "SELECT e.email, e.company, e.department, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
-            "FROM employee_entity e " +
-            "JOIN licensing lic ON e.id = lic.employee_id " +
-            "JOIN license_entity l ON lic.license_id = l.id " +
-            "WHERE e.email LIKE %:search% " +
-            "OR e.department LIKE %:search% " +
-            "OR e.company LIKE %:search% " +
-            "OR l.purchase_order LIKE %:search% " +
-            "OR l.purchase_order_originally LIKE %:search% " +
-            "OR l.subscription_pack LIKE %:search% " +
-            "OR l.expiration_date LIKE %:search%", nativeQuery = true)
-    public List<Object> find(@Param("search") String search);
-
-    @Query(value = "SELECT * FROM employee_entity Where email = :email AND department = :department AND company = :company", nativeQuery = true)
-    public Optional<EmployeeEntity> searchEmployee(@Param("email") String email, @Param("department") String department, @Param("company") String company);
-
-}
+Sinn der funktion: änderungen von employee sollen gespeichert werden und die id der lizenz soll anhand von subscriptionPack, po und amount gefunden werden. wenn beides geschehen ist soll die id der license bei licensing geupdatet werden.
+hier sind weitere klassen:
 
 package com.vodafone.spring_swlzfw;
 
@@ -185,6 +102,43 @@ public class EmployeeEntity {
     }
 }
 
+
+package com.vodafone.spring_swlzfw;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
+
+    // Query zur Rückgabe von Mitarbeiterinformationen und den zugehörigen Lizenzinformationen über die Licensing-Tabelle
+    @Query(value = "SELECT e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM employee_entity e " +
+            "JOIN licensing lic ON e.id = lic.employee_id " +
+            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
+    public List<Object> getAll();
+
+    // Suchanfrage, um nach einem Begriff in verschiedenen Feldern zu suchen (über Licensing-Tabelle)
+    @Query(value = "SELECT e.email, e.company, e.department, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM employee_entity e " +
+            "JOIN licensing lic ON e.id = lic.employee_id " +
+            "JOIN license_entity l ON lic.license_id = l.id " +
+            "WHERE e.email LIKE %:search% " +
+            "OR e.department LIKE %:search% " +
+            "OR e.company LIKE %:search% " +
+            "OR l.purchase_order LIKE %:search% " +
+            "OR l.purchase_order_originally LIKE %:search% " +
+            "OR l.subscription_pack LIKE %:search% " +
+            "OR l.expiration_date LIKE %:search%", nativeQuery = true)
+    public List<Object> find(@Param("search") String search);
+
+    @Query(value = "SELECT * FROM employee_entity Where email = :email AND department = :department AND company = :company", nativeQuery = true)
+    public Optional<EmployeeEntity> searchEmployee(@Param("email") String email, @Param("department") String department, @Param("company") String company);
+
+}
 
 package com.vodafone.spring_swlzfw;
 
@@ -339,51 +293,103 @@ public interface LicenseRepo extends CrudRepository<LicenseEntity, Integer> {
 }
 
 
+package com.vodafone.spring_swlzfw;
 
-hier ein teil der console:
+import jakarta.persistence.*;
+
+@Entity
+public class Licensing {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    // Viele Lizenzen können einem Mitarbeiter zugeordnet sein
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private EmployeeEntity employee;
+
+    // Viele Mitarbeiter können einer Lizenz zugeordnet sein
+    @ManyToOne
+    @JoinColumn(name = "license_id")
+    private LicenseEntity license;
+
+    // Getter und Setter
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public EmployeeEntity getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(EmployeeEntity employee) {
+        this.employee = employee;
+    }
+
+    public LicenseEntity getLicense() {
+        return license;
+    }
+
+    public void setLicense(LicenseEntity license) {
+        this.license = license;
+    }
+}
+
+package com.vodafone.spring_swlzfw;
+
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+public interface LicensingRepo extends CrudRepository<Licensing, Integer> {
+
+    // Abfrage aller Verknüpfungen zwischen Mitarbeitern und Lizenzen
+    @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM licensing lic " +
+            "JOIN employee_entity e ON lic.employee_id = e.id " +
+            "JOIN license_entity l ON lic.license_id = l.id " +
+            "Where l.expiration_date <= CURDATE() " +
+            "OR l.expiration_date <= DATE_ADD(CURDATE(), INTERVAL 3 MONTH)", nativeQuery = true)
+    public List<Object[]> getAllLicensingEntriesExpiringSoon();
+
+    @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM licensing lic " +
+            "JOIN employee_entity e ON lic.employee_id = e.id " +
+            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
+    public List<Object[]> getAllLicensingEntries();
 
 
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally FROM licensing lic JOIN employee_entity e ON lic.employee_id = e.id JOIN license_entity l ON lic.license_id = l.id
-Hibernate: SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date
-Hibernate: SELECT t1.available AS frei, t2.unavailable AS belegt, t1.available + t2.unavailable AS gesamt FROM (SELECT SUM(e1.available) as available       FROM (SELECT (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS available             FROM license_entity l             LEFT JOIN licensing lic ON l.id = lic.license_id             GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack             HAVING COALESCE(COUNT(lic.license_id), 0) <= l.amount) AS e1) AS t1,      (SELECT (COUNT(lic.license_id)) AS unavailable       FROM licensing lic) AS t2
-Auth herader:   Basic QmFydDoxMjM=
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.id, l.amount, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date
-Hibernate: SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally FROM licensing lic JOIN employee_entity e ON lic.employee_id = e.id JOIN license_entity l ON lic.license_id = l.id
-Hibernate: SELECT t1.available AS frei, t2.unavailable AS belegt, t1.available + t2.unavailable AS gesamt FROM (SELECT SUM(e1.available) as available       FROM (SELECT (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS available             FROM license_entity l             LEFT JOIN licensing lic ON l.id = lic.license_id             GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack             HAVING COALESCE(COUNT(lic.license_id), 0) <= l.amount) AS e1) AS t1,      (SELECT (COUNT(lic.license_id)) AS unavailable       FROM licensing lic) AS t2
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
-Hibernate: SELECT l.subscription_pack, l.purchase_order, (l.amount - COALESCE(COUNT(lic.license_id), 0)) AS verfügbar FROM license_entity l LEFT JOIN licensing lic ON l.id = lic.license_id GROUP BY l.id, l.amount, l.expiration_date, l.purchase_order, l.purchase_order_originally, l.subscription_pack, l.start_date HAVING COALESCE(COUNT(lic.license_id), 0) < l.amount
-Auth herader:   Basic QmFydDoxMjM=
-Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+
+    // Abfrage, um alle Lizenzen für einen bestimmten Mitarbeiter zu finden
+    @Query(value = "SELECT l.id, l.subscription_pack, l.expiration_date " +
+            "FROM licensing lic " +
+            "JOIN license_entity l ON lic.license_id = l.id " +
+            "WHERE lic.employee_id = :employeeId", nativeQuery = true)
+    public List<Object> findLicensesByEmployee(@Param("employeeId") int employeeId);
+
+    // Abfrage, um alle Mitarbeiter zu finden, die eine bestimmte Lizenz verwenden
+    @Query(value = "SELECT e.id, e.email, e.department " +
+            "FROM licensing lic " +
+            "JOIN employee_entity e ON lic.employee_id = e.id " +
+            "WHERE lic.license_id = :licenseId", nativeQuery = true)
+    public List<Object> findEmployeesByLicense(@Param("licenseId") int licenseId);
+
+    @Query(value = "SELECT *" +
+            "FROM licensing", nativeQuery = true)
+    public List<Object> getAll();
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE licensing SET license_id = :licenseId WHERE id = :licensingId", nativeQuery = true)
+    public void updateLicense(@Param("licensingId") int licensingId, @Param("licenseId") int licenseId);
+}
 
