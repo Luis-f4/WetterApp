@@ -1,143 +1,281 @@
-erstelle eine funktion die die ausgewählte option vom dropdown soeichert:
+warum funktioniert die funktion nicht? (die daten werden korrekt gesendet):
 
-import React, { useEffect, useState } from 'react';
-import './Popup.css';
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/updateEmployee/{licensingID}/{email}/{department}/{company}/{subscriptionPack}/{po}/{amount}")
+    public @ResponseBody String editEmployeeNew(@PathVariable int licensingID, @PathVariable String email, @PathVariable String department, @PathVariable String company, @PathVariable String subscriptionPack, @PathVariable String po, @PathVariable int amount) {
 
-const CreatePopup = ({ onClose, mode }) => {
-    const [currentRow, setCurrentRow] = useState([]);
-    const [dropdownOptions, setDropdownoptions] = useState([]);
+        Licensing licensing = licensingRepo.findById(licensingID).orElse(null);
 
-    useEffect(() => {
-        const fetchLincenseInformation = async () => {
-            try{
-                const response = await fetch(`http://localhost:8080/testLicenseInformation`, {
-                    headers: {
-                        'Authorization': 'Basic ' + btoa('Bart:123')
-                    }
-                });
-                const data = await response.json();
-                console.log("data: ", data);
-                setDropdownoptions(data);
-            }catch (error){
-                console.error('Error fetching license information: ', error);
-            }
-        };
+        EmployeeEntity employee = (licensing != null) ? licensing.getEmployee() : null;
 
-        fetchLincenseInformation();
+        Optional<LicenseEntity> licenseOpt = licenseRepo.searchLicense(subscriptionPack, po, amount);
 
-        
-    }, []);
-
-    const handleInputChange = (e, index) => {
-        const newRow = [...currentRow];
-        newRow[index] = e.target.value;
-        setCurrentRow(newRow);
-    };
-
-    const resetChanges = () => new Promise(resolve => {
-        setCurrentRow([]);
-        resolve();
-    });
-
-    const handleClick = async () => {
-        await resetChanges();
-        onClose();
-    };
-
-
-    const handleCreate = async () => {
-        if(mode ==='License'){
-
-            console.log("Fetch start mode license");
-            
-
-        await fetch(`http://localhost:8080/addLicense/${currentRow[0]}/${currentRow[2]}/${currentRow[3]}/${currentRow[4]}/${currentRow[5]}/${currentRow[1]}`, {
-            method: "Post",
-            headers: {
-                'Authorization': 'Basic ' + btoa('Bart:123')
-            }
-        });
-// /addLicensingWithFrontend/{email}/{department}/{company}/{licenseID}
-        }else{
-
-            await fetch(`http://localhost:8080/addLicensingWithFrontend/${currentRow[0]}/${currentRow[1]}/${currentRow[2]}/${currentRow[3]}`, {
-                method: "Post",
-                headers: {
-                    'Authorization': 'Basic ' + btoa('Bart:123')
-                }
-            });
+        if (employee != null) {
+            employee.setDepartment(department);
+            employee.setCompany(company);
+            employee.setEmail(email);
+            employeeRepo.save(employee);
+            System.out.println("Employee with email " + email + " found and updated.");
+        } else {
+            System.out.println("Employee with email " + email + " not found.");
+            return "Employee not found!";
         }
 
-        onClose();
-        window.location.reload();
+        if (licensing != null) {
+            licensing.setEmployee(employee);
+            if (licenseOpt.isPresent()) {
+                licensing.setLicense(licenseOpt.get());
+                licensingRepo.updateLicense(licensingID, licenseOpt.get().getId());
+            } else {
+                System.out.println("License not found.");
+                return "License not found!";
+            }
+        }
+
+
+        return "Employee and Licensing updated successfully!";
     }
-    
 
-    const renderInputs = () => {
-        return (
-            <>
-                <input className='testInput' defaultValue={""} onChange={(e) => handleInputChange(e, 0)} />
-                <input defaultValue={""}  onChange={(e) => handleInputChange(e, 1)} type={mode === 'License' ? 'Date' : 'text'}  />
-                <input defaultValue={""} onChange={(e) => handleInputChange(e, 2)} type={mode === 'License' ? 'Date' : 'text'} />
-                                
-                {mode !== 'License' && (
-                    <select name="cars" id="cars">
-                        {dropdownOptions.map((option, index) => (
-                            <option key={index} value={option[0]}> {option[0]} | PO: {option[1]} | amount: {option[2]} </option>
-                        ))}
-                    </select>
-                )}
-                
-                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 3)} />}
 
-                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 4)} />}
-                {mode === 'License' && <input defaultValue={""} onChange={(e) => handleInputChange(e, 5)} />}
+package com.vodafone.spring_swlzfw;
 
-               
-            </>
-        );
-    };
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
-    return (
-        <div id="PopupMainDiv">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16" onClick={handleClick}>
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-            </svg>
-            <h2>Create {mode === 'License' ? 'License' : 'Licensing'}</h2>
-            <div id='divLicenseDetailsTitle'>
-                {mode === 'License' ? (
-                    <>
-                        
-                        <p><strong>Amount</strong></p>
-                        <p><strong>Start Date</strong></p>
-                        <p><strong>Expiration Date</strong></p>
-                        <p><strong>PO (new)</strong></p>
-                        <p><strong>PO (old)</strong></p>
-                        <p><strong>Subscription Pack</strong></p>
-                    </>
-                ) : (
-                    <>
-                        <p><strong>E-Mail</strong></p>
-                        <p><strong>Department</strong></p>
-                        <p><strong>Company</strong></p>
-                        {/* <p><strong>Subscription Pack</strong></p>
-                        <p><strong>Expiration Date</strong></p> */}
-                        <p><strong>ID (PO (new))</strong></p>
-                        {/* <p><strong>PO (old)</strong></p> */}
-                    </>
-                )}
-            </div>
-            <div id='divLicenseDetails'>
-                {renderInputs()}
-            </div>
-            <div id='PopupButtons'>
-                
-                <p className="DeleteButton" onClick={handleCreate}>Create</p>
-            </div>
-        </div>
-    );
-};
+import java.util.List;
 
-export default CreatePopup;
+public interface LicensingRepo extends CrudRepository<Licensing, Integer> {
+
+    // Abfrage aller Verknüpfungen zwischen Mitarbeitern und Lizenzen
+    @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM licensing lic " +
+            "JOIN employee_entity e ON lic.employee_id = e.id " +
+            "JOIN license_entity l ON lic.license_id = l.id " +
+            "Where l.expiration_date <= CURDATE() " +
+            "OR l.expiration_date <= DATE_ADD(CURDATE(), INTERVAL 3 MONTH)", nativeQuery = true)
+    public List<Object[]> getAllLicensingEntriesExpiringSoon();
+
+    @Query(value = "SELECT lic.id, e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM licensing lic " +
+            "JOIN employee_entity e ON lic.employee_id = e.id " +
+            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
+    public List<Object[]> getAllLicensingEntries();
+
+
+
+    // Abfrage, um alle Lizenzen für einen bestimmten Mitarbeiter zu finden
+    @Query(value = "SELECT l.id, l.subscription_pack, l.expiration_date " +
+            "FROM licensing lic " +
+            "JOIN license_entity l ON lic.license_id = l.id " +
+            "WHERE lic.employee_id = :employeeId", nativeQuery = true)
+    public List<Object> findLicensesByEmployee(@Param("employeeId") int employeeId);
+
+    // Abfrage, um alle Mitarbeiter zu finden, die eine bestimmte Lizenz verwenden
+    @Query(value = "SELECT e.id, e.email, e.department " +
+            "FROM licensing lic " +
+            "JOIN employee_entity e ON lic.employee_id = e.id " +
+            "WHERE lic.license_id = :licenseId", nativeQuery = true)
+    public List<Object> findEmployeesByLicense(@Param("licenseId") int licenseId);
+
+    @Query(value = "SELECT *" +
+            "FROM licensing", nativeQuery = true)
+    public List<Object> getAll();
+
+    @Query(value = "UPDATE licensing SET license_id = :licenseId WHERE id = :licensingId", nativeQuery = true)
+    public void updateLicense(@Param("licensingId") int licensingId, @Param("licenseId") int licenseId);
+}
+
+package com.vodafone.spring_swlzfw;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
+
+    // Query zur Rückgabe von Mitarbeiterinformationen und den zugehörigen Lizenzinformationen über die Licensing-Tabelle
+    @Query(value = "SELECT e.email, e.department, e.company, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM employee_entity e " +
+            "JOIN licensing lic ON e.id = lic.employee_id " +
+            "JOIN license_entity l ON lic.license_id = l.id", nativeQuery = true)
+    public List<Object> getAll();
+
+    // Suchanfrage, um nach einem Begriff in verschiedenen Feldern zu suchen (über Licensing-Tabelle)
+    @Query(value = "SELECT e.email, e.company, e.department, l.subscription_pack, l.expiration_date, l.purchase_order, l.purchase_order_originally " +
+            "FROM employee_entity e " +
+            "JOIN licensing lic ON e.id = lic.employee_id " +
+            "JOIN license_entity l ON lic.license_id = l.id " +
+            "WHERE e.email LIKE %:search% " +
+            "OR e.department LIKE %:search% " +
+            "OR e.company LIKE %:search% " +
+            "OR l.purchase_order LIKE %:search% " +
+            "OR l.purchase_order_originally LIKE %:search% " +
+            "OR l.subscription_pack LIKE %:search% " +
+            "OR l.expiration_date LIKE %:search%", nativeQuery = true)
+    public List<Object> find(@Param("search") String search);
+
+    @Query(value = "SELECT * FROM employee_entity Where email = :email AND department = :department AND company = :company", nativeQuery = true)
+    public Optional<EmployeeEntity> searchEmployee(@Param("email") String email, @Param("department") String department, @Param("company") String company);
+
+}
+
+package com.vodafone.spring_swlzfw;
+
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+public class EmployeeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String email;
+    private String department;
+    private String company;
+
+    // n:m Beziehung zu LicenseEntity mit Licensing als Join-Tabelle
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Licensing> licenses;
+
+    // Getter und Setter
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public List<Licensing> getLicenses() {
+        return licenses;
+    }
+
+    public void setLicenses(List<Licensing> licenses) {
+        this.licenses = licenses;
+    }
+}
+
+
+package com.vodafone.spring_swlzfw;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Entity
+public class LicenseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String subscriptionPack;
+    private LocalDate expirationDate;
+    private int purchaseOrder;
+    private int purchaseOrderOriginally;
+    private int amount;
+    private LocalDate startDate;
+
+    // n:m Beziehung zu EmployeeEntity mit Licensing als Join-Tabelle
+    @OneToMany(mappedBy = "license", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Licensing> employees;
+
+    // Getter und Setter
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSubscriptionPack() {
+        return subscriptionPack;
+    }
+
+    public void setSubscriptionPack(String subscriptionPack) {
+        this.subscriptionPack = subscriptionPack;
+    }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public int getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(int purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public int getPurchaseOrderOriginally() {
+        return purchaseOrderOriginally;
+    }
+
+    public void setPurchaseOrderOriginally(int purchaseOrderOriginally) {
+        this.purchaseOrderOriginally = purchaseOrderOriginally;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public List<Licensing> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Licensing> employees) {
+        this.employees = employees;
+    }
+}
+
+
 
