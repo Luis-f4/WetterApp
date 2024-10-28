@@ -1,46 +1,553 @@
-@CrossOrigin(origins = "http://localhost:3000")
-@PutMapping(path = "/updateEmployee/{licensingID}/{email}/{department}/{company}/{subscriptionPack}/{po}/{amount}")
-public @ResponseBody String editEmployeeNew(@PathVariable int licensingID, @PathVariable String email, 
-                                            @PathVariable String department, @PathVariable String company, 
-                                            @PathVariable String subscriptionPack, @PathVariable String po, 
-                                            @PathVariable int amount) {
+Erkläre mir wie Diese klasssen alles scher machen und wie sie funktioniere:
 
-    // Find the Licensing entry by licensingID
-    Licensing licensing = licensingRepo.findById(licensingID).orElse(null);
 
-    // Extract Employee associated with this Licensing
-    EmployeeEntity employee = (licensing != null) ? licensing.getEmployee() : null;
 
-    // Find the License based on subscriptionPack, po, and amount
-    Optional<LicenseEntity> licenseOpt = licenseRepo.searchLicense(subscriptionPack, po, amount);
+package com.vodafone.spring_swlzfw.Security;
 
-    // Update Employee details if Employee exists
-    if (employee != null) {
-        employee.setDepartment(department);
-        employee.setCompany(company);
-        employee.setEmail(email);
-        employeeRepo.save(employee);
-        System.out.println("Employee with email " + email + " found and updated.");
-    } else {
-        System.out.println("Employee with email " + email + " not found.");
-        return "Employee not found!";
-    }
+//import com.example.Vodafone_Programm_neu.Security.JWTService;
+//import com.example.Vodafone_Programm_neu.Security.MyUserDetailsService;
+import com.vodafone.spring_swlzfw.Security.JWTService;
+import com.vodafone.spring_swlzfw.Security.MyUserDetailsService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext; // Hier der richtige Import
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-    // If Licensing exists, update the license association
-    if (licensing != null) {
-        licensing.setEmployee(employee);
-        if (licenseOpt.isPresent()) {
-            // Set the new License in the Licensing entry and update the licensing entry
-            licensing.setLicense(licenseOpt.get());
-            licensingRepo.updateLicense(licensingID, licenseOpt.get().getId());
-            System.out.println("License updated successfully for employee with email " + email);
-        } else {
-            System.out.println("License not found.");
-            return "License not found!";
+import java.io.IOException;
+
+@Component
+public class JwtFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private JWTService jwtService;
+
+    @Autowired
+    ApplicationContext context;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String authHeader = request.getHeader("Authorization");
+        String token = null;
+        String username = null;
+
+        System.out.println("Auth herader:   " + authHeader);
+        if(authHeader != null && authHeader.startsWith("Bearer ")){
+            token = authHeader.substring(7);
+            username = jwtService.extractUserName(token);
+
+            System.out.println("username:  " + username);
         }
-    } else {
-        return "Licensing entry not found!";
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+
+            UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
+
+            if (jwtService.validateToken(token, userDetails)){
+                UsernamePasswordAuthenticationToken authtoken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authtoken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authtoken);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+}
+
+
+package com.vodafone.spring_swlzfw.Security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.cglib.core.internal.Function;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+public class JWTService {
+
+    private String secretkey = "";
+
+    public JWTService() {
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
+            SecretKey sk = keyGen.generateKey();
+            secretkey = Base64.getEncoder().encodeToString(sk.getEncoded());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    return "Employee and Licensing updated successfully!";
+    public String generateToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .setClaims(claims)  // Hier die Änderung
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 8 * 3600000)) // Der Token ist 8h lang gültig
+                .signWith(getKey())  // Signiere den Token mit dem Schlüssel
+                .compact();
+    }
+
+    private SecretKey getKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretkey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String extractUserName(String token) {
+        // Extrahiere den Benutzernamen aus dem JWT-Token
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()   // Verwende parserBuilder anstelle von parser
+                .setSigningKey(getKey())  // Hier die Änderung
+                .build()
+                .parseClaimsJws(token)   // Parse den Token und hole die Claims
+                .getBody();
+    }
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String userName = extractUserName(token);
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    // Methode zum Überprüfen der Token-Gültigkeit
+    public boolean isTokenValid(String token) {
+        try {
+            String username = extractUserName(token);
+            if (username != null && !isTokenExpired(token)) {
+                return true;
+            }
+        } catch (JwtException | IllegalArgumentException e) {
+            // Falls der Token ungültig ist, wird eine Exception geworfen
+        }
+        return false;
+    }
+}
+
+
+package com.vodafone.spring_swlzfw.Security;
+/*
+import com.example.Vodafone_Programm_neu.Security.UserPrincipal;
+import com.example.Vodafone_Programm_neu.Security.Users;
+import com.example.Vodafone_Programm_neu.Security.UserRepo;
+*/
+import com.vodafone.spring_swlzfw.Security.UserPrincipal;
+import com.vodafone.spring_swlzfw.Security.Users;
+import com.vodafone.spring_swlzfw.Security.UserRepo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class MyUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserRepo userRepo;
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users user = userRepo.findByUsername(username);
+        if (user == null) {
+            System.out.println("User Not Found");
+            throw new UsernameNotFoundException("user not found");
+        }
+
+        return new UserPrincipal(user);
+    }
+}
+
+
+package com.vodafone.spring_swlzfw.Security;
+
+//import com.example.Vodafone_Programm_neu.Security.MyUserDetailsService;
+import com.vodafone.spring_swlzfw.Security.MyUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.context.annotation.Bean; import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
+import java.util.Collections;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
+/*
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        return http.csrf(customizer -> customizer.disable()).
+                authorizeHttpRequests(request -> request
+                        .requestMatchers("register", "login")
+                        .permitAll()
+                        .anyRequest().authenticated()).
+                httpBasic(Customizer.withDefaults()).
+                sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+
+
+    }*/
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/register", "/login").permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+        configuration.setAllowCredentials(true); // Fügen Sie diese Zeile hinzu, wenn Sie Cookies oder HTTP Auth verwenden
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+        protected void configure(HttpSecurity http) throws Exception {
+            http.cors().and().csrf().disable();
+        }
+
+
+
+
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//
+//        UserDetails user1 = User
+//                .withDefaultPasswordEncoder()
+//                .username("kiran")
+//                .password("k@123")
+//                .roles("USER")
+//                .build();
+//
+//        UserDetails user2 = User
+//                .withDefaultPasswordEncoder()
+//                .username("harsh")
+//                .password("h@123")
+//                .roles("ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user1, user2);
+//    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
+        provider.setUserDetailsService(userDetailsService);
+
+
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+       return config.getAuthenticationManager();
+    }
+}
+
+package com.vodafone.spring_swlzfw.Security;
+
+//import com.example.Vodafone_Programm_neu.Security.Users;
+//import com.example.Vodafone_Programm_neu.Security.UserService;
+
+import com.vodafone.spring_swlzfw.Security.Users;
+import com.vodafone.spring_swlzfw.Security.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+public class UserController {
+
+    @Autowired
+    private UserService service;
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/register")
+    public Users register(@RequestBody Users user) {
+
+
+
+        return service.register(user);
+
+    }
+
+    /*
+    @PostMapping("/login")
+    public String login(@RequestBody Users user) {
+
+        return service.verify(user);
+    }*/
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody Users user) {
+        String token = service.verify(user);
+        if ("fail".equals(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+        }
+        return ResponseEntity.ok(token);
+    }
+
+    @Autowired
+    private JWTService jwtService;
+
+    @PostMapping("/checkAuth")
+    public boolean checkAuth(@RequestParam String token) {
+        return jwtService.isTokenValid(token);
+    }
+}
+
+package com.vodafone.spring_swlzfw.Security;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
+
+
+
+
+public class UserPrincipal implements UserDetails {
+
+    private Users user;
+
+    public UserPrincipal(Users user) {
+        this.user = user;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}
+
+package com.vodafone.spring_swlzfw.Security;
+
+//import com.example.Vodafone_Programm_neu.Security.Users;
+import com.vodafone.spring_swlzfw.Security.Users;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+
+
+
+@Repository
+public interface UserRepo extends JpaRepository<Users, Integer> {
+
+    Users findByUsername(String username);
+}
+
+package com.vodafone.spring_swlzfw.Security;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+
+
+@Entity
+public class Users {
+    @Id
+    private int id;
+    private String username;
+    private String password;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+}
+
+
+package com.vodafone.spring_swlzfw.Security;
+
+//import com.example.Vodafone_Programm_neu.Security.Users;
+//import com.example.Vodafone_Programm_neu.Security.UserRepo;
+
+import com.vodafone.spring_swlzfw.Security.Users;
+import com.vodafone.spring_swlzfw.Security.UserRepo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+
+
+@Service
+public class UserService {
+
+    @Autowired
+    private JWTService jwtService;
+
+    @Autowired
+    AuthenticationManager authManager;
+
+    @Autowired
+    private UserRepo repo;
+
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+    public Users register(Users user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        repo.save(user);
+        return user;
+    }
+
+    public String verify(Users user) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(user.getUsername());
+        } else {
+            return "fail";
+        }
+    }
 }
