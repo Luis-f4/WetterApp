@@ -1,15 +1,36 @@
-Die Klassen implementieren eine JWT-basierte Authentifizierung in einer Spring Boot-Anwendung:
+@startuml
+actor User
 
-JwtFilter: Überprüft eingehende Anfragen auf ein gültiges JWT. Wenn ein Token vorhanden und gültig ist, authentifiziert es den Benutzer im Security-Kontext.
+participant "UserController" as UC
+participant "UserService" as US
+participant "AuthenticationManager" as AM
+participant "MyUserDetailsService" as MUDS
+participant "UserRepo" as UR
+participant "JWTService" as JS
+participant "JwtFilter" as JF
+participant "SecurityContextHolder" as SCH
+participant "Ziel-Controller" as ZC
 
-JWTService: Erzeugt, validiert und analysiert JWT-Tokens. Es erstellt den Token mit Benutzername und Ablaufzeit und validiert ihn später anhand des geheimen Schlüssels.
+User -> UC: POST /login (Benutzeranfrage)
+UC -> US: Überprüfe Benutzeranmeldedaten
+US -> AM: Authentifiziere Benutzer
+AM -> MUDS: Lade Benutzerdetails
+MUDS -> UR: Suche Benutzer nach Username
+UR --> MUDS: Benutzer gefunden
+MUDS --> AM: Rückgabe Benutzer-Details
+AM --> US: Authentifizierung erfolgreich
+US -> JS: Erstelle JWT-Token
+JS --> US: Rückgabe des JWT-Tokens
+US --> UC: Rückgabe Token an Benutzer
+UC --> User: JWT-Token als Antwort
 
-MyUserDetailsService: Lädt Benutzerdetails aus der Datenbank, um den Benutzer zur Authentifizierung zu identifizieren.
-
-SecurityConfig: Konfiguriert die Sicherheitsregeln, deaktiviert CSRF, erlaubt CORS und setzt JwtFilter als Filter für HTTP-Anfragen ein.
-
-UserController: Stellt Endpunkte für Registrierung, Login und Token-Überprüfung bereit.
-
-UserPrincipal und Users: UserPrincipal verwaltet die Benutzerrollen und -rechte; Users repräsentiert die Benutzerentität in der Datenbank.
-
-UserService: Verarbeitet Registrierung und Login, speichert neue Benutzer und gibt nach erfolgreicher Authentifizierung ein Token zurück.
+User -> JF: Anfrage mit JWT-Token
+JF -> JS: Validierung des Tokens
+JS --> JF: Token ist gültig
+JF -> MUDS: Lade Benutzerdetails
+MUDS -> UR: Suche Benutzer nach Username
+UR --> MUDS: Rückgabe Benutzer
+JF -> SCH: Setze authentifizierten Benutzer
+JF -> ZC: Anfrage weiterleiten
+ZC --> User: Antwort an Benutzer
+@enduml
