@@ -1,36 +1,31 @@
-@startuml
-actor User
+Ich verstehe nicht wann 
 
-participant "UserController" as UC
-participant "UserService" as US
-participant "AuthenticationManager" as AM
-participant "MyUserDetailsService" as MUDS
-participant "UserRepo" as UR
-participant "JWTService" as JS
-participant "JwtFilter" as JF
-participant "SecurityContextHolder" as SCH
-participant "Ziel-Controller" as ZC
-
-User -> UC: POST /login (Benutzeranfrage)
-UC -> US: Überprüfe Benutzeranmeldedaten
-US -> AM: Authentifiziere Benutzer
-AM -> MUDS: Lade Benutzerdetails
-MUDS -> UR: Suche Benutzer nach Username
-UR --> MUDS: Benutzer gefunden
-MUDS --> AM: Rückgabe Benutzer-Details
-AM --> US: Authentifizierung erfolgreich
-US -> JS: Erstelle JWT-Token
-JS --> US: Rückgabe des JWT-Tokens
-US --> UC: Rückgabe Token an Benutzer
-UC --> User: JWT-Token als Antwort
-
-User -> JF: Anfrage mit JWT-Token
-JF -> JS: Validierung des Tokens
-JS --> JF: Token ist gültig
-JF -> MUDS: Lade Benutzerdetails
-MUDS -> UR: Suche Benutzer nach Username
-UR --> MUDS: Rückgabe Benutzer
 JF -> SCH: Setze authentifizierten Benutzer
 JF -> ZC: Anfrage weiterleiten
-ZC --> User: Antwort an Benutzer
-@enduml
+
+
+auftrit.
+
+Passiert es direkt nach Lade benutzerdetails oder nach Suche Benutzer nach Username  oder garnicht?
+
+ChatGPT:
+ChatGPT
+Gute Frage! Die Schritte im Diagramm nach „Lade Benutzerdetails“ und „Suche Benutzer nach Username“ folgen einer bestimmten Logik:
+
+JF -> SCH: Setze authentifizierten Benutzer
+Dieser Schritt passiert nachdem der Benutzer gefunden wurde und erfolgreich verifiziert ist. Nachdem der JwtFilter (JF) den Benutzer durch MyUserDetailsService (MUDS) und UserRepo (UR) verifiziert hat, setzt der JwtFilter den Benutzer als authentifiziert im SecurityContextHolder (SCH).
+
+Das bedeutet:
+„Setze authentifizierten Benutzer“ tritt nach MUDS -> UR: Suche Benutzer nach Username und nachdem UR -> MUDS: Benutzer gefunden zurückgegeben wurde, auf.
+
+JF -> ZC: Anfrage weiterleiten
+Nachdem der Benutzer im SecurityContextHolder (SCH) als authentifiziert markiert wurde, ist der JwtFilter fertig. Nun kann er die Anfrage an den Ziel-Controller (ZC) weiterleiten, der die eigentliche Anwendungslogik bereitstellt (z.B., UserController für den Benutzer oder ein anderer Controller für die Zielressource).
+
+Das bedeutet:
+„Anfrage weiterleiten“ passiert nach Setze authentifizierten Benutzer.
+
+Zusammengefasst:
+
+„Setze authentifizierten Benutzer“ tritt nach dem Laden der Benutzerdetails und der Verifizierung durch UserRepo auf.
+„Anfrage weiterleiten“ erfolgt nachdem der Benutzer authentifiziert ist und der JwtFilter seine Aufgabe beendet hat.
+Das ist der genaue Ablauf für eine erfolgreiche Authentifizierung mit JWT-Token.
