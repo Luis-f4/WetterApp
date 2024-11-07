@@ -1,5 +1,16 @@
-Hi Mert, kein Problem. Welche Programmiersprachen bei Vodafone am meisten genutzt werden, kann ich dir leider nicht genau sagen. Corinna meinte, dass Java sehr häufig verwendet wird. In meiner Abteilung arbeiten wir ausschließlich mit JavaScript. Ich denke jedoch, dass Java für dich sinnvoller sein könnte.
+Erstelle ein Dokument, in dem prozedurale, funktionale und objektorientierte Programmiersprachen in folgenden Punkten unterschieden werden und berücksichtige dabei auch die Punkte der Checkliste.
 
-Für die Abschlussprüfungen ist es im Grunde egal, welche Sprache du beherrschst. Ich würde dir aber definitiv empfehlen, eine objektorientierte Sprache wie Java zu lernen. Der Hauptgrund ist, dass du dabei besser verstehst, wie ein Compiler, ein Linker usw. funktionieren – das hast du bei Skriptsprachen wie JavaScript oft nicht.
+*Darstellungsformen Programmabläufe:
+Aussagenlogik
+Programmstrukturen
+Datenstrukturen
+Algorithmen
+Objekte
+Klassen
+Variablen
+Zuweisungen
+Bedingungen/Verzweigungen
+Schleifen
 
-Zusammengefasst: Mit guten Java-Kenntnissen kommst du schon sehr weit. Für das Abschlussprojekt wäre es aber hilfreich, wenn du auch Grundkenntnisse in verschiedenen Bereichen hättest, also Frontend, Backend und Datenbanken.
+
+
