@@ -1,10 +1,11 @@
 Beantworte die fragen zum thema programmieren (maximal 1 satz lang):
 
-Was bedeutet:
-•	Kohäsion – beschreibt wie funktionen und klassen zusammenhängen
-•	Geheimnisprinzip
-•	Sichtbarkeitsprinzip
-•	Sichtbarkeitsmodifizierer
-•	Getter und Setter
-•	Konstruktoren
-•	Single Responsibility Principle
+Programmierparadigmen>>Was sind: 
+
+unstrukturierte     (GOTO)
+strukturierte 
+prozedurale 
+funktionale
+objektorientierte
+logische
+
