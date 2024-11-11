@@ -1,16 +1,67 @@
-Erstelle ein Dokument, in dem prozedurale, funktionale und objektorientierte Programmiersprachen in folgenden Punkten unterschieden werden und berücksichtige dabei auch die Punkte der Checkliste.
-
-*Darstellungsformen Programmabläufe:
-Aussagenlogik
-Programmstrukturen
-Datenstrukturen
-Algorithmen
-Objekte
-Klassen
-Variablen
-Zuweisungen
-Bedingungen/Verzweigungen
-Schleifen
+Beantworte die Fragen:
 
 
+
+Programmierparadigmen>>Was sind: 
+
+unstrukturierte     (GOTO)
+strukturierte 
+prozedurale 
+funktionale
+objektorientierte
+logische
+
+
+Objektorientierung
+
+Was ist eine Klasse
+Was ist ein Objekt
+Was ist eine Instanz
+Was bedeutet Instantierung
+Was macht das Schlüsselwort new
+Was ist eine Instanzvariable und wie definiert man sie
+Wie werden Instanzvariablen initialisiert
+Was ist null
+Was ist eine Methode
+Was ist Methodensignatur
+Was sind statische Methoden und wie ruft man sie auf
+Was sind Member einer Klasse
+
+
+
+Die drei Säulen
+Kapselung
+Was macht das Schlüsselwort this?
+Was ist die Aufgabe eines Konstruktors
+Wie definiert man einen Konstruktor
+Was ist ein Default-Konstruktor
+Wie steuert man die Sichtbarkeit von Attributen und Methoden von Klassen
+Wie kann man Instandsvariablen initialisieren
+Was bedeutet:
+•	Kohäsion
+•	Geheimnisprinzip
+•	Sichtbarkeitsprinzip
+•	Sichtbarkeitsmodifizierer
+•	Getter und Setter
+•	Konstruktoren
+•	Single Responsibility Principle
+
+Vererbung
+Was bedeutet:
+•	Basisklasse vs. Subklasse
+•	Abstrakte Klassen und Methoden
+•	Überschreiben von Methoden
+•	Einschränkung der Vererbung
+•	Vor-/Nachteile von Mehrfachvererbung
+•	Liskov Substitution Principle
+•	Vor-/Nachteile von Vererbung und Komposition
+
+Polymorphie
+Was bdeutet:
+•	Ausprägungen
+•	Interfaces vs. abstrakte Klassen
+•	Vor-/Nachteile Polymorphie
+•	Design Patterns
+•	Generische Klassen
+•	Despendency Inversion Principle
 
