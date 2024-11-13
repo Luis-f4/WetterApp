@@ -1,11 +1,39 @@
-Beantworte die fragen zum thema programmieren (maximal 1 satz lang):
+Ruby on Rails Demo von Ruby on Rails
+Java EE 7 (Lernzielkontrolle)
+Testen von Java-EE-Anwendungen mit Matthias Bünger
 
-Programmierparadigmen>>Was sind: 
+Erkläre in einen Dokument die Begriffe: 
 
-unstrukturierte     (GOTO)
-strukturierte 
-prozedurale 
-funktionale
-objektorientierte
-logische
+-was ist der Unterschied zwischen Bibliotheken und Framework bei der Programmierung?
+
+-Architekturmuster: MVC, MVVM,MVP, Drei-Schichtenmodell
+
+-Backend- Frontend-Framework Unterschied und Typen:
+
+Java: Jakarta EE, Spring, Quarkus 
+C#: ASP.NET, Blazor 
+PHP: Laravel, Symfony, CakePHP, Zend 
+Python: Django 
+Ruby: Rails 
+JavaScript (mit Node.js): Express 
+Elixir: Phoenix 
+
+React 
+Angular 
+Vue.js 
+Ember 
+Backbone 
+
+-Single Page Applications
+
+
+Bitte mit Beispielen, damit auch ein außenstehender versteht worum es geht. (Wenn möglich) 
+
+
+
+
+
+
+
+
 
