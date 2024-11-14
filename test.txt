@@ -1,10 +1,22 @@
-Unterschied zwischen Bibliotheken und Frameworks in der Programmierung
-Bibliothek: Eine Bibliothek ist eine Sammlung von Funktionen, Klassen und Methoden, die Entwickler verwenden können, um spezifische Aufgaben zu lösen, ohne diese selbst programmieren zu müssen. Die Bibliothek bietet also Werkzeuge, um häufige Programmieraufgaben einfacher zu gestalten. Der Entwickler entscheidet dabei, wann und wie die Bibliothek verwendet wird.
+1. MVP (Model View Presenter)
+In der MVP-Architektur wird die Logik durch einen Presenter verwaltet. Die Hauptkomponenten sind:
 
-Beispiel: jQuery ist eine JavaScript-Bibliothek, die Funktionen zum einfachen Zugriff auf DOM-Elemente oder für Ajax-Anfragen bereitstellt.
+View: Die View ist die Benutzerschnittstelle, die den Anwenderinteraktionen und dem Anzeigen von Daten dient. Sie informiert den Presenter über Änderungen, wie z.B. wenn ein neuer Bildauswahlschritt initiiert wird.
+Presenter: Der Presenter agiert als Vermittler zwischen View und Model. Er reagiert auf Benutzerinteraktionen aus der View, verarbeitet diese und aktualisiert das Model entsprechend. Sobald das Model aktualisiert ist, benachrichtigt der Presenter die View, damit diese die Änderungen anzeigen kann.
+Model: Das Model enthält die Geschäftslogik und die Daten. Es wird vom Presenter aktualisiert und sendet keine Informationen direkt an die View.
+In diesem Muster hat die View keine direkte Verbindung zum Model. Alle Daten und Logik passieren durch den Presenter.
 
-Framework: Ein Framework ist eine umfassende Struktur oder ein Grundgerüst, das für die Entwicklung einer Anwendung vorgesehen ist. Anders als bei einer Bibliothek gibt das Framework die Architektur und den Fluss der Anwendung vor. Der Entwickler fügt den Code in den vom Framework bereitgestellten Rahmen ein und folgt den vordefinierten Konventionen.
+2. MVVM (Model View View-Model)
+MVVM erweitert MVP, indem es den View-Model einführt, der speziell zur Trennung der Logik und des Datenbindungsmechanismus dient:
 
-Beispiel: React ist ein JavaScript-Framework zur Erstellung von Benutzeroberflächen. Es gibt eine Struktur mit Komponenten vor und steuert, wie und wann die UI aktualisiert wird.
+View: Die View zeigt Daten an und reagiert auf Benutzerinteraktionen, wie das Auswählen eines neuen Bildes. Die Datenbindung ermöglicht hier eine automatische Synchronisation zwischen View und View-Model.
+View Model: Das View Model dient als Bindeglied zwischen View und Model. Es verwaltet den Status und die Daten, die für die Darstellung benötigt werden, ohne direkt mit der UI (View) zu interagieren. Durch Data Binding wird sichergestellt, dass Änderungen im View Model automatisch in der View angezeigt werden.
+Model: Das Model enthält die Geschäftslogik und die Daten und wird vom View Model aktualisiert.
+Durch die Datenbindung (Data Binding) können View und View Model in Echtzeit synchronisiert werden, wodurch die Interaktionen effizienter gestaltet werden.
 
-Unterschied: Bei einer Bibliothek ruft der Entwickler bestimmte Funktionen auf und behält die Kontrolle, während ein Framework das Grundgerüst vorgibt und den Fluss bestimmt, wodurch das Framework „das Sagen“ hat und den Entwickler „aufruft“.
+3. MVVM-C (Model View View-Model Coordinator)
+Das MVVM-C-Architekturmodell ergänzt das MVVM-Modell durch einen Coordinator, der die Navigation und Komplexität der Bildschirmwechsel steuert:
+
+Coordinator: Der Coordinator verwaltet die Navigation und steuert Übergänge zwischen verschiedenen Ansichten (z.B. vom Profilbildschirm zur Bildauswahl). Er kümmert sich um die Navigation und hält den View Model und die Views leichter und modularer.
+View, View Model und Model: Diese Komponenten verhalten sich wie im MVVM-Modell, wobei der Coordinator nun die Rolle des Navigation-Logikmanagers übernimmt.
+Das MVVM-C-Modell ist besonders nützlich in komplexen Anwendungen, in denen Navigation und Benutzerfluss separat vom Geschäftslogik-Code behandelt werden müssen.
