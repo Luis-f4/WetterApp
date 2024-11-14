@@ -1,39 +1,10 @@
-Ruby on Rails Demo von Ruby on Rails
-Java EE 7 (Lernzielkontrolle)
-Testen von Java-EE-Anwendungen mit Matthias Bünger
+Unterschied zwischen Bibliotheken und Frameworks in der Programmierung
+Bibliothek: Eine Bibliothek ist eine Sammlung von Funktionen, Klassen und Methoden, die Entwickler verwenden können, um spezifische Aufgaben zu lösen, ohne diese selbst programmieren zu müssen. Die Bibliothek bietet also Werkzeuge, um häufige Programmieraufgaben einfacher zu gestalten. Der Entwickler entscheidet dabei, wann und wie die Bibliothek verwendet wird.
 
-Erkläre in einen Dokument die Begriffe: 
+Beispiel: jQuery ist eine JavaScript-Bibliothek, die Funktionen zum einfachen Zugriff auf DOM-Elemente oder für Ajax-Anfragen bereitstellt.
 
--was ist der Unterschied zwischen Bibliotheken und Framework bei der Programmierung?
+Framework: Ein Framework ist eine umfassende Struktur oder ein Grundgerüst, das für die Entwicklung einer Anwendung vorgesehen ist. Anders als bei einer Bibliothek gibt das Framework die Architektur und den Fluss der Anwendung vor. Der Entwickler fügt den Code in den vom Framework bereitgestellten Rahmen ein und folgt den vordefinierten Konventionen.
 
--Architekturmuster: MVC, MVVM,MVP, Drei-Schichtenmodell
+Beispiel: React ist ein JavaScript-Framework zur Erstellung von Benutzeroberflächen. Es gibt eine Struktur mit Komponenten vor und steuert, wie und wann die UI aktualisiert wird.
 
--Backend- Frontend-Framework Unterschied und Typen:
-
-Java: Jakarta EE, Spring, Quarkus 
-C#: ASP.NET, Blazor 
-PHP: Laravel, Symfony, CakePHP, Zend 
-Python: Django 
-Ruby: Rails 
-JavaScript (mit Node.js): Express 
-Elixir: Phoenix 
-
-React 
-Angular 
-Vue.js 
-Ember 
-Backbone 
-
--Single Page Applications
-
-
-Bitte mit Beispielen, damit auch ein außenstehender versteht worum es geht. (Wenn möglich) 
-
-
-
-
-
-
-
-
-
+Unterschied: Bei einer Bibliothek ruft der Entwickler bestimmte Funktionen auf und behält die Kontrolle, während ein Framework das Grundgerüst vorgibt und den Fluss bestimmt, wodurch das Framework „das Sagen“ hat und den Entwickler „aufruft“.
