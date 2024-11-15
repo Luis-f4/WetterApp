@@ -1,22 +1,55 @@
-1. MVP (Model View Presenter)
-In der MVP-Architektur wird die Logik durch einen Presenter verwaltet. Die Hauptkomponenten sind:
 
-View: Die View ist die Benutzerschnittstelle, die den Anwenderinteraktionen und dem Anzeigen von Daten dient. Sie informiert den Presenter über Änderungen, wie z.B. wenn ein neuer Bildauswahlschritt initiiert wird.
-Presenter: Der Presenter agiert als Vermittler zwischen View und Model. Er reagiert auf Benutzerinteraktionen aus der View, verarbeitet diese und aktualisiert das Model entsprechend. Sobald das Model aktualisiert ist, benachrichtigt der Presenter die View, damit diese die Änderungen anzeigen kann.
-Model: Das Model enthält die Geschäftslogik und die Daten. Es wird vom Presenter aktualisiert und sendet keine Informationen direkt an die View.
-In diesem Muster hat die View keine direkte Verbindung zum Model. Alle Daten und Logik passieren durch den Presenter.
+Unterschied zwischen Backend- und Frontend-Frameworks und Typen
+In der Softwareentwicklung bezieht sich das „Backend“ auf die serverseitigen Prozesse und Datenbanken, die für die Speicherung, Verarbeitung und Verwaltung der Daten und Logik einer Anwendung zuständig sind. Das „Frontend“ hingegen ist der clientseitige Teil, der für die Darstellung und Interaktion mit dem Benutzer verantwortlich ist. Im Folgenden eine kurze Erklärung und Übersicht der verschiedenen Backend- und Frontend-Frameworks.
 
-2. MVVM (Model View View-Model)
-MVVM erweitert MVP, indem es den View-Model einführt, der speziell zur Trennung der Logik und des Datenbindungsmechanismus dient:
+Backend-Frameworks
+Ein Backend-Framework unterstützt die Entwicklung serverseitiger Anwendungen. Es erleichtert die Arbeit mit Datenbanken, die Verwaltung von APIs, die Authentifizierung und die Kommunikation mit dem Frontend. Hier sind einige populäre Backend-Frameworks auf Basis verschiedener Programmiersprachen:
 
-View: Die View zeigt Daten an und reagiert auf Benutzerinteraktionen, wie das Auswählen eines neuen Bildes. Die Datenbindung ermöglicht hier eine automatische Synchronisation zwischen View und View-Model.
-View Model: Das View Model dient als Bindeglied zwischen View und Model. Es verwaltet den Status und die Daten, die für die Darstellung benötigt werden, ohne direkt mit der UI (View) zu interagieren. Durch Data Binding wird sichergestellt, dass Änderungen im View Model automatisch in der View angezeigt werden.
-Model: Das Model enthält die Geschäftslogik und die Daten und wird vom View Model aktualisiert.
-Durch die Datenbindung (Data Binding) können View und View Model in Echtzeit synchronisiert werden, wodurch die Interaktionen effizienter gestaltet werden.
+Java
 
-3. MVVM-C (Model View View-Model Coordinator)
-Das MVVM-C-Architekturmodell ergänzt das MVVM-Modell durch einen Coordinator, der die Navigation und Komplexität der Bildschirmwechsel steuert:
+Jakarta EE: Ein Enterprise-Framework für Java, das eine Reihe von APIs und Spezifikationen zur Entwicklung robuster, skalierbarer Unternehmensanwendungen bietet. Geeignet für große, verteilte Systeme.
+Spring: Ein beliebtes Java-Framework, das Flexibilität und Konfigurierbarkeit bietet. Es ist besonders für die Entwicklung von Webanwendungen und Microservices geeignet.
+Quarkus: Ein modernes Java-Framework, das auf hohe Leistung und niedrigen Speicherverbrauch für Cloud-native und containerisierte Anwendungen ausgelegt ist.
+C#
 
-Coordinator: Der Coordinator verwaltet die Navigation und steuert Übergänge zwischen verschiedenen Ansichten (z.B. vom Profilbildschirm zur Bildauswahl). Er kümmert sich um die Navigation und hält den View Model und die Views leichter und modularer.
-View, View Model und Model: Diese Komponenten verhalten sich wie im MVVM-Modell, wobei der Coordinator nun die Rolle des Navigation-Logikmanagers übernimmt.
-Das MVVM-C-Modell ist besonders nützlich in komplexen Anwendungen, in denen Navigation und Benutzerfluss separat vom Geschäftslogik-Code behandelt werden müssen.
+ASP.NET: Ein Microsoft-Framework für die Entwicklung von Webanwendungen und APIs. ASP.NET Core ist die moderne, plattformübergreifende Version und wird oft für Microservices und cloudbasierte Anwendungen verwendet.
+Blazor: Ein C#-Framework, das es ermöglicht, clientseitige Web-Apps mit .NET zu entwickeln. Blazor kann sowohl im Browser als auch auf dem Server laufen und ist besonders für interaktive Webanwendungen geeignet.
+PHP
+
+Laravel: Ein elegantes und funktionsreiches PHP-Framework, das das Arbeiten mit Datenbanken, Routing und Authentifizierung vereinfacht. Es wird häufig für Webanwendungen und APIs verwendet.
+Symfony: Ein flexibles und modulares PHP-Framework, das besonders in großen, komplexen Anwendungen eingesetzt wird. Symfony bietet eine Vielzahl von wiederverwendbaren Komponenten.
+CakePHP: Ein benutzerfreundliches Framework für PHP mit einem „Convention over Configuration“-Ansatz, das schnelle Entwicklung ermöglicht.
+Zend: Ein Framework für die Entwicklung von Webanwendungen und APIs. Es bietet eine breite Auswahl an Funktionen und ist für große Anwendungen geeignet.
+Python
+
+Django: Ein hohes Maß an Sicherheit und Stabilität machen Django zu einem bevorzugten Framework für schnelle Entwicklung und skalierbare Anwendungen. Es folgt dem „Don’t Repeat Yourself“ (DRY)-Prinzip und ist für Web-Apps und APIs geeignet.
+Ruby
+
+Rails: Ruby on Rails ist ein beliebtes Framework für schnelle Entwicklung. Es legt großen Wert auf Konventionen und ermöglicht es Entwicklern, schnell funktionsreiche Webanwendungen zu erstellen.
+JavaScript (mit Node.js)
+
+Express: Ein minimalistisches, flexibles Web-Framework für Node.js. Es ist sehr leichtgewichtig und wird oft als Basis für die Entwicklung von RESTful APIs und serverseitigen Anwendungen verwendet.
+Elixir
+
+Phoenix: Ein modernes Framework für Webanwendungen und Echtzeitanwendungen, das auf Elixir basiert und von Erlang inspiriert ist. Phoenix ist besonders leistungsfähig und skaliert gut.
+Frontend-Frameworks
+Ein Frontend-Framework bietet Tools und Strukturen, um Benutzeroberflächen zu entwickeln und Benutzerinteraktionen zu steuern. Frontend-Frameworks unterstützen HTML, CSS und JavaScript und helfen, eine saubere Struktur und ein gutes Benutzererlebnis zu schaffen. Zu den bekannten Frontend-Frameworks gehören:
+
+React: Ein von Facebook entwickeltes JavaScript-Framework, das komponentenbasiert ist und sich auf die Entwicklung interaktiver Benutzeroberflächen konzentriert. React ist besonders beliebt für Single Page Applications (SPAs), da es den Zustand einer Anwendung effizient verwaltet und die Benutzeroberfläche automatisch aktualisiert.
+
+Angular: Ein umfangreiches JavaScript-Framework von Google, das eine vollständige Lösung für Frontend-Entwicklung bietet, einschließlich MVC-Architektur, Datenbindung und Vorlagen. Es ist besonders gut für große und komplexe Webanwendungen geeignet.
+
+Vue.js: Ein leichtgewichtiges und flexibles JavaScript-Framework, das sich für einfache, aber auch komplexe Webanwendungen eignet. Vue.js ist besonders einfach zu erlernen und bietet eine komponentenbasierte Struktur.
+
+Ember: Ein JavaScript-Framework, das für produktive und nachhaltige Entwicklung steht. Es nutzt eine starke Konvention und ist besonders in großen Projekten nützlich, die eine umfassende Struktur benötigen.
+
+Backbone: Ein minimalistisches JavaScript-Framework, das eine Grundstruktur für Webanwendungen bietet und sich durch ein leichtes Datenmodell auszeichnet. Es wird häufig als Basis für einfache und leichtgewichtige SPAs verwendet.
+
+Zusammenfassung
+Backend-Frameworks konzentrieren sich auf die serverseitige Logik und das Management von Daten und Geschäftslogik, während Frontend-Frameworks darauf abzielen, Benutzeroberflächen zu gestalten und das Benutzererlebnis zu steuern. Während Backend-Frameworks wie Django und Express API-Logik und Datenzugriff bereitstellen, ermöglichen Frontend-Frameworks wie React und Angular eine reibungslose und interaktive Nutzererfahrung.
+
+
+
+
+
+
