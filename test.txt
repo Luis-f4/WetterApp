@@ -1,68 +1,74 @@
-let player; // 360 | 455
+let player; // Spielerposition
 let jumpForce = 0;
 let movement = 0;
 let ground;
-let platform;
-let platform2;
+let platforms = [];
 
 function setup() {
     createCanvas(1900, 900);
     player = createVector(width / 2, height - 50);
-    platform = createVector(100, 800);
-    platform2 = createVector(400, 650);
+    platforms.push(createVector(100, 800)); // Plattform 1
+    platforms.push(createVector(400, 650)); // Plattform 2
     ground = height - 50;
 }
 
 function draw() {
     background('DeepSkyBlue');
     rectMode(CENTER);
+    
+    // Spieler zeichnen
     fill('white');
     rect(player.x, player.y, 50, 50);
+
+    // Plattformen zeichnen
     fill('green');
-    rect(platform.x, platform.y, 150, 20);
-    rect(platform2.x, platform2.y, 150, 20);
+    for (let platform of platforms) {
+        rect(platform.x, platform.y, 150, 20);
+    }
 
-
+    // Bewegung und Schwerkraft
     player.y += jumpForce;
     player.x += movement;
 
+    let onGround = false;
+
+    // Überprüfung: Boden oder Plattformen
     if (player.y >= ground) {
-        jumpForce = 0;
-    } else if (
-        (player.x + 25 >= platform.x - 75 && player.x - 25 <= platform.x + 75 && player.y + 25 >= platform.y - 10 &&
-player.y + 25 <= platform.y + 10)
-        
+        onGround = true;
+        player.y = ground;
+    } else {
+        for (let platform of platforms) {
+            if (
+                player.x + 25 >= platform.x - 75 &&
+                player.x - 25 <= platform.x + 75 &&
+                player.y + 25 >= platform.y - 10 &&
+                player.y + 25 <= platform.y + 10
+            ) {
+                onGround = true;
+                player.y = platform.y - 35;
+                break;
+            }
+        }
+    }
 
-    ) {
-        jumpForce = 0;
-        player.y = platform.y - 35;
-    } else if(        player.x + 25 >= platform2.x - 75 &&
-        player.x - 25 <= platform2.x + 75 &&
-        player.y + 25 >= platform2.y - 10 &&
-        player.y + 25 <= platform2.y + 10){
-            jumpForce = 0;
-            player.y = platform2.y - 35;
-        
-    }else {
+    // Schwerkraft anwenden, wenn nicht auf dem Boden oder Plattform
+    if (!onGround) {
         jumpForce += 0.5;
+    } else {
+        jumpForce = 0;
     }
 
-    if (keyIsDown(32) && (player.y >= ground || player.y == platform.y - 35)) {
+    // Springen
+    if (keyIsDown(32) && onGround) {
         jumpForce = -12;
     }
 
-    if (keyIsDown(32) && (player.y >= ground || player.y == platform2.y - 35)) {
-        jumpForce = -12;
-    }
-
-
+    // Links/Rechts Bewegung
     if (keyIsDown(LEFT_ARROW)) {
         movement = -10;
     } else if (keyIsDown(RIGHT_ARROW)) {
-        movement = +10;
+        movement = 10;
     } else {
         movement = 0;
     }
-
-
 }
