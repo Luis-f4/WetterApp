@@ -1,3 +1,27 @@
+korrigiere:
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Square Advanture</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <h1 id="h1" style="position: absolute; left: 35%; top: 30%; font-size:700%; color: gold; opacity: 0;">GEWONNEN!</h1>
+    <button id="btn" onclick="standartZeichnung()" style="display: none; position: absolute; left: 45%; top: 45%;">Neustart</button>
+</body>
+</html>
+
+
+
+
+
+
 let player; // Spielerposition
 let jumpForce = 0;
 let movement = 0;
@@ -12,12 +36,16 @@ function setup() {
     platforms.push(createVector(400, 650));
     platforms.push(createVector(650, 500));
     platforms.push(createVector(1000, 350));
-    coin = createVector(100, 100); // Coin-Position
+    coin = createVector(1200, 200); 
 
     ground = height - 50;
 }
 
-function draw() {
+
+
+
+
+function standartZeichnung(){
     background('DeepSkyBlue');
     rectMode(CENTER);
     
@@ -37,6 +65,10 @@ function draw() {
         ellipse(coin.x, coin.y, 30, 30); // Coin rund machen
     }
 
+}
+function draw() {
+
+    standartZeichnung();
     // Bewegung und Schwerkraft
     player.y += jumpForce;
     player.x += movement;
@@ -83,8 +115,18 @@ function draw() {
         movement = 0;
     }
 
-    // Überprüfung: Spieler berührt Coin
+    
     if (coin && dist(player.x, player.y, coin.x, coin.y) < 40) {
-        coin = null; // Coin verschwindet
+        coin = null; 
+        ground = null;
+        platforms = null;
+        player = null;
+        document.getElementById("h1").style.opacity = 1;
+        document.getElementById("btn").style.display = "block";
+
+        
+
+        
+       
     }
 }
