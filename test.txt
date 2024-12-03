@@ -1,4 +1,19 @@
-let player; // Spielerposition
+Warum funktioniert das nicht (ich will dass sich die platform hin und her bewegt:
+
+    if(platforms[2].x <= 651){
+
+        platforms[2].x += 50;
+    }else if(platforms[2].x >= 750){
+        platforms[2].x += -50;
+    }
+
+
+
+gesammter code:
+
+
+
+let player; 
 let jumpForce = 0;
 let movement = 0;
 let ground;
@@ -79,6 +94,36 @@ function draw() {
         }
     }
 
+    
+
+
+    /////////////////
+
+    // standart 650
+
+    if(platforms[2].x <= 651){
+
+        platforms[2].x += 50;
+    }else if(platforms[2].x >= 750){
+        platforms[2].x += -50;
+    }
+
+    
+
+
+    /////////////////
+
+
+
+
+
+
+
+
+
+
+
+
     // Schwerkraft anwenden, wenn nicht auf dem Boden oder Plattform
     if (!onGround) {
         jumpForce += 0.5;
@@ -101,10 +146,18 @@ function draw() {
     }
 
     // Prüfung: Coin eingesammelt
-    if (coin && dist(player.x, player.y, coin.x, coin.y) < 40) {
+    if  (coin && dist(player.x, player.y, coin.x, coin.y) < 40) {
         coin = null;
-        noLoop(); // Spiel anhalten
+        platforms = null;
+        player = null;
+       
         document.getElementById("h1").style.opacity = 1;
         document.getElementById("btn").style.display = "block";
+
+        noLoop();
     }
+
+
+
+    
 }
