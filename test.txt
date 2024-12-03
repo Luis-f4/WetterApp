@@ -1,41 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Square Adventure</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="script.js"></script>
-    <style>
-        #h1 {
-            position: absolute;
-            left: 35%;
-            top: 30%;
-            font-size: 7rem;
-            color: gold;
-            opacity: 0;
-        }
-        #btn {
-            display: none;
-            position: absolute;
-            left: 45%;
-            top: 45%;
-        }
-    </style>
-</head>
-<body>
-    <h1 id="h1">GEWONNEN!</h1>
-    <button id="btn" onclick="restartGame()">Neustart</button>
-</body>
-</html>
-
-
-
-
-
-
-
 let player; // Spielerposition
 let jumpForce = 0;
 let movement = 0;
@@ -90,4 +52,59 @@ function drawGame() {
 }
 
 function draw() {
-    draw
+    drawGame();
+
+    // Bewegung und Schwerkraft
+    player.y += jumpForce;
+    player.x += movement;
+
+    let onGround = false;
+
+    // Überprüfung: Boden oder Plattformen
+    if (player.y >= ground) {
+        onGround = true;
+        player.y = ground;
+    } else {
+        for (let platform of platforms) {
+            if (
+                player.x + 25 >= platform.x - 75 &&
+                player.x - 25 <= platform.x + 75 &&
+                player.y + 25 >= platform.y - 10 &&
+                player.y + 25 <= platform.y + 10
+            ) {
+                onGround = true;
+                player.y = platform.y - 35;
+                break;
+            }
+        }
+    }
+
+    // Schwerkraft anwenden, wenn nicht auf dem Boden oder Plattform
+    if (!onGround) {
+        jumpForce += 0.5;
+    } else {
+        jumpForce = 0;
+    }
+
+    // Springen
+    if (keyIsDown(32) && onGround) {
+        jumpForce = -12;
+    }
+
+    // Links/Rechts Bewegung
+    if (keyIsDown(LEFT_ARROW)) {
+        movement = -10;
+    } else if (keyIsDown(RIGHT_ARROW)) {
+        movement = 10;
+    } else {
+        movement = 0;
+    }
+
+    // Prüfung: Coin eingesammelt
+    if (coin && dist(player.x, player.y, coin.x, coin.y) < 40) {
+        coin = null;
+        noLoop(); // Spiel anhalten
+        document.getElementById("h1").style.opacity = 1;
+        document.getElementById("btn").style.display = "block";
+    }
+}
