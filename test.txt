@@ -1,24 +1,12 @@
-Warum funktioniert das nicht (ich will dass sich die platform hin und her bewegt:
-
-    if(platforms[2].x <= 651){
-
-        platforms[2].x += 50;
-    }else if(platforms[2].x >= 750){
-        platforms[2].x += -50;
-    }
-
-
-
-gesammter code:
-
-
-
 let player; 
 let jumpForce = 0;
 let movement = 0;
 let ground;
 let platforms = [];
 let coin;
+
+// Variable für die Bewegungsrichtung der Plattform
+let platformDirection = 1; 
 
 function setup() {
     createCanvas(1900, 900);
@@ -94,35 +82,14 @@ function draw() {
         }
     }
 
-    
-
-
-    /////////////////
-
-    // standart 650
-
-    if(platforms[2].x <= 651){
-
-        platforms[2].x += 50;
-    }else if(platforms[2].x >= 750){
-        platforms[2].x += -50;
+    // Plattform-Bewegung (hin und her)
+    if (platforms[2].x <= 650) {
+        platformDirection = 1; // Plattform bewegt sich nach rechts
+    } else if (platforms[2].x >= 750) {
+        platformDirection = -1; // Plattform bewegt sich nach links
     }
 
-    
-
-
-    /////////////////
-
-
-
-
-
-
-
-
-
-
-
+    platforms[2].x += platformDirection * 2; // Geschwindigkeit der Bewegung (2 Pixel pro Frame)
 
     // Schwerkraft anwenden, wenn nicht auf dem Boden oder Plattform
     if (!onGround) {
@@ -156,8 +123,4 @@ function draw() {
 
         noLoop();
     }
-
-
-
-    
 }
