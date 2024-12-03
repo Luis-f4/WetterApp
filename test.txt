@@ -1,14 +1,21 @@
+behebe den fehler und mache den coin rund, wenn der spieler den coin berührt verschwindet er:
+
 let player; // Spielerposition
 let jumpForce = 0;
 let movement = 0;
 let ground;
 let platforms = [];
+let coin;
 
 function setup() {
     createCanvas(1900, 900);
     player = createVector(width / 2, height - 50);
-    platforms.push(createVector(100, 800)); // Plattform 1
-    platforms.push(createVector(400, 650)); // Plattform 2
+    platforms.push(createVector(100, 800)); 
+    platforms.push(createVector(400, 650)); 
+    platforms.push(createVector(650, 500)); 
+    platforms.push(createVector(1000, 350)); 
+    coin.createVector(100,100);
+
     ground = height - 50;
 }
 
@@ -26,6 +33,8 @@ function draw() {
         rect(platform.x, platform.y, 150, 20);
     }
 
+    fill('gold');
+    rect(coin, 100, 100);
     // Bewegung und Schwerkraft
     player.y += jumpForce;
     player.x += movement;
