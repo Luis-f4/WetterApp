@@ -1,63 +1,68 @@
+let player; // 360 | 455
+let jumpForce = 0;
+let movement = 0;
+let ground;
+let platform;
+let platform2;
 
-1. Problembeschreibung (Ist-Zustand) / Aus welchen Gründen wurde das Projekt veranlasst?
-Der aktuelle Ist-Zustand in der betreffenden Organisation zeigt, dass in einigen Abteilungen kein Scrum genutzt wird, obwohl dies ein effizientes und agiles Arbeitsmodell ist, das in vielen modernen Softwareentwicklungsprozessen weit verbreitet ist. Ein weiteres Problem ist, dass die Auszubildenden in der Firma keinen Zugriff auf kostenpflichtige Tools wie Jira haben, um Scrum zu praktizieren. Dies führt dazu, dass sie sich nicht in der Anwendung von Scrum und agilen Methoden üben können, was zu einer Lücke in ihrer praktischen Ausbildung führt.
+function setup() {
+    createCanvas(1900, 900);
+    player = createVector(width / 2, height - 50);
+    platform = createVector(100, 800);
+    platform2 = createVector(400, 650);
+    ground = height - 50;
+}
 
-Das Projekt wurde veranlasst, um ein kostengünstiges, einfaches Werkzeug zu entwickeln, mit dem sowohl Auszubildende als auch andere Mitarbeiter in der Firma Scrum-Methoden anwenden und erlernen können, ohne auf teure Software zurückgreifen zu müssen. Ziel ist es, auch in Abteilungen, in denen Scrum noch nicht angewendet wird, eine Möglichkeit zu schaffen, agile Arbeitsprozesse umzusetzen und zu fördern.
-
-2. Ziel des Projektes (Soll-Zustand)
-Das Ziel des Projektes ist es, eine Webanwendung zu entwickeln, die es ermöglicht, Scrum-Projekte zu verwalten und durchzuführen. Die Webapp soll den Benutzern eine übersichtliche und benutzerfreundliche Oberfläche bieten, um Scrum-Methoden effizient anzuwenden. Die wichtigsten Funktionen der Webapp umfassen:
-
-Auflistung und Erstellung von Projekten.
-Verwaltung des Backlogs, in dem Benutzer Stories anlegen und bearbeiten können.
-Planung und Verwaltung von Sprints, einschließlich der Möglichkeit, Stories in Sprints zu ziehen und die Storypunkte zu berechnen.
-Kanban-Board zur Verwaltung des Sprintfortschritts mit den Status "Todo", "In Progress", "In Review" und "Done".
-Anzeige und Bearbeitung von Stories, die jeweils eine Überschrift, eine Beschreibung, Akzeptanzkriterien und Storypunkte enthalten.
-Die Webapp wird auf einer MySQL-Datenbank basieren, die in einer Node.js/Express-API integriert wird. Das System soll ohne Benutzerverwaltung auskommen, um die Komplexität zu reduzieren und schnell einsatzbereit zu sein.
-
-3. Beschreibung des technischen Umfeldes / Systemumgebung
-Betriebssystem: Die Webapp wird auf gängigen Betriebssystemen wie Windows, macOS und Linux laufen, da sie webbasiert ist und über einen Browser zugänglich ist.
-
-Datenbanksystem: Die Daten werden in einer MySQL-Datenbank gespeichert, da MySQL eine weit verbreitete und robuste Lösung für relationale Datenbanken darstellt, die gut mit Node.js und Express integrierbar ist.
-
-Programmiersprachen:
-
-Frontend: Die Webanwendung wird mit React entwickelt. React ermöglicht es, eine dynamische und interaktive Benutzeroberfläche zu erstellen, die schnell reagiert und benutzerfreundlich ist.
-Backend: Das Backend wird mit Node.js und Express entwickelt, um eine RESTful API bereitzustellen, die die Kommunikation mit der MySQL-Datenbank ermöglicht.
-Entwicklungsumgebung:
-
-Für das Frontend wird eine Entwicklungsumgebung wie VS Code genutzt, mit einer Build- und Entwicklungsumgebung wie Webpack oder Vite für React.
-Das Backend wird ebenfalls in VS Code entwickelt, mit Node.js und Express als Frameworks.
-MySQL Workbench oder phpMyAdmin kann zur Verwaltung der MySQL-Datenbank verwendet werden.
-Git wird zur Versionskontrolle und Zusammenarbeit genutzt.
-Weitere Tools:
-
-Postman zur API-Entwicklung und -Testung.
-Docker für eine vereinfachte Containerisierung und Deployment, falls erforderlich.
-4. Projektphasen in Stunden (max. 80 Std.)
-Phase	Zeitaufwand (Stunden)
-Anforderungsanalyse & Planung	8
-Datenbankentwurf & Backend-Setup	12
-Frontend-Entwicklung	20
-API-Entwicklung	12
-Integration & Testing	12
-Dokumentation	8
-Abschluss & Präsentation	8
-Gesamt	80
-5. Darstellung der eigenen Leistung und gegebenenfalls die Einordnung in das Gesamtprojekt
-Im Rahmen dieses Projekts wird die eigene Leistung in mehreren Bereichen liegen:
-
-Frontend-Entwicklung: Die Verantwortung für die Implementierung der Benutzeroberfläche und der Benutzerinteraktionen in React. Dies umfasst das Erstellen der Seiten für Projektverwaltung, Backlog-Verwaltung, Sprintplanung und Kanban-Board.
-
-Backend-Entwicklung: Die Verantwortung für die Entwicklung der API mit Node.js und Express, um CRUD-Operationen (Erstellen, Lesen, Aktualisieren, Löschen) für die Scrum-Projekte, Stories und Sprints zu ermöglichen.
-
-Integration der Datenbank: Integration der MySQL-Datenbank zur Speicherung von Projekten, Stories, Sprints und den dazugehörigen Informationen. Das umfasst auch das Erstellen der Datenbanktabellen und das Implementieren von Datenbankabfragen.
-
-Testing und Qualitätssicherung: Durchführung von Tests, um sicherzustellen, dass alle Funktionen wie erwartet arbeiten, und die Behebung von Bugs, die während der Entwicklung auftreten.
-
-Die eigene Leistung wird sich hauptsächlich auf den technischen Aufbau der Webapp konzentrieren, sowohl im Frontend als auch im Backend, mit der Integration der verschiedenen Komponenten. Das Projekt wird eigenständig umgesetzt, wobei unterstützende Ressourcen (wie Dokumentation oder Codebeispiele) nur in begrenztem Umfang genutzt werden. Die Integration von Backend und Frontend sowie die Sicherstellung einer funktionsfähigen und benutzerfreundlichen Anwendung sind dabei die Hauptaufgaben.
+function draw() {
+    background('DeepSkyBlue');
+    rectMode(CENTER);
+    fill('white');
+    rect(player.x, player.y, 50, 50);
+    fill('green');
+    rect(platform.x, platform.y, 150, 20);
+    rect(platform2.x, platform2.y, 150, 20);
 
 
+    player.y += jumpForce;
+    player.x += movement;
+
+    if (player.y >= ground) {
+        jumpForce = 0;
+    } else if (
+        (player.x + 25 >= platform.x - 75 && player.x - 25 <= platform.x + 75 && player.y + 25 >= platform.y - 10 &&
+player.y + 25 <= platform.y + 10)
+        
+
+    ) {
+        jumpForce = 0;
+        player.y = platform.y - 35;
+    } else if(        player.x + 25 >= platform2.x - 75 &&
+        player.x - 25 <= platform2.x + 75 &&
+        player.y + 25 >= platform2.y - 10 &&
+        player.y + 25 <= platform2.y + 10){
+            jumpForce = 0;
+            player.y = platform2.y - 35;
+        
+    }else {
+        jumpForce += 0.5;
+    }
+
+    if (keyIsDown(32) && (player.y >= ground || player.y == platform.y - 35)) {
+        jumpForce = -12;
+    }
+
+    if (keyIsDown(32) && (player.y >= ground || player.y == platform2.y - 35)) {
+        jumpForce = -12;
+    }
 
 
+    if (keyIsDown(LEFT_ARROW)) {
+        movement = -10;
+    } else if (keyIsDown(RIGHT_ARROW)) {
+        movement = +10;
+    } else {
+        movement = 0;
+    }
 
 
+}
