@@ -1,15 +1,46 @@
-SQL
+SQL (Structured Query Language)
+SQL ist eine standardisierte Programmiersprache zur Verwaltung und Manipulation relationaler Datenbanken. Es ermöglicht das Erstellen, Bearbeiten, Abfragen und Verwalten von Daten in einer strukturierten Form. SQL ist in verschiedene Sprachtypen unterteilt, die jeweils unterschiedliche Aufgaben erfüllen:
 
-•	DDL (Data Definition Language): z.B. CREATE TABLE 
-•	DCL (Data Control Language): z.B. GRANT, REVOKE 
-•	DML (Data Manipulation Language): z.B. INSERT, UPDATE, DELETE 
-•	TCL (Transaction Control Language): z.B. COMMIT, ROLLBACK 
-•	DQL (Data Query Language): z.B. SELECT
+DDL (Data Definition Language)
+Die DDL wird verwendet, um die Struktur einer Datenbank zu definieren oder zu ändern. Dazu gehören Befehle wie:
 
-NoSQL
+CREATE TABLE: Erstellt eine neue Tabelle in der Datenbank.
+ALTER TABLE: Modifiziert eine bestehende Tabelle.
+DROP TABLE: Löscht eine Tabelle aus der Datenbank.
+DCL (Data Control Language)
+DCL wird verwendet, um Zugriffsrechte und Berechtigungen für Datenbankbenutzer zu verwalten. Dazu gehören Befehle wie:
+
+GRANT: Erteilt spezifische Rechte an Benutzer, z. B. Lese- oder Schreibrechte.
+REVOKE: Entzieht zuvor erteilte Rechte.
+DML (Data Manipulation Language)
+DML dient zur Manipulation von Daten innerhalb der Tabellen. Beispiele sind:
+
+INSERT: Fügt neue Datensätze in eine Tabelle ein.
+UPDATE: Aktualisiert bestehende Daten in einer Tabelle.
+DELETE: Entfernt Datensätze aus einer Tabelle.
+TCL (Transaction Control Language)
+TCL wird verwendet, um Transaktionen innerhalb der Datenbank zu verwalten. Beispiele hierfür sind:
+
+COMMIT: Bestätigt eine Transaktion und speichert alle Änderungen dauerhaft in der Datenbank.
+ROLLBACK: Macht eine laufende oder abgeschlossene Transaktion rückgängig.
+DQL (Data Query Language)
+DQL umfasst Abfragen, die Daten aus einer Datenbank abrufen. Der zentrale Befehl ist:
+
+SELECT: Extrahiert Daten aus einer oder mehreren Tabellen, basierend auf bestimmten Bedingungen.
+NoSQL (Not Only SQL)
+NoSQL bezeichnet eine Klasse von Datenbanken, die nicht strikt auf einem relationalen Datenbankmodell basieren. Sie sind flexibler und für unstrukturierte oder semi-strukturierte Daten optimiert. Es gibt verschiedene Typen von NoSQL-Datenbanken:
 
 Key-Value-Store
+Diese Datenbanken speichern Daten als Schlüssel-Wert-Paare, ähnlich wie bei einem Wörterbuch. Jeder Schlüssel ist eindeutig, und der zugehörige Wert kann beliebige Daten enthalten. Beispiele: Redis, DynamoDB.
+
 Dokumentendatenbank
+Dokumentendatenbanken speichern Daten in dokumentenbasierten Formaten wie JSON, BSON oder XML. Sie sind ideal für semi-strukturierte Daten, da die Struktur der Dokumente flexibel ist. Beispiele: MongoDB, CouchDB.
+
 Objektorientierte Datenbank
+Diese Datenbanken speichern Daten als Objekte, ähnlich wie in der objektorientierten Programmierung. Sie verbinden Daten und Methoden direkt, wodurch komplexe Datentypen effizient gespeichert und verarbeitet werden können. Beispiele: ObjectDB, db4o.
+
 Graphendatenbank
-spaltenorientierte Datenbank
+Graphendatenbanken speichern Daten in Form von Knoten (Entities) und Kanten (Beziehungen). Sie eignen sich besonders gut für Anwendungen, bei denen Beziehungen zwischen Daten eine zentrale Rolle spielen, wie soziale Netzwerke oder Empfehlungsalgorithmen. Beispiele: Neo4j, OrientDB.
+
+Spaltenorientierte Datenbank
+Diese Datenbanken organisieren Daten in Spalten statt in Zeilen, was sie für analytische Abfragen und Datenanalysen besonders effizient macht. Sie eignen sich hervorragend für große Datenmengen, die für Abfragen optimiert sind. Beispiele: Apache Cassandra, HBase.
