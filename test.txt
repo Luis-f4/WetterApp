@@ -1,126 +1,15 @@
-let player; 
-let jumpForce = 0;
-let movement = 0;
-let ground;
-let platforms = [];
-let coin;
+SQL
 
-// Variable für die Bewegungsrichtung der Plattform
-let platformDirection = 1; 
+•	DDL (Data Definition Language): z.B. CREATE TABLE 
+•	DCL (Data Control Language): z.B. GRANT, REVOKE 
+•	DML (Data Manipulation Language): z.B. INSERT, UPDATE, DELETE 
+•	TCL (Transaction Control Language): z.B. COMMIT, ROLLBACK 
+•	DQL (Data Query Language): z.B. SELECT
 
-function setup() {
-    createCanvas(1900, 900);
-    resetGame();
-}
+NoSQL
 
-function resetGame() {
-    player = createVector(width / 2, height - 50);
-    platforms = [
-        createVector(100, 800),
-        createVector(400, 650),
-        createVector(650, 500),
-        createVector(1000, 350)
-    ];
-    coin = createVector(1200, 200);
-    ground = height - 50;
-
-    document.getElementById("h1").style.opacity = 0;
-    document.getElementById("btn").style.display = "none";
-}
-
-function restartGame() {
-    resetGame();
-    loop();
-}
-
-function drawGame() {
-    background('DeepSkyBlue');
-    rectMode(CENTER);
-
-    // Spieler zeichnen
-    fill('white');
-    rect(player.x, player.y, 50, 50);
-
-    // Plattformen zeichnen
-    fill('green');
-    for (let platform of platforms) {
-        rect(platform.x, platform.y, 150, 20);
-    }
-
-    // Coin zeichnen
-    if (coin) {
-        fill('gold');
-        ellipse(coin.x, coin.y, 30, 30); // Coin rund machen
-    }
-}
-
-function draw() {
-    drawGame();
-
-    // Bewegung und Schwerkraft
-    player.y += jumpForce;
-    player.x += movement;
-
-    let onGround = false;
-
-    // Überprüfung: Boden oder Plattformen
-    if (player.y >= ground) {
-        onGround = true;
-        player.y = ground;
-    } else {
-        for (let platform of platforms) {
-            if (
-                player.x + 25 >= platform.x - 75 &&
-                player.x - 25 <= platform.x + 75 &&
-                player.y + 25 >= platform.y - 10 &&
-                player.y + 25 <= platform.y + 10
-            ) {
-                onGround = true;
-                player.y = platform.y - 35;
-                break;
-            }
-        }
-    }
-
-    // Plattform-Bewegung (hin und her)
-    if (platforms[2].x <= 650) {
-        platformDirection = 1; // Plattform bewegt sich nach rechts
-    } else if (platforms[2].x >= 750) {
-        platformDirection = -1; // Plattform bewegt sich nach links
-    }
-
-    platforms[2].x += platformDirection * 2; // Geschwindigkeit der Bewegung (2 Pixel pro Frame)
-
-    // Schwerkraft anwenden, wenn nicht auf dem Boden oder Plattform
-    if (!onGround) {
-        jumpForce += 0.5;
-    } else {
-        jumpForce = 0;
-    }
-
-    // Springen
-    if (keyIsDown(32) && onGround) {
-        jumpForce = -12;
-    }
-
-    // Links/Rechts Bewegung
-    if (keyIsDown(LEFT_ARROW)) {
-        movement = -10;
-    } else if (keyIsDown(RIGHT_ARROW)) {
-        movement = 10;
-    } else {
-        movement = 0;
-    }
-
-    // Prüfung: Coin eingesammelt
-    if  (coin && dist(player.x, player.y, coin.x, coin.y) < 40) {
-        coin = null;
-        platforms = null;
-        player = null;
-       
-        document.getElementById("h1").style.opacity = 1;
-        document.getElementById("btn").style.display = "block";
-
-        noLoop();
-    }
-}
+Key-Value-Store
+Dokumentendatenbank
+Objektorientierte Datenbank
+Graphendatenbank
+spaltenorientierte Datenbank
