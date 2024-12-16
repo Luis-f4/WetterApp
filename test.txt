@@ -1,1 +1,20 @@
-Diese Woche begann ich zusammen mit meinem Azubi-Kollegen, an den Terminen der Abteilung meiner Ausbilderin teilzunehmen. Der Montag begann mit einem Azubi-Daily. Nach diesem Termin startete der Daily-Call mit der Abteilung meiner Ausbilderin. Nach den Dailys stand ein Bereichsmeeting an, in dem über Neuigkeiten im Fachbereich berichtet wurde und Fragen gestellt werden konnten. Nach der Mittagspause habe ich den Code des Jump-&-Run-Spiels ein wenig angepasst, um es im nächsten Jahr auf einer Schülermesse vorzustellen. Am Dienstag hatte ich nach den beiden Dailys einen Termin, in dem mir zwei Kollegen das Projekt erklärt haben, an dem sie aktuell mitarbeiten. Danach wurde in dem Termin besprochen, welche Tickets bis zum Februar abgeschlossen sein müssen, um den MVP-Status des Projekts zu erreichen. Nach der Mittagspause hatten wir unser Azubi-Weekly, in dem wir die Aufgaben für diese und nächste Woche besprochen haben. Am Mittwoch und Donnerstag hatte ich eine Schulung, in der uns gezeigt wurde, wie man PowerPoint-Präsentationen besser und ansprechender gestalten kann, damit man die Aufmerksamkeit seiner Zuschauer nicht verliert. Am Freitagmorgen hatte ich wieder meine beiden Dailys. Später habe ich an einem Termin teilgenommen, in dem Fragen zu den Schnittstellen des aktuellen Projekts geklärt wurden. Es wurde auch besprochen, welche Funktionen für den MVP-Status relevant sind und welche in späterer Zukunft implementiert werden müssen. Später habe ich in einem Termin zugeschaut, wie meine Ausbilderin ein Ticket bearbeitet.
+Vereinfache mir  diesen text und sag mir was dort gesagt wurde:
+
+
+Eine Datenbank stellt meistens ihre Daten als zweidimensionale Tabellen aus Zeilen und Spalten dar; diese müssen aber in eindimensionaler Form gespeichert werden. Zum Beispiel könnte eine Datenbank die folgende Tabelle enthalten:
+
+Personalnr	Nachname	Vorname	Gehalt
+1	Schmidt	Josef	40000
+2	Müller	Maria	50000
+3	Meier	Julia	44000
+Diese einfache Tabelle enthält eine Spalte für die Personalnummer, Namensspalten und ein Gehalt.
+
+Diese Tabelle existiert im Arbeitsspeicher und auf der Festplatte des Computers. Beide Speicherarten haben gemeinsam, dass die Daten aus der Sicht des Betriebssystems in einer eindimensionalen Folge von Bytes angeordnet sind. Die zu lösende Aufgabe ist also, die zweidimensionale Struktur einer Datenbanktabelle in eine eindimensionale Folge von Bytes abzubilden.
+
+Eine zeilenorientierte Datenbank hängt alle Datenwerte einer Zeile aneinander, es folgt die nächste Zeile usw.
+
+1,Schmidt,Josef,40000;2,Müller,Maria,50000;3,Meier,Julia,44000;
+Eine spaltenorientierte Datenbank geht stattdessen Spalte für Spalte vor:
+
+1,2,3;Schmidt,Müller,Meier;Josef,Maria,Julia;40000,50000,44000;
+Die physische Organisation einer Datenbank wird von Partitionierung, Indizes, Caching, Views, OLAP-Würfel und transaktionalen Aspekten wie Write-Ahead-Logging stark beeinflusst. Unter der Berücksichtigung all dieser Einflüsse stellt sich heraus, dass OLTP-Systeme eher zeilenorientiert, OLAP-Systeme eine Balance aus Zeilen- und Spaltenorientierung anstreben.
