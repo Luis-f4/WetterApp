@@ -1,39 +1,8 @@
+Qualitätskriterien beim Programmieren
 
-Six Sigma ist eine Methode zur Prozessverbesserung und Fehlerreduktion in Unternehmen. Ziel ist es, Abläufe effizienter zu machen, die Qualität zu verbessern und Schwankungen in Prozessen zu minimieren. Das Bild zeigt den sogenannten DMAIC-Zyklus, der zentral für Six Sigma ist und die fünf Schritte beschreibt, die bei der Optimierung durchlaufen werden. Hier eine Erklärung:
-
-Die fünf Phasen des DMAIC-Zyklus:
-Define (Definieren) (grün):
-
-Ziel: Das Problem und die Anforderungen der Kunden klar definieren.
-Es wird festgelegt, welche Prozesse verbessert werden sollen und welche Ergebnisse erwartet werden.
-Typische Werkzeuge: Projekt-Charta, SIPOC-Diagramm (Lieferant-Eingabe-Prozess-Ausgabe-Kunde).
-Measure (Messen) (blau):
-
-Ziel: Daten sammeln, um den aktuellen Zustand des Prozesses zu verstehen.
-Es wird geprüft, wie der Prozess momentan funktioniert und wie er gemessen werden kann.
-Typische Werkzeuge: Messsystemanalyse, Prozessflussdiagramme, Datenerfassung.
-Analyze (Analysieren) (blau):
-
-Ziel: Die Ursachen für Probleme oder Schwankungen im Prozess finden.
-Es wird untersucht, warum der Prozess nicht wie gewünscht funktioniert.
-Typische Werkzeuge: Ursache-Wirkungs-Diagramme, Pareto-Analyse, statistische Auswertungen.
-Improve (Verbessern) (schwarz):
-
-Ziel: Lösungen entwickeln und umsetzen, um den Prozess zu verbessern.
-Die ermittelten Schwachstellen werden durch konkrete Maßnahmen behoben.
-Typische Werkzeuge: Brainstorming, Design of Experiments (Versuchsplanung), Pilotprojekte.
-Control (Kontrollieren) (rot):
-
-Ziel: Sicherstellen, dass die Verbesserungen langfristig bestehen bleiben.
-Es werden Kontrollen und Standards eingeführt, um sicherzustellen, dass der optimierte Prozess stabil bleibt.
-Typische Werkzeuge: Kontrollpläne, Überwachungsdiagramme, Audits.
-
-
-
-Bei Six Sigma gibt es ein Gürtelsystem (Belt System), das die verschiedenen Rollen und Qualifikationen innerhalb eines Projekts beschreibt – ähnlich wie bei Kampfsportarten. Die Farben zeigen die Kompetenzstufen:
-
-White Belt: Einstiegsebene – Grundkenntnisse über Six Sigma, keine Projektverantwortung.
-Yellow Belt: Unterstützt Projekte durch Basiswissen und hilft bei der Datensammlung.
-Green Belt: Führt kleinere Projekte oder arbeitet in Teams, hat fundierte Kenntnisse im DMAIC-Prozess.
-Black Belt: Leitet größere Projekte, hat Expertenwissen in Statistik und Prozessverbesserung.
-Master Black Belt: Koordiniert mehrere Projekte, bildet andere aus und sorgt für die strategische Umsetzung von Six Sigma in der Organisation.
+Was bedeutet:
+Korrektheit
+Robustheit
+Performanz
+Wartbarkeit
+Energieeffizienz
