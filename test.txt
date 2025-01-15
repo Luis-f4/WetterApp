@@ -1,8 +1,26 @@
-Qualitätskriterien beim Programmieren
 
-Was bedeutet:
-Korrektheit
-Robustheit
-Performanz
-Wartbarkeit
-Energieeffizienz
+Qualitätskriterien beim Programmieren definieren, wie gut ein Softwareprodukt entwickelt wurde und wie gut es langfristig wartbar und nutzbar ist. Hier sind die wichtigsten Kriterien:
+Funktionalität: Die Software erfüllt alle festgelegten Anforderungen und liefert korrekte Ergebnisse. Sie arbeitet wie vorgesehen.
+
+Wartbarkeit: Der Code ist klar strukturiert und lässt sich einfach anpassen oder erweitern. Gute Dokumentation und Modularität sind wichtig.
+
+Performanz: Die Software arbeitet schnell und ressourcenschonend. Sie optimiert die Nutzung von Zeit und Speicher.
+
+Robustheit: Die Software bleibt stabil, auch bei unerwarteten Eingaben oder Fehlern. Sie verarbeitet Fehler ohne Abstürze.
+
+Sicherheit: Die Software schützt vor unbefugtem Zugriff und Datenverlust. Sie verwendet sichere Praktiken wie Verschlüsselung.
+
+
+
+
+
+Korrektheit: Das System erfüllt die spezifizierten Anforderungen und liefert korrekte Ergebnisse.
+
+Robustheit: Das System bleibt stabil, auch bei unerwarteten Eingaben oder Fehlern.
+
+Performanz: Das System arbeitet effizient und schnell, ohne unnötige Ressourcen zu verbrauchen.
+
+Wartbarkeit: Das System lässt sich leicht warten, anpassen und erweitern.
+
+Energieeffizienz: Das System nutzt Energie sparsam und ressourcenschonend.
+
