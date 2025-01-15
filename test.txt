@@ -1,30 +1,12 @@
+Die QS-Normen 9000-9004 sind Standards für Qualitätsmanagement, die Unternehmen helfen, Qualität zu sichern und kontinuierlich besser zu werden.
 
-Das EFQM-Modell ist ein Werkzeug, das Organisationen dabei hilft, sich zu verbessern und langfristig erfolgreich zu sein. Es beschreibt, wie eine Organisation durch gute Führung, klare Prozesse und Zusammenarbeit ihre Ziele erreichen kann. Schauen wir uns das Bild an:
+ISO 9000: Grundlagen und Begriffe – erklärt, wie Qualitätsmanagement funktioniert.
+ISO 9001: Anforderungen an ein zertifizierbares Qualitätsmanagementsystem – stellt sicher, dass Produkte/Dienstleistungen den Kundenanforderungen entsprechen.
+ISO 9004: Leitfaden für nachhaltige Verbesserung – hilft Unternehmen, langfristig erfolgreich zu sein und über die reinen Anforderungen hinauszugehen.
+Vorteile:
 
-Führung (links):
-
-Die Führung ist der Ausgangspunkt. Führungskräfte geben die Richtung vor, setzen Prioritäten und schaffen eine Arbeitskultur, die motivierend und zielgerichtet ist.
-Sie beeinflussen, wie die Strategie, Ressourcen, Mitarbeiter und Partnerschaften gestaltet werden.
-Umsetzung (Mitte):
-
-Die Umsetzung erfolgt durch die genannten Bereiche:
-Strategie: Was will die Organisation erreichen?
-Ressourcen: Wie werden Zeit, Geld und Material eingesetzt?
-Mitarbeiter: Wie werden Mitarbeitende gefördert und eingebunden?
-Partnerschaften: Wie arbeitet die Organisation mit anderen zusammen?
-Diese Bausteine sind auf die Prozesse & Endprodukte ausgerichtet. Hier wird die eigentliche Arbeit getan, und es entstehen die Leistungen und Produkte der Organisation.
-Ergebnisse (rechts):
-
-Die gute Umsetzung der Prozesse führt zu verschiedenen Ergebnissen:
-Kundenergebnisse: Wie zufrieden sind die Kunden, und welchen Nutzen haben sie?
-Mitarbeiterergebnisse: Wie zufrieden sind die Mitarbeitenden, und wie gut können sie ihre Aufgaben erfüllen?
-Gesellschaftsergebnisse: Wie trägt die Organisation zur Gesellschaft bei, zum Beispiel in den Bereichen Umwelt oder Soziales?
-All das trägt zu den Schlüsselergebnissen bei, die zeigen, wie erfolgreich die Organisation insgesamt ist (z. B. wirtschaftliche Ergebnisse oder Ziele, die erreicht wurden).
-Lernen und Verbessern (unten):
-
-Das Modell ist dynamisch. Es zeigt, dass die Organisation aus den Ergebnissen lernt. Wenn etwas nicht wie geplant läuft, wird es angepasst und verbessert.
-Zusammenhang:
-
-Der Ablauf von links nach rechts zeigt, wie Führung und Umsetzung zu Ergebnissen führen.
-Der untere Pfeil zeigt, dass es wichtig ist, immer wieder zu hinterfragen, was man besser machen kann, um sich weiterzuentwickeln.
-Das EFQM-Modell ist wie ein Kompass für Organisationen. Es zeigt, wo man steht und was man verbessern kann, um noch besser auf die eigenen Ziele hinzuarbeiten.
+Strukturierte Prozesse
+Zuverlässige Qualität
+Höhere Kundenzufriedenheit
+Wettbewerbsvorteile
+Die Normen fördern eine Verbesserungskultur und sind für jede Organisation anwendbar.
