@@ -1,26 +1,30 @@
-Das EFQM-Modell (European Foundation for Quality Management) ist ein Rahmenwerk zur Bewertung und Verbesserung der organisatorischen Exzellenz. Es basiert auf dem Prinzip, dass exzellente Ergebnisse durch effektive Umsetzung und ständige Verbesserung erreicht werden können. Anhand des Bildes kann das Modell wie folgt erklärt werden:
+
+Das EFQM-Modell ist ein Werkzeug, das Organisationen dabei hilft, sich zu verbessern und langfristig erfolgreich zu sein. Es beschreibt, wie eine Organisation durch gute Führung, klare Prozesse und Zusammenarbeit ihre Ziele erreichen kann. Schauen wir uns das Bild an:
 
 Führung (links):
 
-Führung ist die Grundlage des Modells. Führungskräfte geben die Richtung vor und schaffen eine Kultur, die Exzellenz fördert.
-Sie beeinflussen die Strategie, die Ressourcen, die Mitarbeiter und die Partnerschaften, die im nächsten Schritt aufgelistet sind.
+Die Führung ist der Ausgangspunkt. Führungskräfte geben die Richtung vor, setzen Prioritäten und schaffen eine Arbeitskultur, die motivierend und zielgerichtet ist.
+Sie beeinflussen, wie die Strategie, Ressourcen, Mitarbeiter und Partnerschaften gestaltet werden.
 Umsetzung (Mitte):
 
-Die Umsetzung erfolgt durch die Strategie, Ressourcen, Mitarbeiter und Partnerschaften, die alle auf die Prozesse & Endprodukte ausgerichtet sind. Diese Prozesse sind das Herzstück der Organisation, da sie die Werte und Ergebnisse schaffen.
-Diese Bereiche werden durch das Führungsverhalten und die strategischen Entscheidungen gestaltet.
-Resultate (rechts):
+Die Umsetzung erfolgt durch die genannten Bereiche:
+Strategie: Was will die Organisation erreichen?
+Ressourcen: Wie werden Zeit, Geld und Material eingesetzt?
+Mitarbeiter: Wie werden Mitarbeitende gefördert und eingebunden?
+Partnerschaften: Wie arbeitet die Organisation mit anderen zusammen?
+Diese Bausteine sind auf die Prozesse & Endprodukte ausgerichtet. Hier wird die eigentliche Arbeit getan, und es entstehen die Leistungen und Produkte der Organisation.
+Ergebnisse (rechts):
 
-Die Umsetzung der Prozesse führt zu verschiedenen Ergebnissen:
-Kundenresultate: Ergebnisse, die aus Kundenzufriedenheit und Kundennutzen resultieren.
-Mitarbeiterresultate: Ergebnisse, die sich auf die Zufriedenheit und das Engagement der Mitarbeiter beziehen.
-Gesellschaftsresultate: Der Beitrag der Organisation zur Gesellschaft, z. B. in Bezug auf Nachhaltigkeit oder soziale Verantwortung.
-Diese Ergebnisse führen schließlich zu den Schlüsselresultaten, die den Gesamterfolg der Organisation messen (z. B. finanzielle Ergebnisse, Marktanteile).
-Lernen & Verbessern (unten):
+Die gute Umsetzung der Prozesse führt zu verschiedenen Ergebnissen:
+Kundenergebnisse: Wie zufrieden sind die Kunden, und welchen Nutzen haben sie?
+Mitarbeiterergebnisse: Wie zufrieden sind die Mitarbeitenden, und wie gut können sie ihre Aufgaben erfüllen?
+Gesellschaftsergebnisse: Wie trägt die Organisation zur Gesellschaft bei, zum Beispiel in den Bereichen Umwelt oder Soziales?
+All das trägt zu den Schlüsselergebnissen bei, die zeigen, wie erfolgreich die Organisation insgesamt ist (z. B. wirtschaftliche Ergebnisse oder Ziele, die erreicht wurden).
+Lernen und Verbessern (unten):
 
-Das Modell ist nicht statisch, sondern beinhaltet einen kontinuierlichen Lern- und Verbesserungsprozess.
-Feedback aus den Ergebnissen wird genutzt, um die Führungspraktiken, Prozesse und Ressourcen kontinuierlich zu optimieren.
-Verknüpfung von Umsetzung und Resultaten:
+Das Modell ist dynamisch. Es zeigt, dass die Organisation aus den Ergebnissen lernt. Wenn etwas nicht wie geplant läuft, wird es angepasst und verbessert.
+Zusammenhang:
 
-Der Pfeil von "Umsetzung" zu "Resultaten" zeigt, dass die Prozesse und deren Umsetzung die Ergebnisse direkt beeinflussen.
-Der Rückfluss von den Ergebnissen zur Führung (orangefarbener Pfeil unten) symbolisiert, dass die Organisation aus den Resultaten lernt und sich weiterentwickelt.
-Das EFQM-Modell hilft Organisationen, ihre Stärken und Schwächen zu analysieren und gezielt an Verbesserungsmaßnahmen zu arbeiten, um langfristig erfolgreich zu sein.
+Der Ablauf von links nach rechts zeigt, wie Führung und Umsetzung zu Ergebnissen führen.
+Der untere Pfeil zeigt, dass es wichtig ist, immer wieder zu hinterfragen, was man besser machen kann, um sich weiterzuentwickeln.
+Das EFQM-Modell ist wie ein Kompass für Organisationen. Es zeigt, wo man steht und was man verbessern kann, um noch besser auf die eigenen Ziele hinzuarbeiten.
