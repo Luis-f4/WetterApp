@@ -106,4 +106,36 @@ function draw() {
         platforms = null;
         player = null;
 
-        document.getElementById("h1").style.opacity =
+        document.getElementById("h1").style.opacity = 1;
+        document.getElementById("btn").style.display = "block";
+
+        noLoop();
+    }
+
+    if (!onGround) {
+        jumpForce += height * 0.0007; // Schwerkraft leicht angepasst
+    } else {
+        jumpForce = 0;
+    }
+
+    // Springen
+    if (keyIsDown(32) && onGround) {
+        jumpForce = -height * 0.015; // Reduzierte Sprunghöhe
+    }
+
+    // Links/Rechts Bewegung
+    if (keyIsDown(LEFT_ARROW)) {
+        movement = -width * 0.008;
+    } else if (keyIsDown(RIGHT_ARROW)) {
+        movement = width * 0.008;
+    } else {
+        movement = 0;
+    }
+}
+
+let newPlatform;
+
+function addNewPlatform() {
+    newPlatform = createVector(width * 0.08, height * 0.82); // Neue Plattform
+    rect(newPlatform.x, newPlatform.y, width * 0.12, height * 0.036);
+}
