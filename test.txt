@@ -1,9 +1,195 @@
-Am Montag hatte ich bis zum Vormittag Daily- und Weekly-Termine. Danach habe ich zusammen mit meinem Azubi-Kollegen das Dokument mit den Statistiken vom Sonderprozess an unsere Kollegen geschickt. Am Nachmittag hatte ich wieder einen Refinement-Termin und anschließend einen All-Hands-Call, in dem Neuigkeiten aus der Abteilung vorgestellt wurden.
+let player; 
+let jumpForce = 0;
+let movement = 0;
+let ground;
+let platforms = [];
+let coin;
 
-Am Dienstag war ich in der Niederlassung und habe zusammen mit meinem Azubi-Kollegen eine Abschlussprüfung Teil 2 geschrieben, um ein Gefühl dafür zu bekommen, wie viel Zeit man pro Prüfung hat und wie die Fragen formuliert sind. Nachdem wir mit der Prüfung fertig waren, stand unser Azubi-Weekly an, in dem wir unsere To-dos und organisatorische Themen besprochen haben.
 
-Nach den zwei Dailys am Mittwoch haben mein Azubi-Kollege und ich das Dokument mit den Statistiken für einen Sonderprozess mit neuen Daten befüllt und anschließend passende Diagramme erstellt, um die Zahlen zusätzlich grafisch darzustellen. Nachdem wir das Dokument auf den neuesten Stand gebracht hatten, habe ich ein Dokument erstellt, in dem Vorgehensmodelle und Fachbegriffe aus dem Qualitätsmanagement erklärt werden.
+let platformDirection = 1; 
+let coinDirection = 1;
 
-Am Donnerstag habe ich nach meinen zwei Dailys weiter an dem Dokument für das Qualitätsmanagement gearbeitet. Später hatte ich einen Termin, in dem über abgeschaltete Stationen und deren Pflege in der Datenbank gesprochen wurde. Anschließend hatte ich einen weiteren Termin, in dem wir zusammen mit meiner Ausbilderin, meinem Azubi-Kollegen und zwei weiteren Kollegen ein Ticket bearbeitet haben. Nach dem Meeting habe ich mein Dokument für das Qualitätsmanagement fertiggestellt.
+function setup() {
+    createCanvas(1250, 550);
+    resetGame();
+}
 
-Am Freitag hatte ich am Vormittag einen Termin, in dem wir Fragen zu Aufgaben oder Abläufen stellen konnten. Dieses Mal haben wir uns einen Code angeschaut und gemeinsam besprochen. Nachmittags habe ich zusammen mit meinem Azubi-Kollegen SQL-Abfragen gemacht, mit denen wir herausfinden wollten, wie viele Kunden uns täglich anrufen und um welche Technologie es sich bei den Anrufen handelt. Dazu erstellten wir Tabellen, in denen wir alles festhielten. Am Ende des Tages habe ich dann meinen Ausbildungsnachweis geschrieben.
+function resetGame() {
+    player = createVector(width / 2, height - 50);
+    platforms = [
+        createVector(400, 650),
+        createVector(650, 500),
+        createVector(1000, 350)
+    ];
+    coin = createVector(1200, 200);
+    ground = height - 50;
+
+    document.getElementById("h1").style.opacity = 0;
+    document.getElementById("btn").style.display = "none";
+}
+
+function restartGame() {
+    resetGame();
+    loop();
+}
+
+function drawGame() {
+    background('DeepSkyBlue');
+    rectMode(CENTER);
+
+    // Spieler zeichnen
+    fill('white');
+    rect(player.x, player.y, 50, 50);
+
+    // Plattformen zeichnen
+    fill('green');
+    for (let platform of platforms) {
+        rect(platform.x, platform.y, 150, 20);
+    }
+
+    // Coin zeichnen
+    if (coin) {
+        fill('gold');
+        ellipse(coin.x, coin.y, 30, 30); // Coin rund machen
+    }
+
+
+    addNewlatform();
+}
+
+function draw() {
+    drawGame();
+
+    // Bewegung und Schwerkraft
+    player.y += jumpForce;
+    player.x += movement;
+
+    let onGround = false;
+
+    // Überprüfung: Boden oder Plattformen
+    if (player.y >= ground) {
+        onGround = true;
+        player.y = ground;
+    } else if(            player.x + 25 >= newPlatform.x - 75 &&
+        player.x - 25 <= newPlatform.x + 75 &&
+        player.y + 25 >= newPlatform.y - 10 &&
+        player.y + 25 <= newPlatform.y + 10){
+        
+
+            onGround = true;
+            player.y = newPlatform.y - 35;
+            
+    }else {
+        for (let platform of platforms) {
+            if (
+                player.x + 25 >= platform.x - 75 &&
+                player.x - 25 <= platform.x + 75 &&
+                player.y + 25 >= platform.y - 10 &&
+                player.y + 25 <= platform.y + 10
+            ) {
+                onGround = true;
+                player.y = platform.y - 35;
+                break;
+            }
+        }
+    }
+
+//////////////////////////////////////////////////////////
+//Bewegungen 
+    platforms[2].x += platformDirection * 2;
+  
+    if (platforms[2].x <= 630) {
+        platformDirection = 1; 
+    } else if (platforms[2].x >= 900) {
+        platformDirection = -1; 
+    }
+
+
+    if (coin.y <= 150) {
+        coinDirection = 1; 
+    } else if (coin.y >= 250) {
+        coinDirection = -1; 
+    }
+
+    coin.y += coinDirection;
+//////////////////////////////////////////////////////////
+
+    // Schwerkraft, wenn nicht auf dem Boden oder Plattform
+
+
+    // Prüfung: Coin eingesammelt
+    if  (coin && dist(player.x, player.y, coin.x, coin.y) < 40) {
+        coin = null;
+        platforms = null;
+        player = null;
+       
+        document.getElementById("h1").style.opacity = 1;
+        document.getElementById("btn").style.display = "block";
+
+        noLoop();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (!onGround) {
+        jumpForce += 0.5;
+    } else {
+        jumpForce = 0;
+     }
+
+    // Springen
+    if (keyIsDown(32) && onGround) {
+        jumpForce = -12;
+    }
+
+    // // Links/Rechts Bewegung
+    if (keyIsDown(LEFT_ARROW)) {
+        movement = -10;
+    }else if (keyIsDown(RIGHT_ARROW)) {
+        movement = 10;
+    } else {
+        movement = 0;
+    }
+
+
+
+
+}
+
+
+let newPlatform;
+
+function addNewlatform(){
+
+    newPlatform = createVector(100, height - 100);
+    rect(newPlatform.x, newPlatform.y, 150, 20);
+
+}
+
+// IDEE 1: Eine (oder zwei) platform fehlt um an den coin zu kommen  und wir müssen sie érschaffen damit wir an die münze kommen
+// IDEE 2: wir erstellen nur den Winningscreen ( + Coin)
+// IDEE 3: wir erstellen einen Player und die physik
