@@ -37,7 +37,7 @@ function draw() {
 
     // Plattform 3 Bewegung
     platform3.x += platform3Direction * 2;
-    if (platform3.x >= width - 75 || platform3.x <= 75) {
+    if (platform3.x >= width -350 || platform3.x <= 750) {
         platform3Direction *= -1;
     }
 
