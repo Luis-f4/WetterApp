@@ -1,13 +1,10 @@
-Die dritte Plattform soll sich nach links und rechts bewegen:
-
-
-
 let player; 
 let jumpForce = 0;
 let movement = 0;
 let ground;
 let platform1, platform2, platform3;
 let coin;
+let platform3Direction = 1;
 
 function setup() {
     createCanvas(1250, 540);
@@ -27,24 +24,29 @@ function draw() {
     fill('white');
     rect(player.x, player.y, 50, 50);
 
-    
+    // Plattformen malen
     drawPlatforms();
-
 
     // Münze malen
     fill('yellow');
     ellipse(coin.x, coin.y, 30, 30);
 
-    // spieler Position updaten
+    // Spieler Position updaten
     player.y += jumpForce;
     player.x += movement;
+
+    // Plattform 3 Bewegung
+    platform3.x += platform3Direction * 2;
+    if (platform3.x >= width - 75 || platform3.x <= 75) {
+        platform3Direction *= -1;
+    }
 
     // Berührung mit dem Boden checken
     if (player.y >= ground) {
         jumpForce = 0;
         player.y = ground;
     } 
-    //  Berührung mit Plattfornen checken
+    // Berührung mit Plattformen checken
     else if (
         (player.x + 25 >= platform1.x - 75 &&
         player.x - 25 <= platform1.x + 75 &&
