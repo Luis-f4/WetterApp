@@ -1,3 +1,7 @@
+Die dritte Plattform soll sich nach links und rechts bewegen:
+
+
+
 let player; 
 let jumpForce = 0;
 let movement = 0;
@@ -9,9 +13,9 @@ function setup() {
     createCanvas(1250, 540);
     player = createVector(width / 2, height - 50);
     platform1 = createVector(200, 430);
-    platform2 = createVector(600, 300);
-    platform3 = createVector(1000, 200);
-    coin = createVector(width / 2, height / 2);
+    platform2 = createVector(500, 350);
+    platform3 = createVector(800, 250);
+    coin = createVector(1150, 160);
     ground = height - 50;
 }
 
@@ -19,30 +23,28 @@ function draw() {
     background('DeepSkyBlue');
     rectMode(CENTER);
 
-    // Draw player
+    // Spieler malen
     fill('white');
     rect(player.x, player.y, 50, 50);
 
-    // Draw platforms
-    fill('green');
-    rect(platform1.x, platform1.y, 150, 20);
-    rect(platform2.x, platform2.y, 150, 20);
-    rect(platform3.x, platform3.y, 150, 20);
+    
+    drawPlatforms();
 
-    // Draw coin
+
+    // Münze malen
     fill('yellow');
     ellipse(coin.x, coin.y, 30, 30);
 
-    // Update player position
+    // spieler Position updaten
     player.y += jumpForce;
     player.x += movement;
 
-    // Check ground collision
+    // Berührung mit dem Boden checken
     if (player.y >= ground) {
         jumpForce = 0;
         player.y = ground;
     } 
-    // Check platform collisions
+    //  Berührung mit Plattfornen checken
     else if (
         (player.x + 25 >= platform1.x - 75 &&
         player.x - 25 <= platform1.x + 75 &&
@@ -60,19 +62,19 @@ function draw() {
         player.y + 25 <= platform3.y + 10)
     ) {
         jumpForce = 0;
-        player.y -= 0.5; // Small offset to keep the player on the platform
+        player.y -= 0.5; 
     } 
-    // Apply gravity
+    // Gravity
     else {
         jumpForce += 0.5;
     }
 
-    // Jump
+    // Springen
     if (keyIsDown(32) && (player.y >= ground || Math.abs(player.y - platform1.y + 35) < 1 || Math.abs(player.y - platform2.y + 35) < 1 || Math.abs(player.y - platform3.y + 35) < 1)) {
         jumpForce = -12;
     }
 
-    // Horizontal movement
+    // Spieler nach Links und rechts bewegen
     if (keyIsDown(LEFT_ARROW)) {
         movement = -8;
     } else if (keyIsDown(RIGHT_ARROW)) {
@@ -80,4 +82,12 @@ function draw() {
     } else {
         movement = 0;
     }
+}
+
+// Hier mit den Schülern arbeiten
+function drawPlatforms(){
+    fill('green');
+    rect(platform1.x, platform1.y, 150, 20);
+    rect(platform2.x, platform2.y, 150, 20);
+    rect(platform3.x, platform3.y, 150, 20);
 }
