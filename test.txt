@@ -1,57 +1,83 @@
-Füge dem code noch 2 weitere platformen hinzu und eine runde münze:
-
-
-
 let player; 
 let jumpForce = 0;
 let movement = 0;
 let ground;
-let platform;
+let platform1, platform2, platform3;
+let coin;
 
 function setup() {
     createCanvas(1250, 540);
     player = createVector(width / 2, height - 50);
-    platform = createVector(200, 430);
+    platform1 = createVector(200, 430);
+    platform2 = createVector(600, 300);
+    platform3 = createVector(1000, 200);
+    coin = createVector(width / 2, height / 2);
     ground = height - 50;
 }
 
 function draw() {
     background('DeepSkyBlue');
     rectMode(CENTER);
+
+    // Draw player
     fill('white');
     rect(player.x, player.y, 50, 50);
-    fill('green');
-    rect(platform.x, platform.y, 150, 20);
 
+    // Draw platforms
+    fill('green');
+    rect(platform1.x, platform1.y, 150, 20);
+    rect(platform2.x, platform2.y, 150, 20);
+    rect(platform3.x, platform3.y, 150, 20);
+
+    // Draw coin
+    fill('yellow');
+    ellipse(coin.x, coin.y, 30, 30);
+
+    // Update player position
     player.y += jumpForce;
     player.x += movement;
 
+    // Check ground collision
     if (player.y >= ground) {
         jumpForce = 0;
-    } else if (
-        player.x + 25 >= platform.x - 75 &&
-        player.x - 25 <= platform.x + 75 &&
-        player.y + 25 >= platform.y - 10 &&
-        player.y + 25 <= platform.y + 10
+        player.y = ground;
+    } 
+    // Check platform collisions
+    else if (
+        (player.x + 25 >= platform1.x - 75 &&
+        player.x - 25 <= platform1.x + 75 &&
+        player.y + 25 >= platform1.y - 10 &&
+        player.y + 25 <= platform1.y + 10) ||
+
+        (player.x + 25 >= platform2.x - 75 &&
+        player.x - 25 <= platform2.x + 75 &&
+        player.y + 25 >= platform2.y - 10 &&
+        player.y + 25 <= platform2.y + 10) ||
+
+        (player.x + 25 >= platform3.x - 75 &&
+        player.x - 25 <= platform3.x + 75 &&
+        player.y + 25 >= platform3.y - 10 &&
+        player.y + 25 <= platform3.y + 10)
     ) {
         jumpForce = 0;
-        player.y = platform.y - 35;
-    } else {
+        player.y -= 0.5; // Small offset to keep the player on the platform
+    } 
+    // Apply gravity
+    else {
         jumpForce += 0.5;
     }
 
-    if (keyIsDown(32) && (player.y >= ground || player.y == platform.y - 35)) {
+    // Jump
+    if (keyIsDown(32) && (player.y >= ground || Math.abs(player.y - platform1.y + 35) < 1 || Math.abs(player.y - platform2.y + 35) < 1 || Math.abs(player.y - platform3.y + 35) < 1)) {
         jumpForce = -12;
     }
 
-
+    // Horizontal movement
     if (keyIsDown(LEFT_ARROW)) {
         movement = -8;
     } else if (keyIsDown(RIGHT_ARROW)) {
-        movement = +8;
+        movement = 8;
     } else {
         movement = 0;
     }
-
-
 }
