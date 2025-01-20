@@ -9,19 +9,19 @@ let platformDirection = 1;
 let coinDirection = 1;
 
 function setup() {
-    createCanvas(1250, 550); // Neue Leinwandgröße
+    createCanvas(1250, 550);
     resetGame();
 }
 
 function resetGame() {
-    player = createVector(width * 0.5, height * 0.85); // Spieler mittig, 15% vom unteren Rand
+    player = createVector(width * 0.5, height * 0.85); // Spielerposition
     platforms = [
         createVector(width * 0.3, height * 0.85),  // Plattform 1
         createVector(width * 0.52, height * 0.65), // Plattform 2
         createVector(width * 0.8, height * 0.45)   // Plattform 3
     ];
-    coin = createVector(width * 0.96, height * 0.36); // Coin rechts oben
-    ground = height * 0.9; // Boden leicht über dem unteren Rand
+    coin = createVector(width * 0.96, height * 0.36); // Münzposition
+    ground = height * 0.9; // Bodenhöhe
 
     document.getElementById("h1").style.opacity = 0;
     document.getElementById("btn").style.display = "none";
@@ -38,18 +38,18 @@ function drawGame() {
 
     // Spieler zeichnen
     fill('white');
-    rect(player.x, player.y, width * 0.04, height * 0.09); // Spieler relativ skalieren
+    rect(player.x, player.y, width * 0.03, height * 0.06); // Spielergröße angepasst
 
     // Plattformen zeichnen
     fill('green');
     for (let platform of platforms) {
-        rect(platform.x, platform.y, width * 0.12, height * 0.036); // Plattformen skalieren
+        rect(platform.x, platform.y, width * 0.12, height * 0.036); // Plattformgröße
     }
 
     // Coin zeichnen
     if (coin) {
         fill('gold');
-        ellipse(coin.x, coin.y, width * 0.024, height * 0.043); // Coin skalieren
+        ellipse(coin.x, coin.y, width * 0.024, height * 0.043); // Münze
     }
 
     addNewPlatform();
@@ -69,23 +69,22 @@ function draw() {
         onGround = true;
         player.y = ground;
     } else if (
-        player.x + width * 0.02 >= newPlatform.x - width * 0.06 &&
-        player.x - width * 0.02 <= newPlatform.x + width * 0.06 &&
-        player.y + height * 0.045 >= newPlatform.y - height * 0.018 &&
-        player.y + height * 0.045 <= newPlatform.y + height * 0.018
+        player.x + width * 0.015 >= newPlatform.x - width * 0.06 &&
+        player.x - width * 0.015 <= newPlatform.x + width * 0.06 &&
+        player.y + height * 0.03 >= newPlatform.y - height * 0.018 &&
+        player.y + height * 0.03 <= newPlatform.y + height * 0.018
     ) {
         onGround = true;
-        player.y = newPlatform.y - height * 0.072;
+        player.y = newPlatform.y - height * 0.06;
     } else {
         for (let platform of platforms) {
             if (
-                player.x + width * 0.02 >= platform.x - width * 0.06 &&
-                player.x - width * 0.02 <= platform.x + width * 0.06 &&
-                player.y + height * 0.045 >= platform.y - height * 0.018 &&
-                player.y + height * 0.045 <= platform.y + height * 0.018
+                player.x + width * 0.015 >= platform.x - width * 0.06 &&
+                player.x - width * 0.015 <= platform.x + width * 0.06 &&
+                Math.abs(player.y + height * 0.03 - (platform.y - height * 0.06)) <= 1 // Toleranz hinzugefügt
             ) {
                 onGround = true;
-                player.y = platform.y - height * 0.072;
+                player.y = platform.y - height * 0.06;
                 break;
             }
         }
@@ -122,14 +121,14 @@ function draw() {
     }
 
     if (!onGround) {
-        jumpForce += height * 0.0009;
+        jumpForce += height * 0.0007; // Schwerkraft leicht angepasst
     } else {
         jumpForce = 0;
     }
 
     // Springen
     if (keyIsDown(32) && onGround) {
-        jumpForce = -height * 0.022;
+        jumpForce = -height * 0.015; // Reduzierte Sprunghöhe
     }
 
     // Links/Rechts Bewegung
