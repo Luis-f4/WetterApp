@@ -68,23 +68,15 @@ function draw() {
     if (player.y >= ground) {
         onGround = true;
         player.y = ground;
-    } else if (
-        player.x + width * 0.015 >= newPlatform.x - width * 0.06 &&
-        player.x - width * 0.015 <= newPlatform.x + width * 0.06 &&
-        player.y + height * 0.03 >= newPlatform.y - height * 0.018 &&
-        player.y + height * 0.03 <= newPlatform.y + height * 0.018
-    ) {
-        onGround = true;
-        player.y = newPlatform.y - height * 0.06;
     } else {
         for (let platform of platforms) {
             if (
-                player.x + width * 0.015 >= platform.x - width * 0.06 &&
+                player.x + width * 0.015 >= platform.x - width * 0.06 && // Breite der Plattform
                 player.x - width * 0.015 <= platform.x + width * 0.06 &&
-                Math.abs(player.y + height * 0.03 - (platform.y - height * 0.06)) <= 1 // Toleranz hinzugefügt
+                Math.abs(player.y + height * 0.03 - (platform.y - height * 0.018)) <= 1 // Stabilisierung
             ) {
                 onGround = true;
-                player.y = platform.y - height * 0.06;
+                player.y = platform.y - height * 0.06; // Spieler stabil auf Plattform
                 break;
             }
         }
@@ -114,36 +106,4 @@ function draw() {
         platforms = null;
         player = null;
 
-        document.getElementById("h1").style.opacity = 1;
-        document.getElementById("btn").style.display = "block";
-
-        noLoop();
-    }
-
-    if (!onGround) {
-        jumpForce += height * 0.0007; // Schwerkraft leicht angepasst
-    } else {
-        jumpForce = 0;
-    }
-
-    // Springen
-    if (keyIsDown(32) && onGround) {
-        jumpForce = -height * 0.015; // Reduzierte Sprunghöhe
-    }
-
-    // Links/Rechts Bewegung
-    if (keyIsDown(LEFT_ARROW)) {
-        movement = -width * 0.008;
-    } else if (keyIsDown(RIGHT_ARROW)) {
-        movement = width * 0.008;
-    } else {
-        movement = 0;
-    }
-}
-
-let newPlatform;
-
-function addNewPlatform() {
-    newPlatform = createVector(width * 0.08, height * 0.82); // Neue Plattform
-    rect(newPlatform.x, newPlatform.y, width * 0.12, height * 0.036);
-}
+        document.getElementById("h1").style.opacity =
