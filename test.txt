@@ -1,11 +1,45 @@
-Am Montag hatte ich wieder meine zwei Daily-Besprechungen. Zwischen den beiden Dailys hatte ich einen Termin mit meinem Azubikollegen und meinen Ausbildern. In diesem Termin haben wir die Auswertungen unserer SQL-Abfragen vorgestellt und überprüfen lassen. Später hatten wir einen Townhall-Talk, in dem Neuigkeiten aus dem Bereich, in dem wir aktuell eingesetzt werden, berichtet wurden. Nach der Mittagspause habe ich am wöchentlichen Refinement-Termin teilgenommen.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Lists</title>
+</head>
+<body>
+    <textarea id="tt" placeholder="DB"></textarea>
+    <textarea id="tt2" placeholder="Liste"></textarea>
+    <button onclick="filterList()">Gen</button>
+    <textarea id="Ausgabe"></textarea>
 
-Am Dienstag war ich in der Niederlassung. Den Großteil des Tages habe ich damit verbracht, abzufragen, welche Störbilder bei unseren Kunden im Dialogsystem am häufigsten ausgewählt werden, und diese Ergebnisse anschließend in Diagrammen darzustellen. Am Nachmittag hatten wir unser wöchentliches Azubi-Meeting.
+    <script>
+        function filterList() {
+            var list1 = document.getElementById("tt").value.split("\n");  // Hier wird Liste 1 abgerufen
+            var list2 = document.getElementById("tt2").value.split("\n");  // Hier wird Liste 2 abgerufen
 
-Am Mittwoch haben wir Azubis gemeinsam an einer Schulung teilgenommen, in der uns erklärt wurde, wie wir Texte für Kunden angemessen schreiben können. Nach der Schulung habe ich mir auf der Seite studio.code.org angeschaut, welche Programmier-Projekte man zusammen mit zukünftigen Praktikanten machen könnte, um ihnen das Programmieren mithilfe von Blockprogrammierung näherzubringen. Am Ende habe ich drei kleine Programme gebaut:
+            var result = [];
+            for (var i = 0; i < list1.length; i++) {
+                if (list2.indexOf(list1[i].trim()) === -1) {
+                    result.push(list1[i]);
+                }
+            }
 
-Einen Klick-Counter, der zählt, wie oft man auf einen Knopf gedrückt hat.
-Einen Mathe-Aufgaben-Generator, der zufällige Matheaufgaben erstellt, die man lösen kann.
-Am Donnerstag habe ich mit der Auswertung der Störbilder weitergemacht und die Ergebnisse in unser Dokument eingetragen. Am Vormittag stand ein Termin an, in dem wir über die abgeschalteten Basisstationen gesprochen haben. Mein Azubi-Kollege und ich haben dabei unsere Statistiken zum Sonderprozess vorgestellt. Am Ende des Tages habe ich an einem Termin teilgenommen, in dem die Reports zu einem neuen System analysiert und mögliche Fehler gesucht wurden.
+            //if(BTS){
 
-Am Freitag hatte ich nach meinen zwei Dailys einen Termin, in dem wir im ersten Teil unsere Projekte für die Praktikanten vorgestellt haben. Im zweiten Teil haben wir gemeinsam einen Code analysiert, um zu verstehen, was dieser machen soll. Anschließend haben wir getestet, ob dieser Code wie gewünscht funktioniert. Nachmittags habe ich mich auf die Schule vorbereitet und meine Abwesenheitsnotiz geschrieben. Am Ende des Tages habe ich meinen Ausbildungsnachweis verfasst.
+                for (var x = 0; x < result.length; x++) {
+                    result[x] = `insert Into test_label(Spalte1, Spalte2) values("value1","` + result[x] + `");`;
+                }
+
+            //}else{
+                for (var x = 0; x < result.length; x++) {
+                    result[x] = `insert Into test_label(Spalte1, Spalte2) values("value1","` + result[x] + `");`;
+                }
+            //}
+
+
+            document.getElementById("Ausgabe").value = result.join("\n");
+        }
+    </script>
+</body>
+</html>
+
+
