@@ -1,1 +1,20 @@
-Erstell mir ein usecase diagramm in lantuml. Das system heit Easyscrum. Ein user kann ein Projekt erstellen Ein user kann eine Story erstellen, aber nur wenn bereits ei n projekt erstellt wurde Ein user kann einen sprint erstellen, aber nur wenn ein projekt erstellt wurde. ein user kann storys inem srint zuweisen. Ein user kann eine Story bearbeiten (den status ändern) aber nur wenn die story in einem sprint ist ein user kann einen srint beenden wenn er vorher einen erstellt hat
+
+Bei der Architektur wurde sich für ein auf MVC basierendes Prinzip entschieden. Das MVC-Modell kommt häufig in großen Einzelanwendung zum Einsatz und lässt sich sehr gut auf moderne Webanwendungen mit getrenntem Frontend und Backend übertragen.
+
+
+
+
+Die Entscheidung für das MVC-Modell fiel, weil es eine klare Trennung der Verantwortlichkeiten ermöglicht
+
+Models kümmern sich nur um die Struktur der Daten innerhalb der API
+
+Controller beinhalten die Anwendungslogik
+
+View ist für die Darstellung und Interaktion zuständig
+
+
+
+
+Diese Trennung sorgt für bessere Wartbarkeit, Testbarkeit und Skalierbarkeit der Anwendung. Änderungen am Frontend beeinflussen das Backend kaum und umgekehrt.
+
+Zudem bietet diese Architektur Flexibilität – beispielsweise könnte in Zukunft eine mobile App oder eine weitere View-Schicht (z. B. für Admins) hinzugefügt werden, ohne die gesamte Logik neu schreiben zu müssen.
