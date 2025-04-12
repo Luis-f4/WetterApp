@@ -1,20 +1,59 @@
+# TESTS.md – Criteria API
 
-Bei der Architektur wurde sich für ein auf MVC basierendes Prinzip entschieden. Das MVC-Modell kommt häufig in großen Einzelanwendung zum Einsatz und lässt sich sehr gut auf moderne Webanwendungen mit getrenntem Frontend und Backend übertragen.
+## 🧪 Test-Dokumentation – Criteria Endpoints
 
+### Übersicht:
+Alle folgenden API-Endpunkte wurden **manuell getestet** (mit Postman). Die Tests liefen erfolgreich ohne Fehler durch.
 
+Base-URL: `http://localhost:3000/api/criteria`
 
+---
 
-Die Entscheidung für das MVC-Modell fiel, weil es eine klare Trennung der Verantwortlichkeiten ermöglicht
+## ✅ GET /getAll
 
-Models kümmern sich nur um die Struktur der Daten innerhalb der API
+**Beschreibung:** Holt alle vorhandenen Kriterien.
 
-Controller beinhalten die Anwendungslogik
+- **Anfrage:** `GET /getAll`
+- **Erwartung:** Status 200, Rückgabe ist ein Array von Kriterien
+- **Ergebnis:** ✅ Erfolgreich – JSON-Array mit mehreren Kriterien empfangen
 
-View ist für die Darstellung und Interaktion zuständig
+---
 
+## ✅ GET /getById/:id
 
+**Beschreibung:** Holt ein Kriterium anhand der ID.
 
+- **Anfrage:** `GET /getById/1`
+- **Erwartung:** Status 200, einzelnes Kriterium mit ID 1 wird zurückgegeben
+- **Ergebnis:** ✅ Erfolgreich – Objekt mit ID 1 empfangen
 
-Diese Trennung sorgt für bessere Wartbarkeit, Testbarkeit und Skalierbarkeit der Anwendung. Änderungen am Frontend beeinflussen das Backend kaum und umgekehrt.
+**Negativ-Test:**
+- **Anfrage:** `GET /getById/99999`
+- **Erwartung:** Status 404
+- **Ergebnis:** ✅ Erfolgreich – `"Criteria not found"` zurückgegeben
 
-Zudem bietet diese Architektur Flexibilität – beispielsweise könnte in Zukunft eine mobile App oder eine weitere View-Schicht (z. B. für Admins) hinzugefügt werden, ohne die gesamte Logik neu schreiben zu müssen.
+---
+
+## ✅ GET /getByStoryId/:id
+
+**Beschreibung:** Holt alle Kriterien, die zu einer bestimmten Story gehören.
+
+- **Anfrage:** `GET /getByStoryId/2`
+- **Erwartung:** Status 200, Array mit zugehörigen Kriterien
+- **Ergebnis:** ✅ Erfolgreich – mehrere Kriterien erhalten
+
+---
+
+## ✅ POST /create
+
+**Beschreibung:** Legt ein neues Kriterium an.
+
+- **Anfrage:**  
+```json
+POST /create
+Content-Type: application/json
+{
+  "story_id": 2,
+  "text": "Akzeptanzkriterium Test",
+  "status_id": 1
+}
