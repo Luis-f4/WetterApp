@@ -1,59 +1,23 @@
-# TESTS.md – Criteria API
 
-## 🧪 Test-Dokumentation – Criteria Endpoints
+Um sicherzustellen, dass die Entwickelte Appliaktion Fehlerfrei funktionirt erfolgten verschiedene Testarten, die sicherstellen, dass sowohll technische als auch funktionale Aspekte korrekt umgesetzt wurden.
 
-### Übersicht:
-Alle folgenden API-Endpunkte wurden **manuell getestet** (mit Postman). Die Tests liefen erfolgreich ohne Fehler durch.
 
-Base-URL: `http://localhost:3000/api/criteria`
+7.1 Test der Endpoints (Backend-Tests)
+Zur Sicherstellung der korrekten Funktionalität des Express.js-Backends wurden die API-Endpunkte mit Postman getestet. Dabei wurde überprüft ob Anfragen mit Entsprechender HTTP-Methode (GET, POST, PUT und DELETE) korrekt verarbeitet werden und entsprechende Antworten liefern. Zudem wurde sichergestellt, dass fehlerhafte Anfragen mit beispielsweise ungültigen Daten mit geeigneter rückmeldung und Statuscod behandelt werden. In ABBILDUNG wird ein Ausschnitt von den Endpointtest gezeigt.
 
----
 
-## ✅ GET /getAll
+7.2 UI/UX-Tests
+Der Fokus der UI/UX-Tests lag auf der Verständlichkeit und Klarheit der Benutzeroberfläche um sicherzustellen, dass die Oberfläche Intuitiv gestaltet wurd und bei der Nutzer ohne große Einarbeitung die wichtigsten Funktionen schnell erfassen und bedienen können.
 
-**Beschreibung:** Holt alle vorhandenen Kriterien.
+.Zu den getesteten Punkten gehörten unter anderem:
 
-- **Anfrage:** `GET /getAll`
-- **Erwartung:** Status 200, Rückgabe ist ein Array von Kriterien
-- **Ergebnis:** ✅ Erfolgreich – JSON-Array mit mehreren Kriterien empfangen
+Verständliche Bezeichnungen und Beschriftungen (Buttons, Eingabefelder, Überschriften)
 
----
+Logisch aufgebaute Benutzerführung
 
-## ✅ GET /getById/:id
+Klare visuelle Rückmeldungen bei Aktionen
 
-**Beschreibung:** Holt ein Kriterium anhand der ID.
+In ABBILDUNG ist ein Ausschnitt vom Protokoll des UI/UX tests zu sehen
 
-- **Anfrage:** `GET /getById/1`
-- **Erwartung:** Status 200, einzelnes Kriterium mit ID 1 wird zurückgegeben
-- **Ergebnis:** ✅ Erfolgreich – Objekt mit ID 1 empfangen
 
-**Negativ-Test:**
-- **Anfrage:** `GET /getById/99999`
-- **Erwartung:** Status 404
-- **Ergebnis:** ✅ Erfolgreich – `"Criteria not found"` zurückgegeben
-
----
-
-## ✅ GET /getByStoryId/:id
-
-**Beschreibung:** Holt alle Kriterien, die zu einer bestimmten Story gehören.
-
-- **Anfrage:** `GET /getByStoryId/2`
-- **Erwartung:** Status 200, Array mit zugehörigen Kriterien
-- **Ergebnis:** ✅ Erfolgreich – mehrere Kriterien erhalten
-
----
-
-## ✅ POST /create
-
-**Beschreibung:** Legt ein neues Kriterium an.
-
-- **Anfrage:**  
-```json
-POST /create
-Content-Type: application/json
-{
-  "story_id": 2,
-  "text": "Akzeptanzkriterium Test",
-  "status_id": 1
-}
+Die End-to-End-Tests dienten dazu, komplette Abläufe innerhalb der Anwendung zu überprüfen – vom Benutzerinterfacing im Frontend bis hin zur Datenverarbeitung im Backend. Diese Tests wurden manuell durchgeführt, ohne den Einsatz automatisierter Testtools. Dabei wurden verschiedene Szenarien durchgespielt, in denen der Benutzer bestimmte Aufgaben über die Benutzeroberfläche ausführen musste. Die jeweiligen Ergebnisse und Beobachtungen wurden dokumentiert, um die Funktionalität und Benutzerfreundlichkeit der Anwendung nachvollziehbar zu prüfen
