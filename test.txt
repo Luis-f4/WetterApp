@@ -1,52 +1,69 @@
-UI/UX-Testbericht – EasyScrum
+E2E-Testprotokoll – EasyScrum
 
-Testziel:
-Ziel des UI/UX-Tests war es, die Benutzerfreundlichkeit und Verständlichkeit der Anwendung EasyScrum durch einen unvoreingenommenen Tester zu überprüfen. Der Tester hatte vor dem Test keine Erfahrung mit der Anwendung. Während des Tests gab ich gezielte Aufgaben und beobachtete das Verhalten und die Reaktionen des Testers.
-
-⸻
-
-1. Testaufbau
-
-Der Tester erhielt keine Einführung in die Anwendung. Stattdessen wurden ihm Schritt für Schritt Aufgaben gestellt, die typische Anwendungsfälle abbilden. Ziel war es, zu analysieren, ob die Benutzeroberfläche ohne Einarbeitung verständlich ist und korrekt bedient werden kann.
+Ziel des Tests:
+Die End-to-End-Tests dienten dazu, vollständige Abläufe innerhalb der Anwendung EasyScrum zu überprüfen – von der Interaktion mit der Benutzeroberfläche bis hin zur Datenverarbeitung im Backend. Die Tests wurden manuell vom Entwickler selbst durchgeführt, um sicherzustellen, dass die Anwendung in realistischen Nutzungsszenarien zuverlässig funktioniert.
 
 ⸻
 
-2. Getestete Komponenten & Beobachtungen
+Testdurchführung
 
-2.1 Startseite (Projektübersicht)
-
-Aufgabe: „Erstelle ein neues Projekt.“
-	•	Beobachtung:
-Der Tester identifizierte sofort das große Plus-Symbol als möglichen Einstiegspunkt für die Erstellung eines Projekts. Nach dem Klick öffnete sich das Eingabefeld für Titel, Beschreibung und Enddatum, welches der Tester ohne Rückfragen ausfüllte.
-	•	Feedback:
-Die Funktion war selbsterklärend. Ein kleiner Hinweistext („Projekt erstellen“) beim Hover über das Plus hätte die Aktion noch klarer gemacht.
+Im Rahmen des Tests wurden typische Nutzeraktionen vollständig durchlaufen, um die wichtigsten Funktionen in einem realistischen Ablauf zu prüfen. Die Tests fanden im lokalen Entwicklungsumfeld (localhost) statt.
 
 ⸻
 
-2.2 Projekt-Detailseite (Backlog)
+Szenario: Kompletter Projektablauf – von der Erstellung bis zum Sprintabschluss
 
-Aufgabe: „Schau dir die Details des Projekts ‚API Test‘ an und erstelle eine neue User Story.“
-	•	Beobachtung:
-Der Tester konnte die Projektübersicht mit Beschreibung, Start- und Enddatum sowie den abgeschlossenen Sprints problemlos erfassen. Auch der Backlog-Bereich wurde schnell verstanden. Die linke Zahl (Priorität) und rechte Zahl (Story-Punkte) wurden nach kurzer Rückfrage erklärt.
-Beim Klick auf das Plus-Symbol im Backlog öffnete sich das Eingabefeld zur Erstellung einer neuen Story mit Akzeptanzkriterien. Der Tester konnte die Felder problemlos ausfüllen.
-	•	Feedback:
-Die Struktur wurde als übersichtlich und logisch empfunden. Das Layout unterstützt eine schnelle Orientierung. Die visuelle Darstellung der Stories ist klar, wobei farbliche Hervorhebungen bei hoher Priorität hilfreich wären.
-
-⸻
-
-2.3 Kanban-Board (Sprint)
-
-Aufgabe: „Verschiebe eine Story vom Status ‚Todo‘ nach ‚In Progress‘.“
-	•	Beobachtung:
-Der Tester wechselte über die Schaltfläche „Sprint anzeigen“ zum Kanban-Board. Die vier Spalten „Todo“, „In Progress“, „In Review“ und „Done“ wurden sofort erkannt. Die Drag-and-Drop-Funktion funktionierte intuitiv – eine Story wurde erfolgreich verschoben.
-Der Tester klickte auch neugierig auf die Stories und stellte fest, dass sich dabei eine Detailansicht öffnet – dies wurde positiv aufgenommen.
-	•	Feedback:
-Die Kanban-Ansicht entsprach den Erwartungen. Die Steuerung per Drag-and-Drop wurde als angenehm empfunden. Ein kleines visuelles Feedback beim Verschieben (z. B. Animation) hätte das Erlebnis noch verbessert.
+1. Projekt anlegen
+	•	Aktion: Über das Plus-Symbol auf der Startseite wurde ein neues Projekt erstellt.
+	•	Eingaben: Titel, Beschreibung und Enddatum.
+	•	Erwartetes Ergebnis: Das Projekt sollte in der Übersicht erscheinen.
+	•	Tatsächliches Ergebnis: Projekt wurde erfolgreich angelegt und korrekt dargestellt.
 
 ⸻
 
-3. Allgemeine Erkenntnisse
-	•	Der Tester konnte alle Aufgaben ohne Anleitung oder Hilfe ausführen.
-	•	Navigation über das Haus-Symbol (Startseite) und den Zurück-Pfeil wurde selbstständig erkannt und genutzt.
-	•	Die wichtigsten Funktionen waren direkt zugänglich und erforderten keine lange Suche.
-	•	Die Beschriftungen, Icons und Strukturen wurden als sinnvoll und verständlich beurteilt.
+2. Projekt öffnen und Story hinzufügen
+	•	Aktion: Nach dem Öffnen des Projekts wurde im Backlog eine neue User Story über das Plus-Symbol hinzugefügt.
+	•	Eingaben: Titel der Story, Akzeptanzkriterien, Priorität, Storypunkte.
+	•	Erwartetes Ergebnis: Die Story erscheint im Backlog mit korrekter Darstellung von Priorität (links) und Punkten (rechts).
+	•	Tatsächliches Ergebnis: Story wurde korrekt gespeichert und visualisiert.
+
+⸻
+
+3. Sprint starten und ins Kanban-Board wechseln
+	•	Aktion: Mit dem Button „Sprint anzeigen“ wurde ein Sprint gestartet und das Kanban-Board geöffnet.
+	•	Erwartetes Ergebnis: Die zuvor erstellte Story wird in der Spalte „Todo“ angezeigt.
+	•	Tatsächliches Ergebnis: Die Story erschien wie erwartet und konnte bearbeitet werden.
+
+⸻
+
+4. Story per Drag-and-Drop verschieben
+	•	Aktion: Die Story wurde per Drag-and-Drop von „Todo“ nach „In Progress“ verschoben.
+	•	Erwartetes Ergebnis: Die Story soll visuell und technisch korrekt verschoben werden.
+	•	Tatsächliches Ergebnis: Die Funktion reagierte wie erwartet, die Position wurde auch nach Aktualisierung beibehalten (Datenbank korrekt aktualisiert).
+
+⸻
+
+5. Sprint beenden
+	•	Aktion: Über die Schaltfläche „Sprint beenden“ wurde der aktuelle Sprint abgeschlossen.
+	•	Erwartetes Ergebnis: Der Sprint wird beendet, die Stories verschwinden aus dem aktiven Board.
+	•	Tatsächliches Ergebnis: Der Abschluss verlief erfolgreich, Änderungen wurden korrekt übernommen.
+
+⸻
+
+Ergebnisse & Fazit
+
+Alle getesteten End-to-End-Funktionen der Anwendung EasyScrum haben erwartungsgemäß funktioniert. Die Kombination aus Frontend-Interaktion und Backend-Verarbeitung zeigte sich stabil, logisch und fehlerfrei.
+
+Besonders positiv aufgefallen:
+	•	Intuitives Handling der UI, auch für komplexe Abläufe wie Drag-and-Drop.
+	•	Reibungslose Übergänge zwischen den Ansichten (Projektübersicht, Details, Kanban).
+	•	Direkte visuelle Rückmeldung bei Aktionen.
+
+Verbesserungspotenzial:
+	•	Leichte visuelle Verstärkung der Rückmeldung bei Drag-and-Drop (z. B. Farbänderung).
+	•	Tooltip-Texte für Buttons zur besseren Erklärung für neue Nutzer:innen.
+
+⸻
+
+Gesamtbewertung:
+Die Anwendung erfüllt die Anforderungen an einen stabilen, intuitiven Projektworkflow. Die durchgeführten E2E-Tests bestätigen die technische Funktionalität und gute Nutzerführung über alle relevanten Module hinweg.
