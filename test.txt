@@ -1,69 +1,127 @@
-E2E-Testprotokoll – EasyScrum
+Benutzerhandbuch – EasyScrum
 
-Ziel des Tests:
-Die End-to-End-Tests dienten dazu, vollständige Abläufe innerhalb der Anwendung EasyScrum zu überprüfen – von der Interaktion mit der Benutzeroberfläche bis hin zur Datenverarbeitung im Backend. Die Tests wurden manuell vom Entwickler selbst durchgeführt, um sicherzustellen, dass die Anwendung in realistischen Nutzungsszenarien zuverlässig funktioniert.
+Einleitung
 
-⸻
-
-Testdurchführung
-
-Im Rahmen des Tests wurden typische Nutzeraktionen vollständig durchlaufen, um die wichtigsten Funktionen in einem realistischen Ablauf zu prüfen. Die Tests fanden im lokalen Entwicklungsumfeld (localhost) statt.
+EasyScrum ist eine Webanwendung zur Verwaltung agiler Softwareprojekte nach dem Scrum-Framework. Die Anwendung unterstützt Teams bei der Strukturierung von Projekten, der Verwaltung von User Stories sowie der Durchführung von Sprints und Sprint-Meetings. Dieses Handbuch bietet eine Übersicht über die Funktionen der Anwendung sowie eine Einführung in die zugrunde liegende Scrum-Methodik.
 
 ⸻
 
-Szenario: Kompletter Projektablauf – von der Erstellung bis zum Sprintabschluss
+1. Einstieg in EasyScrum
 
-1. Projekt anlegen
-	•	Aktion: Über das Plus-Symbol auf der Startseite wurde ein neues Projekt erstellt.
-	•	Eingaben: Titel, Beschreibung und Enddatum.
-	•	Erwartetes Ergebnis: Das Projekt sollte in der Übersicht erscheinen.
-	•	Tatsächliches Ergebnis: Projekt wurde erfolgreich angelegt und korrekt dargestellt.
+1.1 Startseite / Projektübersicht
 
-⸻
+Nach dem Login gelangt man zur Startseite, auf der alle vorhandenen Projekte aufgelistet sind. Jede Projektkarte zeigt:
+	•	Projekttitel
+	•	Startdatum
+	•	Voraussichtliches Enddatum
 
-2. Projekt öffnen und Story hinzufügen
-	•	Aktion: Nach dem Öffnen des Projekts wurde im Backlog eine neue User Story über das Plus-Symbol hinzugefügt.
-	•	Eingaben: Titel der Story, Akzeptanzkriterien, Priorität, Storypunkte.
-	•	Erwartetes Ergebnis: Die Story erscheint im Backlog mit korrekter Darstellung von Priorität (links) und Punkten (rechts).
-	•	Tatsächliches Ergebnis: Story wurde korrekt gespeichert und visualisiert.
-
-⸻
-
-3. Sprint starten und ins Kanban-Board wechseln
-	•	Aktion: Mit dem Button „Sprint anzeigen“ wurde ein Sprint gestartet und das Kanban-Board geöffnet.
-	•	Erwartetes Ergebnis: Die zuvor erstellte Story wird in der Spalte „Todo“ angezeigt.
-	•	Tatsächliches Ergebnis: Die Story erschien wie erwartet und konnte bearbeitet werden.
+Aktionen:
+	•	Durch Klick auf ein Projekt wird die Projektübersicht geöffnet.
+	•	Mit dem Plus-Symbol (+) oben links kann ein neues Projekt erstellt werden. Es erscheint ein Eingabefeld für:
+	•	Projekttitel
+	•	Beschreibung
+	•	Enddatum
 
 ⸻
 
-4. Story per Drag-and-Drop verschieben
-	•	Aktion: Die Story wurde per Drag-and-Drop von „Todo“ nach „In Progress“ verschoben.
-	•	Erwartetes Ergebnis: Die Story soll visuell und technisch korrekt verschoben werden.
-	•	Tatsächliches Ergebnis: Die Funktion reagierte wie erwartet, die Position wurde auch nach Aktualisierung beibehalten (Datenbank korrekt aktualisiert).
+2. Projektübersicht & Backlog
+
+2.1 Projektansicht
+
+In der Projektansicht werden folgende Informationen angezeigt:
+	•	Projektbeschreibung
+	•	Start- und Enddatum
+	•	Anzahl abgeschlossener Sprints und Stories
+
+2.2 Backlog-Verwaltung
+
+Der Backlog befindet sich rechts und enthält alle vorhandenen User Stories des Projekts. Für jede Story werden angezeigt:
+	•	Priorität (links)
+	•	Story-Punkte (rechts)
+
+Aktionen:
+	•	Durch Klick auf das Plus-Symbol kann eine neue Story erstellt werden:
+	•	Titel
+	•	Akzeptanzkriterien
+	•	Priorität
+	•	Story-Punkte
 
 ⸻
 
-5. Sprint beenden
-	•	Aktion: Über die Schaltfläche „Sprint beenden“ wurde der aktuelle Sprint abgeschlossen.
-	•	Erwartetes Ergebnis: Der Sprint wird beendet, die Stories verschwinden aus dem aktiven Board.
-	•	Tatsächliches Ergebnis: Der Abschluss verlief erfolgreich, Änderungen wurden korrekt übernommen.
+3. Scrum-Konzepte in EasyScrum
+
+EasyScrum bildet wichtige Bestandteile des Scrum-Prozesses ab:
+
+3.1 User Stories
+
+User Stories sind kurze Beschreibungen von Anforderungen aus Sicht der Nutzer:innen. Sie bestehen in EasyScrum aus:
+	•	Titel
+	•	Akzeptanzkriterien
+	•	Priorität
+	•	Story-Punkte (zur Aufwandsschätzung)
+
+3.2 Sprints
+
+Ein Sprint ist eine zeitlich begrenzte Entwicklungsphase, in der bestimmte User Stories umgesetzt werden. In EasyScrum kann man:
+	•	Den aktuellen Sprint über „Sprint anzeigen“ starten
+	•	Storys ins Kanban-Board verschieben und dort verwalten
+	•	Den Sprint mit „Sprint beenden“ abschließen
 
 ⸻
 
-Ergebnisse & Fazit
+4. Kanban-Board
 
-Alle getesteten End-to-End-Funktionen der Anwendung EasyScrum haben erwartungsgemäß funktioniert. Die Kombination aus Frontend-Interaktion und Backend-Verarbeitung zeigte sich stabil, logisch und fehlerfrei.
+4.1 Aufbau
 
-Besonders positiv aufgefallen:
-	•	Intuitives Handling der UI, auch für komplexe Abläufe wie Drag-and-Drop.
-	•	Reibungslose Übergänge zwischen den Ansichten (Projektübersicht, Details, Kanban).
-	•	Direkte visuelle Rückmeldung bei Aktionen.
+Das Kanban-Board ist in vier Spalten unterteilt:
+	•	Todo
+	•	In Progress
+	•	In Review
+	•	Done
 
-Verbesserungspotenzial:
-	•	Leichte visuelle Verstärkung der Rückmeldung bei Drag-and-Drop (z. B. Farbänderung).
-	•	Tooltip-Texte für Buttons zur besseren Erklärung für neue Nutzer:innen.
+User Stories aus dem Backlog können durch Drag-and-Drop in die jeweiligen Spalten gezogen werden – je nach Bearbeitungsstatus.
+
+4.2 Interaktion
+	•	Durch Klick auf eine Story öffnet sich die Detailansicht.
+	•	Der Fortschritt eines Sprints wird visuell im Board abgebildet.
 
 ⸻
 
-Gesamtbewertung:
-Die Anwendung erfüllt die Anforderungen an einen stabilen, intuitiven Projektworkflow. Die durchgeführten E2E-Tests bestätigen die technische Funktionalität und gute Nutzerführung über alle relevanten Module hinweg.
+5. Scrum Meetings im Projektalltag
+
+5.1 Daily Scrum
+
+Tägliches Kurzmeeting (15 Minuten), bei dem Teammitglieder drei Fragen beantworten:
+	•	Was habe ich gestern gemacht?
+	•	Was mache ich heute?
+	•	Gibt es Hindernisse?
+
+Tipp: Die Spalten „In Progress“ und „Todo“ im Kanban-Board helfen bei der Visualisierung des aktuellen Standes.
+
+5.2 Sprint Review
+
+Am Ende eines Sprints wird das Erreichte vorgestellt und bewertet. Alle erledigten Stories im Bereich „Done“ bilden die Grundlage für das Review.
+
+5.3 Retrospektive
+
+Nach dem Sprint Review reflektiert das Team den Ablauf:
+	•	Was lief gut?
+	•	Was kann verbessert werden?
+
+Tipp: Die abgeschlossenen Sprints und Stories in der Projektübersicht geben hilfreiche Einblicke in die Sprint-Historie.
+
+⸻
+
+6. Navigation & Bedienung
+	•	Zurück-Pfeil (oben links): Zurück zur vorherigen Seite
+	•	Haus-Symbol: Zurück zur Startseite
+	•	Alle Buttons und Icons sind intuitiv beschriftet, visuelle Rückmeldungen zeigen erfolgreiche Aktionen (z. B. das Anlegen von Storys oder das Beenden von Sprints)
+
+⸻
+
+7. Zusammenfassung
+
+EasyScrum kombiniert ein klares, benutzerfreundliches Interface mit den wichtigsten Prinzipien agiler Entwicklung. Die Anwendung unterstützt bei:
+	•	Der Planung und Strukturierung von Projekten
+	•	Der Verwaltung von Backlog und User Stories
+	•	Der Durchführung von Sprints und deren Bewertung
