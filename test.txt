@@ -1,23 +1,52 @@
+UI/UX-Testbericht – EasyScrum
 
-Um sicherzustellen, dass die Entwickelte Appliaktion Fehlerfrei funktionirt erfolgten verschiedene Testarten, die sicherstellen, dass sowohll technische als auch funktionale Aspekte korrekt umgesetzt wurden.
+Testziel:
+Ziel des UI/UX-Tests war es, die Benutzerfreundlichkeit und Verständlichkeit der Anwendung EasyScrum durch einen unvoreingenommenen Tester zu überprüfen. Der Tester hatte vor dem Test keine Erfahrung mit der Anwendung. Während des Tests gab ich gezielte Aufgaben und beobachtete das Verhalten und die Reaktionen des Testers.
 
+⸻
 
-7.1 Test der Endpoints (Backend-Tests)
-Zur Sicherstellung der korrekten Funktionalität des Express.js-Backends wurden die API-Endpunkte mit Postman getestet. Dabei wurde überprüft ob Anfragen mit Entsprechender HTTP-Methode (GET, POST, PUT und DELETE) korrekt verarbeitet werden und entsprechende Antworten liefern. Zudem wurde sichergestellt, dass fehlerhafte Anfragen mit beispielsweise ungültigen Daten mit geeigneter rückmeldung und Statuscod behandelt werden. In ABBILDUNG wird ein Ausschnitt von den Endpointtest gezeigt.
+1. Testaufbau
 
+Der Tester erhielt keine Einführung in die Anwendung. Stattdessen wurden ihm Schritt für Schritt Aufgaben gestellt, die typische Anwendungsfälle abbilden. Ziel war es, zu analysieren, ob die Benutzeroberfläche ohne Einarbeitung verständlich ist und korrekt bedient werden kann.
 
-7.2 UI/UX-Tests
-Der Fokus der UI/UX-Tests lag auf der Verständlichkeit und Klarheit der Benutzeroberfläche um sicherzustellen, dass die Oberfläche Intuitiv gestaltet wurd und bei der Nutzer ohne große Einarbeitung die wichtigsten Funktionen schnell erfassen und bedienen können.
+⸻
 
-.Zu den getesteten Punkten gehörten unter anderem:
+2. Getestete Komponenten & Beobachtungen
 
-Verständliche Bezeichnungen und Beschriftungen (Buttons, Eingabefelder, Überschriften)
+2.1 Startseite (Projektübersicht)
 
-Logisch aufgebaute Benutzerführung
+Aufgabe: „Erstelle ein neues Projekt.“
+	•	Beobachtung:
+Der Tester identifizierte sofort das große Plus-Symbol als möglichen Einstiegspunkt für die Erstellung eines Projekts. Nach dem Klick öffnete sich das Eingabefeld für Titel, Beschreibung und Enddatum, welches der Tester ohne Rückfragen ausfüllte.
+	•	Feedback:
+Die Funktion war selbsterklärend. Ein kleiner Hinweistext („Projekt erstellen“) beim Hover über das Plus hätte die Aktion noch klarer gemacht.
 
-Klare visuelle Rückmeldungen bei Aktionen
+⸻
 
-In ABBILDUNG ist ein Ausschnitt vom Protokoll des UI/UX tests zu sehen
+2.2 Projekt-Detailseite (Backlog)
 
+Aufgabe: „Schau dir die Details des Projekts ‚API Test‘ an und erstelle eine neue User Story.“
+	•	Beobachtung:
+Der Tester konnte die Projektübersicht mit Beschreibung, Start- und Enddatum sowie den abgeschlossenen Sprints problemlos erfassen. Auch der Backlog-Bereich wurde schnell verstanden. Die linke Zahl (Priorität) und rechte Zahl (Story-Punkte) wurden nach kurzer Rückfrage erklärt.
+Beim Klick auf das Plus-Symbol im Backlog öffnete sich das Eingabefeld zur Erstellung einer neuen Story mit Akzeptanzkriterien. Der Tester konnte die Felder problemlos ausfüllen.
+	•	Feedback:
+Die Struktur wurde als übersichtlich und logisch empfunden. Das Layout unterstützt eine schnelle Orientierung. Die visuelle Darstellung der Stories ist klar, wobei farbliche Hervorhebungen bei hoher Priorität hilfreich wären.
 
-Die End-to-End-Tests dienten dazu, komplette Abläufe innerhalb der Anwendung zu überprüfen – vom Benutzerinterfacing im Frontend bis hin zur Datenverarbeitung im Backend. Diese Tests wurden manuell durchgeführt, ohne den Einsatz automatisierter Testtools. Dabei wurden verschiedene Szenarien durchgespielt, in denen der Benutzer bestimmte Aufgaben über die Benutzeroberfläche ausführen musste. Die jeweiligen Ergebnisse und Beobachtungen wurden dokumentiert, um die Funktionalität und Benutzerfreundlichkeit der Anwendung nachvollziehbar zu prüfen
+⸻
+
+2.3 Kanban-Board (Sprint)
+
+Aufgabe: „Verschiebe eine Story vom Status ‚Todo‘ nach ‚In Progress‘.“
+	•	Beobachtung:
+Der Tester wechselte über die Schaltfläche „Sprint anzeigen“ zum Kanban-Board. Die vier Spalten „Todo“, „In Progress“, „In Review“ und „Done“ wurden sofort erkannt. Die Drag-and-Drop-Funktion funktionierte intuitiv – eine Story wurde erfolgreich verschoben.
+Der Tester klickte auch neugierig auf die Stories und stellte fest, dass sich dabei eine Detailansicht öffnet – dies wurde positiv aufgenommen.
+	•	Feedback:
+Die Kanban-Ansicht entsprach den Erwartungen. Die Steuerung per Drag-and-Drop wurde als angenehm empfunden. Ein kleines visuelles Feedback beim Verschieben (z. B. Animation) hätte das Erlebnis noch verbessert.
+
+⸻
+
+3. Allgemeine Erkenntnisse
+	•	Der Tester konnte alle Aufgaben ohne Anleitung oder Hilfe ausführen.
+	•	Navigation über das Haus-Symbol (Startseite) und den Zurück-Pfeil wurde selbstständig erkannt und genutzt.
+	•	Die wichtigsten Funktionen waren direkt zugänglich und erforderten keine lange Suche.
+	•	Die Beschriftungen, Icons und Strukturen wurden als sinnvoll und verständlich beurteilt.
